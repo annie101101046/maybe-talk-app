@@ -1,0 +1,305 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Quicksand:wght@400;500;600;700&display=swap");
+
+/* ─────────────────────────────────────────
+   Design Token Custom Properties
+   ───────────────────────────────────────── */
+:root {
+  /* Brand Palette */
+  --coral:      #F28B6E;
+  --coral-dark: #E07050;
+  --navy:       #1E2A5E;
+  --teal:       #5BBFB5;
+  --teal-dark:  #3FA89D;
+  --yellow:     #FFB627;
+  --pink:       #F28BAE;
+  --pink-soft:  #FFF0F3;
+  --cream:      #FFF5F0;
+  --white:      #FFFFFF;
+
+  /* Semantic aliases */
+  --background: var(--cream);
+  --foreground: var(--navy);
+  --primary:    var(--coral);
+  --secondary:  var(--teal);
+  --accent:     var(--yellow);
+
+  /* Typography */
+  --font-body:    'Noto Sans TC', 'Quicksand', sans-serif;
+  --font-display: 'Quicksand', 'Noto Sans TC', sans-serif;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 24px 0 rgba(30, 42, 94, 0.07);
+  --shadow-card: 0 8px 40px 0 rgba(30, 42, 94, 0.10);
+  --shadow-hero: 0 20px 60px 0 rgba(242, 139, 110, 0.18);
+}
+
+/* ─────────────────────────────────────────
+   Tailwind v4 Theme Extension
+   ───────────────────────────────────────── */
+@theme inline {
+  --color-coral:     var(--coral);
+  --color-coral-dark: var(--coral-dark);
+  --color-navy:      var(--navy);
+  --color-teal:      var(--teal);
+  --color-teal-dark: var(--teal-dark);
+  --color-yellow:    var(--yellow);
+  --color-pink:      var(--pink);
+  --color-pink-soft: var(--pink-soft);
+  --color-cream:     var(--cream);
+
+  --font-body:    var(--font-body);
+  --font-display: var(--font-display);
+}
+
+/* ─────────────────────────────────────────
+   Base Reset & Global Styles
+   ───────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--navy);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─────────────────────────────────────────
+   Custom Scrollbar
+   ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--pink-soft);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--coral);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--coral-dark);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--coral) var(--pink-soft);
+}
+
+/* ─────────────────────────────────────────
+   Fade-In Scroll Animation
+   ───────────────────────────────────────── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered delays for siblings */
+.fade-in[data-delay="100"] { transition-delay: 0.1s; }
+.fade-in[data-delay="200"] { transition-delay: 0.2s; }
+.fade-in[data-delay="300"] { transition-delay: 0.3s; }
+.fade-in[data-delay="400"] { transition-delay: 0.4s; }
+.fade-in[data-delay="500"] { transition-delay: 0.5s; }
+.fade-in[data-delay="600"] { transition-delay: 0.6s; }
+
+/* ─────────────────────────────────────────
+   Utility Gradients
+   ───────────────────────────────────────── */
+.gradient-hero {
+  background: linear-gradient(135deg, var(--cream) 0%, #FFE8DF 40%, #FFF0F3 100%);
+}
+
+.gradient-coral {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--pink) 100%);
+}
+
+.gradient-teal {
+  background: linear-gradient(135deg, var(--teal) 0%, #82D8D0 100%);
+}
+
+/* ─────────────────────────────────────────
+   Glass Morphism
+   ───────────────────────────────────────── */
+.glass {
+  background: rgba(255, 245, 240, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(242, 139, 110, 0.15);
+}
+
+/* ─────────────────────────────────────────
+   Blob Shape Utility
+   ───────────────────────────────────────── */
+.blob {
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+}
+
+/* ─────────────────────────────────────────
+   Card Hover Lift
+   ───────────────────────────────────────── */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card);
+}
+
+/* ─────────────────────────────────────────
+   Button Styles
+   ───────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--coral);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 0.875rem 2rem;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(242, 139, 110, 0.4);
+}
+
+.btn-primary:hover {
+  background-color: var(--coral-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(242, 139, 110, 0.45);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-weight: 600;
+  padding: 0.875rem 2rem;
+  border-radius: 99px;
+  border: 2px solid var(--navy);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--navy);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* ─────────────────────────────────────────
+   Section Spacing
+   ───────────────────────────────────────── */
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Typography Helpers
+   ───────────────────────────────────────── */
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.section-label {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--coral);
+}
+
+/* ─────────────────────────────────────────
+   Cal.com Embed Overrides
+   ───────────────────────────────────────── */
+[data-cal-namespace] iframe,
+.cal-embed-wrapper iframe {
+  border: none !important;
+  border-radius: 1.5rem !important;
+  width: 100% !important;
+}
+
+/* ─────────────────────────────────────────
+   Pricing Card Highlight Shimmer
+   ───────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.pricing-highlight-badge {
+  background: linear-gradient(90deg, var(--coral), var(--yellow), var(--coral));
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─────────────────────────────────────────
+   Float Animation (hero illustration)
+   ───────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(1deg); }
+  66%       { transform: translateY(-6px) rotate(-0.5deg); }
+}
+
+.float-anim {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 0.9; transform: scale(1.04); }
+}
+
+.pulse-soft {
+  animation: pulse-soft 4s ease-in-out infinite;
+}
