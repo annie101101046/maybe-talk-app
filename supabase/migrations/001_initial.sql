@@ -33,13 +33,15 @@ CREATE TABLE IF NOT EXISTS public.bookings (
 
 -- payments: Stripe payment records linked to a user
 CREATE TABLE IF NOT EXISTS public.payments (
-  id                uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id           uuid        NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
-  stripe_session_id text        UNIQUE NOT NULL,
-  amount            int         NOT NULL,
-  currency          text        NOT NULL DEFAULT 'usd',
-  status            text        NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
-  created_at        timestamptz NOT NULL DEFAULT now()
+  id                    uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id               uuid        NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  stripe_session_id     text        UNIQUE NOT NULL,
+  stripe_payment_intent text,
+  amount_cents          int         NOT NULL,
+  currency              text        NOT NULL DEFAULT 'usd',
+  status                text        NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
+  email                 text,
+  created_at            timestamptz NOT NULL DEFAULT now()
 );
 
 -- ============================================================
