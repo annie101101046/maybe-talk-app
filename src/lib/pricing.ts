@@ -1,6 +1,6 @@
 /**
- * Journey pricing. Buy buttons are mailto pre-orders until checkout exists.
- * Set a plan's `checkoutUrl` to send that button to a checkout page instead.
+ * Journey pricing. Buy buttons use `checkoutUrl` (Gumroad).
+ * Leave `checkoutUrl` null only if a plan should fall back to a mailto.
  */
 
 export type Bilingual = {
@@ -21,15 +21,10 @@ export type PricingPlan = {
   highlighted?: boolean
   badge?: Bilingual
   features: Bilingual[]
-  /**
-   * Mailto subject. Both languages, so a pre-order is recognizable in the inbox.
-   * Example: "Pre-order: Full Pregnancy Pass US$29 / 預購：全孕期通行證 US$29"
-   */
+  cta: Bilingual
+  /** Mailto subject, used only when `checkoutUrl` is null. */
   subject: string
-  /**
-   * Checkout URL. Null keeps the buy button as a mailto to `PRICING.email`.
-   * Swap in a path such as "/checkout?plan=full-pass" when payments return.
-   */
+  /** Gumroad (or later, another checkout) URL. Null falls back to mailto. */
   checkoutUrl: string | null
 }
 
@@ -37,30 +32,34 @@ export const PRICING = {
   email: "hello@maybeshedliketotalk.org",
   currencyNote: { zh: "價格以美金計", en: "Prices in USD" } satisfies Bilingual,
   freeWeeksNote: { zh: "第 1–4 週免費", en: "Weeks 1–4 are free" } satisfies Bilingual,
-  cta: { zh: "來信預購", en: "Pre-order" } satisfies Bilingual,
+  checkoutNote: {
+    zh: "信用卡或 PayPal 都可以，在 Gumroad 結帳。內容每週寄到信箱。",
+    en: "Pay by card or PayPal on Gumroad. Content is emailed weekly.",
+  } satisfies Bilingual,
   plans: [
     {
       id: "single-trimester",
       title: { zh: "單一孕期", en: "Single Trimester" },
-      subtitle: { zh: "孕期中途加入", en: "Join mid-pregnancy" },
+      subtitle: { zh: "孕到一半再加入也行", en: "Join mid-pregnancy" },
       priceUsd: 15,
-      priceNote: { zh: "任選一個孕期", en: "Choose one trimester" },
+      priceNote: { zh: "挑一個孕期", en: "Choose one trimester" },
       features: [
         {
-          zh: "第 1–12、13–27 或 28–40 週，任選其一",
+          zh: "第 1–12、13–27、28–40 週，挑一個",
           en: "Weeks 1–12, 13–27, or 28–40 — choose one",
         },
         {
-          zh: "適合孕期中途才開始的人",
+          zh: "給孕期走到一半才開始的人",
           en: "For people joining mid-pregnancy",
         },
         {
-          zh: "該孕期的情緒引導，以及呼吸與冥想音頻",
+          zh: "這個孕期的情緒引導、呼吸跟冥想音檔",
           en: "Emotional guide plus breathing and meditation audio for that trimester",
         },
       ],
+      cta: { zh: "立即購買", en: "Buy now" },
       subject: "Pre-order: Single Trimester US$15 / 預購：單一孕期 US$15",
-      checkoutUrl: null,
+      checkoutUrl: "https://kincode.gumroad.com/l/single-trimester",
     },
     {
       id: "full-pass",
@@ -74,24 +73,25 @@ export const PRICING = {
       badge: { zh: "最受歡迎", en: "Most Popular" },
       features: [
         {
-          zh: "全部 40 週的情緒引導",
+          zh: "四十週的情緒引導",
           en: "All 40 weeks of the emotional guide",
         },
         {
-          zh: "呼吸與冥想音頻",
+          zh: "呼吸跟冥想音檔",
           en: "Breathing and meditation audio",
         },
         {
-          zh: "每週釋出",
+          zh: "每週更新",
           en: "Released weekly",
         },
         {
-          zh: "終身使用",
+          zh: "買了可以一直用",
           en: "Lifetime access",
         },
       ],
+      cta: { zh: "立即購買", en: "Buy now" },
       subject: "Pre-order: Full Pregnancy Pass US$29 / 預購：全孕期通行證 US$29",
-      checkoutUrl: null,
+      checkoutUrl: "https://kincode.gumroad.com/l/full-pregnancy-pass",
     },
     {
       id: "gift-edition",
@@ -105,7 +105,7 @@ export const PRICING = {
           en: "Includes the Full Pregnancy Pass",
         },
         {
-          zh: "再加一張數位心意卡",
+          zh: "再加一張電子心意卡",
           en: "Plus a digital gift card",
         },
         {
@@ -113,8 +113,9 @@ export const PRICING = {
           en: "For a partner, family, or friends",
         },
       ],
+      cta: { zh: "送給她", en: "Send as a gift" },
       subject: "Pre-order: Gift Edition US$45 / 預購：送禮版 US$45",
-      checkoutUrl: null,
+      checkoutUrl: "https://kincode.gumroad.com/l/gift-edition",
     },
   ] satisfies PricingPlan[],
 }

@@ -166,12 +166,12 @@ export default function Header() {
                   >
                     登入
                   </Link>
-                  <a
-                    href="mailto:hello@maybeshedliketotalk.org"
+                  <Link
+                    href="/#pricing"
                     className="btn-primary text-sm"
                   >
-                    早鳥資格
-                  </a>
+                    立即購買
+                  </Link>
                 </>
               )}
             </div>
@@ -261,13 +261,13 @@ export default function Header() {
                   >
                     登入
                   </Link>
-                  <a
-                    href="mailto:hello@maybeshedliketotalk.org"
+                  <Link
+                    href="/#pricing"
                     onClick={closeMenu}
                     className="block btn-primary text-center"
                   >
-                    來信取得早鳥資格
-                  </a>
+                    立即購買
+                  </Link>
                 </>
               )}
             </div>

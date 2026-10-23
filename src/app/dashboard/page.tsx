@@ -131,7 +131,7 @@ export default function DashboardPage() {
             情緒引導 · Weekly Guide
           </p>
           <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">每週</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">一則為這個孕期寫的心靈功課</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">一週一則，寫給這個週數</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
@@ -146,16 +146,16 @@ export default function DashboardPage() {
       <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
           <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
-            即將開放 | Coming Soon
+            現在可以買 | Available now
           </span>
           <h3 className="text-lg font-bold text-[#1E2A5E]">
             40 週旅程，三種方案
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
-            單一孕期、全孕期通行證、送禮版。{PRICING.freeWeeksNote.zh}，{PRICING.currencyNote.zh}。
+            單一孕期、全孕期通行證、送禮版。{PRICING.freeWeeksNote.zh}，{PRICING.currencyNote.zh}。{PRICING.checkoutNote.zh}
           </p>
           <p className="text-sm text-[#1E2A5E]/50 mt-1">
-            Single Trimester, Full Pregnancy Pass, and Gift Edition. {PRICING.freeWeeksNote.en}. {PRICING.currencyNote.en}.
+            Single Trimester, Full Pregnancy Pass, and Gift Edition. {PRICING.freeWeeksNote.en}. {PRICING.currencyNote.en}. {PRICING.checkoutNote.en}
           </p>
         </div>
         <Link

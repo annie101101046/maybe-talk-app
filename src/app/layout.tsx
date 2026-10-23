@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | 也許妳想找人聊一聊",
   },
   description:
-    "為孕期媽咪設計的 40 週心靈旅程。每週一則情緒引導，加上冥想與呼吸練習，收成一份完整方案，即將開放。A 40-week pregnancy journey for expecting mothers — a weekly emotional guide and meditation practices, as one complete package, coming soon.",
+    "為孕期媽咪設計的 40 週旅程。每週一則情緒引導，加上冥想與呼吸練習。現在可以買，內容每週寄到信箱。A 40-week pregnancy journey for expecting mothers — a weekly emotional guide and meditation practices. Buy now. New content is emailed each week.",
   keywords: [
     "孕期",
     "孕婦",
@@ -50,14 +50,14 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     title: "也許妳想找人聊一聊 | Maybe She'd Like to Talk",
     description:
-      "40 週孕期心靈旅程 — 每週情緒引導・冥想與呼吸練習・一份完整方案即將開放",
+      "40 週孕期旅程。每週情緒引導、冥想與呼吸練習。現在可以買，內容每週寄到信箱。",
     siteName: "也許妳想找人聊一聊",
   },
   twitter: {
     card: "summary_large_image",
     title: "也許妳想找人聊一聊 | Maybe She'd Like to Talk",
     description:
-      "40 週孕期心靈旅程 — 每週情緒引導・冥想與呼吸練習・一份完整方案即將開放",
+      "40 週孕期旅程。每週情緒引導、冥想與呼吸練習。現在可以買，內容每週寄到信箱。",
   },
   robots: {
     index: true,
