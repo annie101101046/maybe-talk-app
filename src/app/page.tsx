@@ -1,5 +1,10 @@
 import Link from "next/link";
 import FadeIn from "@/components/FadeIn";
+import { formatUsd, planPurchaseHref, PRICING, type Bilingual } from "@/lib/pricing";
+
+function bilingual(text: Bilingual) {
+  return `${text.zh} | ${text.en}`;
+}
 
 /* ─────────────────────────────────────────
    Inline SVG: Geometric Blob Pregnant Woman
@@ -298,7 +303,10 @@ function PricingCard({
   badge,
   title,
   subtitle,
+  tagline,
   price,
+  compareAt,
+  compareAtNote,
   priceNote,
   features,
   ctaLabel,
@@ -309,9 +317,12 @@ function PricingCard({
   badge?: string;
   title: string;
   subtitle: string;
+  tagline?: Bilingual;
   price: string;
+  compareAt?: string;
+  compareAtNote?: string;
   priceNote?: string;
-  features: string[];
+  features: Bilingual[];
   ctaLabel: string;
   ctaHref: string;
   delay?: number;
@@ -319,11 +330,7 @@ function PricingCard({
   return (
     <FadeIn
       delay={delay}
-      className={`relative rounded-3xl p-8 flex flex-col gap-6 card-hover ${
-        highlighted
-          ? "bg-white"
-          : "bg-white"
-      }`}
+      className="relative rounded-3xl p-8 flex flex-col gap-6 card-hover h-full bg-white"
       style={
         {
           boxShadow: highlighted
@@ -354,25 +361,47 @@ function PricingCard({
         >
           {subtitle}
         </p>
+        {tagline && (
+          <p className="text-xs mt-1" style={{ color: "#8A93B2" }}>
+            {tagline.zh} / {tagline.en}
+          </p>
+        )}
       </div>
 
-      <div className="flex items-end gap-2">
-        <span
-          className="text-4xl font-black leading-tight"
-          style={{ color: highlighted ? "var(--coral)" : "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
-        >
-          {price}
-        </span>
-        {priceNote && (
-          <span className="text-sm mb-1" style={{ color: "#8A93B2" }}>
-            {priceNote}
+      <div>
+        <div className="flex items-end gap-3 flex-wrap">
+          <span
+            className="text-5xl font-black leading-none"
+            style={{ color: highlighted ? "var(--coral)" : "var(--navy)", fontFamily: "var(--font-quicksand), sans-serif" }}
+          >
+            {price}
           </span>
+          {compareAt && (
+            <span className="mb-1 text-left">
+              {compareAtNote && (
+                <span className="block text-[11px] leading-none mb-1" style={{ color: "#8A93B2" }}>
+                  {compareAtNote}
+                </span>
+              )}
+              <span
+                className="text-lg line-through"
+                style={{ color: "#8A93B2", fontFamily: "var(--font-quicksand), sans-serif" }}
+              >
+                {compareAt}
+              </span>
+            </span>
+          )}
+        </div>
+        {priceNote && (
+          <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
+            {priceNote}
+          </p>
         )}
       </div>
 
       <ul className="space-y-3 flex-1">
-        {features.map((f, i) => (
-          <li key={i} className="flex items-start gap-3 text-sm" style={{ color: "#3A4165" }}>
+        {features.map((feature) => (
+          <li key={feature.en} className="flex items-start gap-3 text-sm" style={{ color: "#3A4165" }}>
             <svg
               className="flex-shrink-0 mt-0.5"
               width="18"
@@ -389,7 +418,12 @@ function PricingCard({
                 strokeLinejoin="round"
               />
             </svg>
-            {f}
+            <span>
+              {feature.zh}
+              <span className="block text-xs mt-0.5" style={{ color: "#8A93B2" }}>
+                {feature.en}
+              </span>
+            </span>
           </li>
         ))}
       </ul>
@@ -424,7 +458,7 @@ function SectionHeader({
 }: {
   label: string;
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   center?: boolean;
 }) {
   return (
@@ -755,47 +789,61 @@ export default function LandingPage() {
           ════════════════════════════════════════ */}
       <section
         id="pricing"
-        className="section-padding"
+        className="section-padding scroll-mt-24"
         style={{ backgroundColor: "var(--pink-soft)" }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <SectionHeader
-              label="完整方案 | The Journey Package"
-              title="一份陪妳走完四十週的方案"
-              subtitle="每週情緒引導與冥想練習，收成一份付費的完整旅程。即將開放——現在可以來信取得早鳥資格。"
+              label="方案 | Pricing"
+              title="為這四十週，選一份陪伴"
+              subtitle={
+                <>
+                  每週情緒引導與冥想練習。{PRICING.freeWeeksNote.zh}。{PRICING.currencyNote.zh}，來信即可預購。
+                  <span className="block mt-1 text-sm">
+                    A weekly emotional guide and meditation practice. {PRICING.freeWeeksNote.en}. {PRICING.currencyNote.en} — email us to pre-order.
+                  </span>
+                </>
+              }
               center
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-8 max-w-md mx-auto">
-            <PricingCard
-              highlighted
-              badge="即將開放"
-              title="40 週旅程"
-              subtitle="One Complete Package"
-              price="即將推出"
-              priceNote="Coming soon"
-              features={[
-                "40 週、每週一則情緒引導",
-                "孕期冥想、呼吸與好眠練習",
-                "三個孕期的心靈功課，收在同一份裡",
-                "一份方案，陪妳從第 1 週走到第 40 週",
-              ]}
-              ctaLabel="來信取得早鳥資格 →"
-              ctaHref="mailto:hello@maybeshedliketotalk.org"
-              delay={100}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-4">
+            {PRICING.plans.map((plan, index) => (
+              <PricingCard
+                key={plan.id}
+                highlighted={plan.highlighted}
+                badge={plan.badge ? bilingual(plan.badge) : undefined}
+                title={plan.title.zh}
+                subtitle={plan.title.en}
+                tagline={plan.subtitle}
+                price={formatUsd(plan.priceUsd)}
+                compareAt={plan.compareAtUsd ? formatUsd(plan.compareAtUsd) : undefined}
+                compareAtNote={plan.compareAtNote ? bilingual(plan.compareAtNote) : undefined}
+                priceNote={plan.priceNote ? bilingual(plan.priceNote) : undefined}
+                features={plan.features}
+                ctaLabel={`${PRICING.cta.zh} | ${PRICING.cta.en}`}
+                ctaHref={planPurchaseHref(plan)}
+                delay={(index + 1) * 100}
+              />
+            ))}
           </div>
 
           <FadeIn delay={350} className="text-center mt-10">
-            <p className="text-sm" style={{ color: "#8A93B2" }}>
-              想先知道開放時間，或有任何疑問？歡迎寫信到
-              <a href="mailto:hello@maybeshedliketotalk.org" className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
-                hello@maybeshedliketotalk.org
+            <p className="text-sm font-semibold" style={{ color: "var(--navy)" }}>
+              {PRICING.currencyNote.zh} / {PRICING.currencyNote.en}
+            </p>
+            <p className="text-sm mt-1" style={{ color: "#5A6480" }}>
+              {PRICING.freeWeeksNote.zh} / {PRICING.freeWeeksNote.en}
+            </p>
+            <p className="text-sm mt-3" style={{ color: "#8A93B2" }}>
+              預購請來信
+              <a href={`mailto:${PRICING.email}`} className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
+                {PRICING.email}
               </a>
               <br />
-              Email us for early access — we&apos;d love to hear from you.
+              Email us to pre-order.
             </p>
           </FadeIn>
         </div>

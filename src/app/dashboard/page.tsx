@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
-
-const CONTACT_EMAIL = 'hello@maybeshedliketotalk.org'
+import { PRICING } from '@/lib/pricing'
 
 interface Profile {
   id: string
@@ -149,29 +149,22 @@ export default function DashboardPage() {
             即將開放 | Coming Soon
           </span>
           <h3 className="text-lg font-bold text-[#1E2A5E]">
-            40 週旅程，一份完整方案
+            40 週旅程，三種方案
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
-            每週情緒引導與冥想練習，會收成一份付費的完整旅程。現在還沒有開放，寫信到{' '}
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="font-semibold text-[#F28BAE] hover:underline"
-            >
-              {CONTACT_EMAIL}
-            </a>
-            ，取得早鳥資格。
+            單一孕期、全孕期通行證、送禮版。{PRICING.freeWeeksNote.zh}，{PRICING.currencyNote.zh}。
           </p>
           <p className="text-sm text-[#1E2A5E]/50 mt-1">
-            One complete package, coming soon. Email us for early access.
+            Single Trimester, Full Pregnancy Pass, and Gift Edition. {PRICING.freeWeeksNote.en}. {PRICING.currencyNote.en}.
           </p>
         </div>
-        <a
-          href={`mailto:${CONTACT_EMAIL}`}
+        <Link
+          href="/#pricing"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors duration-200 whitespace-nowrap shadow-sm"
         >
-          來信取得早鳥資格
-          <span className="opacity-70 font-normal">| Early Access</span>
-        </a>
+          查看方案
+          <span className="opacity-70 font-normal">| See plans</span>
+        </Link>
       </div>
 
       <div>
