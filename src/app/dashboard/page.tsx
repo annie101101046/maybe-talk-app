@@ -11,7 +11,6 @@ interface Profile {
   credits: number
   is_paid: boolean
   first_free_used: boolean
-  stripe_customer_id: string | null
   created_at: string
 }
 
@@ -218,56 +217,37 @@ export default function DashboardPage() {
               </Link>
             </div>
           ) : (
-            /* Free session already used — upsell */
-            <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6">
-              <div className="flex flex-col sm:flex-row gap-6">
-                <div className="flex-1">
-                  <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
-                    升級方案 | Upgrade
-                  </span>
-                  <h3 className="text-xl font-bold text-[#1E2A5E]">
-                    孕期陪伴方案
-                    <span className="ml-2 text-base font-normal text-[#1E2A5E]/50">
-                      Pregnancy Support Package
-                    </span>
-                  </h3>
-                  <p className="text-sm text-[#1E2A5E]/60 mt-2 leading-relaxed">
-                    妳的免費體驗已完成。繼續陪伴妳的孕期旅程 ✦
-                  </p>
-
-                  <ul className="mt-4 space-y-2">
-                    {[
-                      { zh: '4 次深度聊聊 sessions', en: '4 one-on-one sessions' },
-                      { zh: '無限制課程內容存取', en: 'Unlimited content access' },
-                      { zh: '孕期 Bootcamp 參與資格', en: 'Bootcamp access' },
-                      { zh: '支持社群加入', en: 'Community membership' },
-                    ].map((item) => (
-                      <li key={item.zh} className="flex items-start gap-2 text-sm">
-                        <span className="text-[#5BBFB5] font-bold mt-0.5">✓</span>
-                        <span className="text-[#1E2A5E]">
-                          {item.zh}{' '}
-                          <span className="text-[#1E2A5E]/40 text-xs">{item.en}</span>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="sm:w-56 flex flex-col items-center justify-center bg-[#FFF5F0] rounded-xl p-5 text-center gap-3">
-                  <p className="text-3xl font-extrabold text-[#F28B6E]">$250</p>
-                  <p className="text-xs text-[#1E2A5E]/50">USD · 一次性付款</p>
-                  <Link
-                    href="/checkout"
-                    className="w-full py-2.5 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors duration-200 text-center block"
+            /* Free session already used — invite to get in touch */
+            <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-[#1E2A5E]">
+                  妳的免費體驗已完成 ✦
+                </h3>
+                <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
+                  想繼續聊聊嗎？歡迎寫信到{' '}
+                  <a
+                    href="mailto:hello@maybeshedliketotalk.org"
+                    className="font-semibold text-[#F28BAE] hover:underline"
                   >
-                    升級方案 | Upgrade
-                  </Link>
-                </div>
+                    hello@maybeshedliketotalk.org
+                  </a>
+                  ，我們很期待收到妳的來信。
+                </p>
+                <p className="text-sm text-[#1E2A5E]/50 mt-1">
+                  Your free intro session is complete. Want to keep talking? Email us anytime — we&apos;d love to hear from you.
+                </p>
               </div>
+              <a
+                href="mailto:hello@maybeshedliketotalk.org"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[#F28BAE]/40 text-[#F28BAE] font-semibold text-sm hover:bg-[#F28BAE]/10 transition-colors duration-200 whitespace-nowrap"
+              >
+                寫信給我們
+                <span className="opacity-70 font-normal">| Email Us</span>
+              </a>
             </div>
           )
         ) : (
-          /* --- Paid user --- */
+          /* --- Legacy credits user (existing data) --- */
           profile.credits > 0 ? (
             <div className="bg-white rounded-2xl border border-[#5BBFB5]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <div className="flex-1">
@@ -294,7 +274,7 @@ export default function DashboardPage() {
                 You&apos;ve used all your sessions. Reach out if you&apos;d like more.
               </p>
               <a
-                href="mailto:hello@maybetalk.com"
+                href="mailto:hello@maybeshedliketotalk.org"
                 className="inline-block mt-4 px-5 py-2.5 rounded-xl border border-[#F28BAE]/40 text-[#F28BAE] font-semibold text-sm hover:bg-[#F28BAE]/10 transition-colors"
               >
                 聯絡我們 | Contact Us

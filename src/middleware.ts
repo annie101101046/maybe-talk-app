@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 /**
  * Routes that require an authenticated user.
  */
-const PROTECTED_ROUTES = ['/dashboard', '/booking', '/checkout']
+const PROTECTED_ROUTES = ['/dashboard', '/booking']
 
 /**
  * Routes that require admin privileges (matched by ADMIN_EMAIL env var).
