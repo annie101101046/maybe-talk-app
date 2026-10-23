@@ -358,8 +358,8 @@ function PricingCard({
 
       <div className="flex items-end gap-2">
         <span
-          className="text-5xl font-black leading-none"
-          style={{ color: highlighted ? "var(--coral)" : "var(--navy)", fontFamily: "var(--font-quicksand), sans-serif" }}
+          className="text-4xl font-black leading-tight"
+          style={{ color: highlighted ? "var(--coral)" : "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
         >
           {price}
         </span>
@@ -394,12 +394,21 @@ function PricingCard({
         ))}
       </ul>
 
-      <Link
-        href={ctaHref}
-        className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
-      >
-        {ctaLabel}
-      </Link>
+      {ctaHref.startsWith("mailto:") || ctaHref.startsWith("http") ? (
+        <a
+          href={ctaHref}
+          className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
+        >
+          {ctaLabel}
+        </a>
+      ) : (
+        <Link
+          href={ctaHref}
+          className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
+        >
+          {ctaLabel}
+        </Link>
+      )}
     </FadeIn>
   );
 }
@@ -470,7 +479,7 @@ export default function LandingPage() {
             {/* Text column */}
             <div className="order-2 lg:order-1">
               <FadeIn>
-                <p className="section-label mb-4">Pregnancy Wellness Platform</p>
+                <p className="section-label mb-4">40 週旅程 | 40-Week Journey</p>
               </FadeIn>
 
               <FadeIn delay={100}>
@@ -478,9 +487,9 @@ export default function LandingPage() {
                   className="display-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-4"
                   style={{ fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  也許妳想
+                  陪妳走完
                   <br />
-                  <span style={{ color: "var(--coral)" }}>找人聊一聊</span>
+                  <span style={{ color: "var(--coral)" }}>這四十週</span>
                 </h1>
               </FadeIn>
 
@@ -505,27 +514,27 @@ export default function LandingPage() {
                   className="text-base lg:text-lg leading-relaxed mb-2 font-medium"
                   style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  為孕期媽咪設計的心靈陪伴平台
+                  每週一則情緒引導，加上冥想與呼吸練習。一份完整的孕期方案，即將開放。
                 </p>
                 <p
                   className="text-sm lg:text-base leading-relaxed mb-8"
                   style={{ color: "#6B7599" }}
                 >
-                  A pregnancy wellness companion designed for expecting mothers —
-                  because this journey deserves gentle, professional support.
+                  A weekly emotional guide and meditation practice for expecting mothers —
+                  one complete package, coming soon.
                 </p>
               </FadeIn>
 
               <FadeIn delay={350}>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/auth/signup" className="btn-primary text-base">
-                    免費體驗第一次聊聊
+                  <a href="mailto:hello@maybeshedliketotalk.org" className="btn-primary text-base">
+                    來信取得早鳥資格
                     <svg className="ml-2" width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </Link>
-                  <a href="#about" className="btn-secondary text-base">
-                    了解更多
+                  </a>
+                  <a href="#journey" className="btn-secondary text-base">
+                    了解這四十週
                   </a>
                 </div>
               </FadeIn>
@@ -583,24 +592,24 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FeatureCard
-              icon="🧘"
-              title="40 週 Inner Engineering"
-              subtitle="Full Pregnancy Journey"
-              description="從第 1 週到第 40 週，每個階段都有量身設計的情緒引導、正念練習與心靈功課，陪伴妳從接納到準備、從迷惘到篤定。"
+              icon="💌"
+              title="每週情緒引導"
+              subtitle="Weekly Emotional Guide"
+              description="每一週一則為這個孕期寫的心靈功課。從身體的變化、說不出口的焦慮，到慢慢長出來的期待，都有一個可以安放的地方。"
               delay={100}
             />
             <FeatureCard
-              icon="💬"
-              title="1:1 專業陪伴"
-              subtitle="Personal Support Sessions"
-              description="每次 45 分鐘，透過 Google Meet 與訓練有素的孕期陪伴師深度聊聊。不評判、只傾聽，讓妳的感受被好好接住。"
+              icon="🧘"
+              title="40 週完整旅程"
+              subtitle="One Complete Package"
+              description="從第 1 週到第 40 週，三個孕期收在同一份方案裡。一次走完，不必一週一週另外找。"
               delay={200}
             />
             <FeatureCard
               icon="🌙"
               title="呼吸・冥想・好眠"
-              subtitle="Breathwork & Sleep Support"
-              description="精心設計的引導冥想音頻、孕期呼吸練習與好眠儀式，讓妳在身體變化最劇烈的時候，仍能找回內心的平靜與安定。"
+              subtitle="Meditation Practices"
+              description="精心設計的引導冥想、孕期呼吸練習與好眠儀式，讓妳在身體變化最劇烈的時候，仍能找回內心的平靜與安定。"
               delay={300}
             />
           </div>
@@ -608,10 +617,10 @@ export default function LandingPage() {
           {/* Stats bar */}
           <FadeIn delay={400} className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { num: "45", unit: "分鐘", label: "每次深度聊聊" },
-              { num: "40", unit: "週", label: "完整陪伴旅程" },
-              { num: "1:1", unit: "", label: "個人化陪伴" },
-              { num: "∞", unit: "", label: "站內內容無限看" },
+              { num: "40", unit: "週", label: "完整情緒旅程" },
+              { num: "3", unit: "期", label: "三種孕期節奏" },
+              { num: "每週", unit: "", label: "一則心靈引導" },
+              { num: "∞", unit: "", label: "冥想練習隨時聽" },
             ].map(({ num, unit, label }) => (
               <div
                 key={label}
@@ -752,9 +761,9 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <SectionHeader
-              label="免費體驗 | Free Session"
-              title="為妳的孕期旅程找一份陪伴"
-              subtitle="從一次免費的聊聊開始，感受被溫柔接住的感覺。"
+              label="完整方案 | The Journey Package"
+              title="一份陪妳走完四十週的方案"
+              subtitle="每週情緒引導與冥想練習，收成一份付費的完整旅程。即將開放——現在可以來信取得早鳥資格。"
               center
             />
           </div>
@@ -762,56 +771,56 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 gap-8 max-w-md mx-auto">
             <PricingCard
               highlighted
-              title="初次體驗"
-              subtitle="First Free Session"
-              price="免費"
-              priceNote="Free"
+              badge="即將開放"
+              title="40 週旅程"
+              subtitle="One Complete Package"
+              price="即將推出"
+              priceNote="Coming soon"
               features={[
-                "45 分鐘 1:1 聊聊（Google Meet）",
-                "體驗孕期陪伴的感覺",
-                "了解個人化需求與方向",
-                "無任何費用，無需信用卡",
+                "40 週、每週一則情緒引導",
+                "孕期冥想、呼吸與好眠練習",
+                "三個孕期的心靈功課，收在同一份裡",
+                "一份方案，陪妳從第 1 週走到第 40 週",
               ]}
-              ctaLabel="免費預約 →"
-              ctaHref="/auth/signup"
+              ctaLabel="來信取得早鳥資格 →"
+              ctaHref="mailto:hello@maybeshedliketotalk.org"
               delay={100}
             />
           </div>
 
           <FadeIn delay={350} className="text-center mt-10">
             <p className="text-sm" style={{ color: "#8A93B2" }}>
-              體驗之後想繼續聊聊，或有任何疑問？歡迎寫信到
+              想先知道開放時間，或有任何疑問？歡迎寫信到
               <a href="mailto:hello@maybeshedliketotalk.org" className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
                 hello@maybeshedliketotalk.org
               </a>
               <br />
-              Want to keep talking after your free session? Just email us.
+              Email us for early access — we&apos;d love to hear from you.
             </p>
           </FadeIn>
         </div>
       </section>
 
       {/* ════════════════════════════════════════
-          BOOKING SECTION
+          EARLY ACCESS SECTION
           ════════════════════════════════════════ */}
-      <section id="booking" className="section-padding" style={{ backgroundColor: "var(--cream)" }}>
+      <section id="early-access" className="section-padding" style={{ backgroundColor: "var(--cream)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-            {/* Text */}
             <div>
               <SectionHeader
-                label="預約聊聊 | Book a Session"
-                title="找一個時間，讓我們好好聊聊"
-                subtitle="透過 Google Meet，從家裡的沙發、臥室、甚至哺乳椅，都可以開始這段對話。妳不需要準備什麼——帶著妳自己就夠了。"
+                label="早鳥資格 | Early Access"
+                title="這份旅程，即將一次完整開放"
+                subtitle="從家裡的沙發、臥室、甚至半夜醒著的那一刻，都可以打開這一週的引導。妳不需要準備什麼——帶著妳自己就夠了。"
               />
               <FadeIn delay={200} className="mt-8">
                 <ul className="space-y-4">
                   {[
-                    { icon: "📅", text: "彈性選擇妳方便的時間，週間週末皆有" },
-                    { icon: "💻", text: "Google Meet 線上進行，無需安裝任何程式" },
-                    { icon: "🔒", text: "完全保密，妳說的話只在這個空間裡" },
-                    { icon: "🌸", text: "第一次完全免費，感受陪伴的溫度" },
+                    { icon: "💌", text: "每週一則情緒引導，跟著孕期的節奏走" },
+                    { icon: "🌙", text: "冥想、呼吸與好眠練習，想聽的時候就回來" },
+                    { icon: "🌸", text: "三個孕期的心靈功課，收在同一份方案裡" },
+                    { icon: "✦", text: "一份完整方案，即將開放" },
                   ].map(({ icon, text }) => (
                     <li key={text} className="flex items-start gap-3">
                       <span className="text-xl flex-shrink-0 mt-0.5">{icon}</span>
@@ -823,22 +832,20 @@ export default function LandingPage() {
                 </ul>
               </FadeIn>
               <FadeIn delay={300} className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link href="/auth/signup" className="btn-primary text-base">
-                  登入後立即預約
-                </Link>
+                <a href="mailto:hello@maybeshedliketotalk.org" className="btn-primary text-base">
+                  來信取得早鳥資格
+                </a>
                 <Link href="/auth/login" className="btn-secondary text-base">
                   已有帳號？登入
                 </Link>
               </FadeIn>
             </div>
 
-            {/* Booking preview card */}
             <FadeIn delay={200}>
               <div
                 className="rounded-3xl p-8 relative overflow-hidden"
                 style={{ background: "white", boxShadow: "var(--shadow-card)" }}
               >
-                {/* Decorative top bar */}
                 <div
                   className="h-2 rounded-full mb-8 -mx-8 -mt-8 px-8"
                   style={{
@@ -852,43 +859,47 @@ export default function LandingPage() {
                     className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
                     style={{ background: "var(--cream)" }}
                   >
-                    💬
+                    🌙
                   </div>
                   <div>
                     <p
                       className="font-bold text-base"
                       style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                     >
-                      初次免費體驗聊聊
+                      40 週完整方案
                     </p>
                     <p className="text-sm" style={{ color: "#8A93B2" }}>
-                      45 分鐘 · Google Meet · 完全免費
+                      每週情緒引導 · 冥想練習 · 即將開放
                     </p>
                   </div>
                 </div>
 
-                {/* Fake time slots */}
                 <p
                   className="text-xs font-bold uppercase tracking-wider mb-3"
                   style={{ color: "var(--coral)" }}
                 >
-                  可預約時間
+                  旅程裡有什麼
                 </p>
-                <div className="grid grid-cols-3 gap-2 mb-6">
+                <div className="space-y-2 mb-6">
                   {[
-                    "週一 10:00", "週二 14:00", "週三 11:00",
-                    "週四 16:00", "週五 09:00", "週六 15:00",
-                  ].map((slot) => (
+                    { weeks: "第 1–12 週", theme: "接納與安定" },
+                    { weeks: "第 13–27 週", theme: "連結與探索" },
+                    { weeks: "第 28–40 週", theme: "準備與期待" },
+                  ].map(({ weeks, theme }) => (
                     <div
-                      key={slot}
-                      className="rounded-xl py-2.5 px-2 text-center text-xs font-semibold border-2 transition-colors cursor-pointer"
+                      key={weeks}
+                      className="rounded-xl py-3 px-4 flex items-center justify-between border-2"
                       style={{
                         borderColor: "var(--coral)",
-                        color: "var(--coral)",
-                        fontFamily: "var(--font-quicksand), sans-serif",
+                        color: "var(--navy)",
                       }}
                     >
-                      {slot}
+                      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-noto), sans-serif" }}>
+                        {weeks}
+                      </span>
+                      <span className="text-xs font-semibold" style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}>
+                        {theme}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -897,15 +908,15 @@ export default function LandingPage() {
                   className="text-xs text-center mb-4"
                   style={{ color: "#8A93B2" }}
                 >
-                  登入後查看完整可預約時段
+                  寫信給我們，開放時第一時間告訴妳
                 </p>
 
-                <Link
-                  href="/auth/signup"
+                <a
+                  href="mailto:hello@maybeshedliketotalk.org"
                   className="btn-primary w-full text-center block text-sm"
                 >
-                  免費註冊並預約
-                </Link>
+                  來信取得早鳥資格
+                </a>
               </div>
             </FadeIn>
 
@@ -932,30 +943,30 @@ export default function LandingPage() {
               className="text-2xl md:text-3xl font-bold text-white"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              被聽見的感覺，真的很不一樣
+              被陪伴的這四十週，真的很不一樣
             </h2>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                quote: "第一次聊聊就哭了，但哭完之後覺得好輕鬆。終於有人懂我孕期的焦慮不是無理取鬧。",
+                quote: "每週的情緒引導像有人輕輕陪著我。孕吐那段最難的時候，終於知道怎麼安放自己的心情。",
                 name: "小涵",
-                week: "孕 28 週",
+                week: "孕 12 週",
                 color: "var(--coral)",
                 delay: 100,
               },
               {
-                quote: "40 週課程裡的冥想音頻變成我每天睡前必聽。有了這個陪伴，整個孕期都安心很多。",
+                quote: "40 週旅程裡的冥想練習變成我每天睡前必聽。有了這個陪伴，整個孕期都安心很多。",
                 name: "Mei",
                 week: "孕 36 週",
                 color: "var(--teal)",
                 delay: 200,
               },
               {
-                quote: "原本不知道自己需要什麼，聊了幾次之後，才發現一直壓著的情緒有了出口。謝謝妳們。",
+                quote: "第三孕期的呼吸練習讓我在睡不著的夜裡找到一個安定的節奏。這四十週，我沒有覺得自己在硬撐。",
                 name: "Amanda",
-                week: "已生產，回顧",
+                week: "孕 34 週",
                 color: "var(--yellow)",
                 delay: 300,
               },
@@ -1017,23 +1028,23 @@ export default function LandingPage() {
             >
               也許，現在就是
               <br />
-              找人聊聊的好時機
+              開始這四十週的時候
             </h2>
             <p className="text-white/80 text-base mb-8 leading-relaxed">
-              第一次完全免費。不需要準備什麼，帶著妳自己就夠了。
+              一份完整方案即將開放。寫信給我們，取得早鳥資格。
               <br />
-              <span className="font-semibold">Maybe now is a good time to talk.</span>
+              <span className="font-semibold">One journey. Coming soon.</span>
             </p>
-            <Link
-              href="/auth/signup"
+            <a
+              href="mailto:hello@maybeshedliketotalk.org"
               className="inline-flex items-center gap-2 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
               style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
             >
-              免費體驗第一次聊聊
+              來信取得早鳥資格
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </Link>
+            </a>
           </FadeIn>
         </div>
       </section>
@@ -1059,7 +1070,7 @@ export default function LandingPage() {
               <p className="text-sm text-white/50 leading-relaxed">
                 Maybe She&apos;d Like to Talk
                 <br />
-                孕期心靈陪伴平台
+                40 週孕期心靈旅程
               </p>
             </div>
 
@@ -1072,8 +1083,8 @@ export default function LandingPage() {
                 {[
                   { label: "關於我們", href: "#about" },
                   { label: "40 週旅程", href: "#journey" },
-                  { label: "免費體驗", href: "#pricing" },
-                  { label: "預約聊聊", href: "#booking" },
+                  { label: "完整方案", href: "#pricing" },
+                  { label: "早鳥資格", href: "#early-access" },
                 ].map(({ label, href }) => (
                   <li key={href}>
                     <a
@@ -1103,12 +1114,12 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li className="pt-4">
-                  <Link
-                    href="/auth/signup"
+                  <a
+                    href="mailto:hello@maybeshedliketotalk.org"
                     className="text-sm font-bold text-white py-2.5 px-5 rounded-full border-2 border-white/30 hover:border-white transition-colors"
                   >
-                    免費體驗 →
-                  </Link>
+                    取得早鳥資格 →
+                  </a>
                 </li>
               </ul>
             </div>

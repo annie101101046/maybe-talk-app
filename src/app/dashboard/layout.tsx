@@ -68,13 +68,7 @@ export default async function DashboardLayout({
               href="/dashboard"
               className="text-sm font-medium text-[#1E2A5E]/70 hover:text-[#1E2A5E] transition-colors"
             >
-              主頁
-            </a>
-            <a
-              href="/booking"
-              className="text-sm font-medium text-[#1E2A5E]/70 hover:text-[#1E2A5E] transition-colors"
-            >
-              預約
+              旅程
             </a>
 
             {/* Profile chip */}

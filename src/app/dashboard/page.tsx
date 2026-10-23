@@ -2,60 +2,43 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
+
+const CONTACT_EMAIL = 'hello@maybeshedliketotalk.org'
 
 interface Profile {
   id: string
   full_name: string | null
-  credits: number
-  is_paid: boolean
-  first_free_used: boolean
   created_at: string
 }
 
-interface Booking {
-  id: string
-  booking_type: string
-  status: string
-  created_at: string
-  cal_booking_id: string | null
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    confirmed: 'bg-[#5BBFB5]/15 text-[#5BBFB5] border-[#5BBFB5]/30',
-    pending: 'bg-[#FFB627]/15 text-[#FFB627] border-[#FFB627]/30',
-    cancelled: 'bg-red-50 text-red-400 border-red-200',
-    completed: 'bg-[#1E2A5E]/10 text-[#1E2A5E]/60 border-[#1E2A5E]/15',
-  }
-  const label: Record<string, string> = {
-    confirmed: '已確認',
-    pending: '待確認',
-    cancelled: '已取消',
-    completed: '已完成',
-  }
-  return (
-    <span
-      className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium border ${map[status] ?? 'bg-gray-100 text-gray-500 border-gray-200'}`}
-    >
-      {label[status] ?? status}
-    </span>
-  )
-}
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('zh-TW', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
+const TRIMESTERS = [
+  {
+    period: '第一孕期',
+    weeks: '1–12 週',
+    en: 'First Trimester',
+    theme: '接納與安定',
+    items: ['認識身體的變化', '焦慮時的情緒引導', '與寶寶的第一次連結冥想'],
+  },
+  {
+    period: '第二孕期',
+    weeks: '13–27 週',
+    en: 'Second Trimester',
+    theme: '連結與探索',
+    items: ['感受胎動的儀式', '身體形象與自我接納', '深化與寶寶的情感連結'],
+  },
+  {
+    period: '第三孕期',
+    weeks: '28–40 週',
+    en: 'Third Trimester',
+    theme: '準備與期待',
+    items: ['生產恐懼的溫柔鬆綁', '孕期好眠呼吸練習', '迎接分娩的正念陪伴'],
+  },
+]
 
 export default function DashboardPage() {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
 
   const supabase = createBrowserClient(
@@ -74,7 +57,6 @@ export default function DashboardPage() {
         return
       }
 
-      // Try reading the profile injected by the server layout first
       const inlineScript = document.getElementById('__PROFILE_DATA__')
       if (inlineScript) {
         try {
@@ -87,23 +69,13 @@ export default function DashboardPage() {
         }
       }
 
-      // Always fetch fresh profile data from Supabase
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, full_name, created_at')
         .eq('id', user.id)
         .single()
 
       if (profileData) setProfile(profileData as Profile)
-
-      const { data: bookingData } = await supabase
-        .from('bookings')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(10)
-
-      if (bookingData) setBookings(bookingData as Booking[])
 
       setLoading(false)
     }
@@ -126,204 +98,110 @@ export default function DashboardPage() {
   if (!profile) return null
 
   const firstName = profile.full_name?.split(' ')[0] ?? '妳'
-  const totalBookings = bookings.length
 
   return (
     <div className="space-y-8">
-      {/* Welcome header */}
       <div>
         <h2 className="text-2xl sm:text-3xl font-bold text-[#1E2A5E]">
           嗨，{firstName} 👋
         </h2>
         <p className="text-[#1E2A5E]/50 text-sm mt-1">
-          Hi {profile.full_name ?? ''}! Here&apos;s your overview.
+          這四十週，我們一週一週陪著妳。
+          <br />
+          <span className="text-xs">
+            Your 40-week journey — a weekly emotional guide and meditation practice.
+          </span>
         </p>
       </div>
 
-      {/* Status cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Credits card */}
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            剩餘點數 · Credits
+            完整旅程 · Full Journey
           </p>
-          <p
-            className={`text-5xl font-extrabold leading-none ${profile.is_paid ? 'text-[#5BBFB5]' : 'text-[#F28B6E]'}`}
-          >
-            {profile.is_paid ? profile.credits : profile.first_free_used ? 0 : '✦'}
+          <p className="text-5xl font-extrabold leading-none text-[#F28B6E]">
+            40
+            <span className="text-lg ml-1">週</span>
           </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">
-            {profile.is_paid
-              ? `${profile.credits} session${profile.credits !== 1 ? 's' : ''} available`
-              : profile.first_free_used
-              ? '免費體驗已使用'
-              : '免費體驗可預約'}
-          </p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">從第 1 週到寶寶出生</p>
         </div>
 
-        {/* Membership card */}
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            會員狀態 · Membership
+            情緒引導 · Weekly Guide
           </p>
-          {profile.is_paid ? (
-            <>
-              <p className="text-2xl font-extrabold text-[#F28BAE]">Premium</p>
-              <p className="text-xs text-[#1E2A5E]/40 mt-2">孕期陪伴方案已啟用</p>
-            </>
-          ) : (
-            <>
-              <p className="text-2xl font-extrabold text-[#1E2A5E]/40">Free</p>
-              <p className="text-xs text-[#1E2A5E]/40 mt-2">免費體驗方案</p>
-            </>
-          )}
+          <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">每週</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">一則為這個孕期寫的心靈功課</p>
         </div>
 
-        {/* Total sessions card */}
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            已預約次數 · Total Sessions
+            冥想練習 · Meditation
           </p>
-          <p className="text-5xl font-extrabold text-[#FFB627] leading-none">
-            {totalBookings}
-          </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">
-            {totalBookings === 0 ? '尚未預約' : `共 ${totalBookings} 次聊聊`}
-          </p>
+          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">∞</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">呼吸、冥想與好眠，隨時可以回來</p>
         </div>
       </div>
 
-      {/* Action panel */}
-      <div>
-        {!profile.is_paid ? (
-          /* --- Free user --- */
-          !profile.first_free_used ? (
-            /* Has not used free session */
-            <div className="bg-white rounded-2xl border border-[#5BBFB5]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-[#1E2A5E]">
-                  妳有一次免費體驗！
-                </h3>
-                <p className="text-sm text-[#1E2A5E]/50 mt-1">
-                  You have a free intro session waiting. No commitment needed.
-                </p>
-              </div>
-              <Link
-                href="/booking"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#5BBFB5] hover:bg-[#4aaea4] text-white font-semibold text-sm transition-colors duration-200 whitespace-nowrap shadow-sm"
-              >
-                預約免費體驗
-                <span className="opacity-70 font-normal">| Book Now</span>
-              </Link>
-            </div>
-          ) : (
-            /* Free session already used — invite to get in touch */
-            <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-[#1E2A5E]">
-                  妳的免費體驗已完成 ✦
-                </h3>
-                <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
-                  想繼續聊聊嗎？歡迎寫信到{' '}
-                  <a
-                    href="mailto:hello@maybeshedliketotalk.org"
-                    className="font-semibold text-[#F28BAE] hover:underline"
-                  >
-                    hello@maybeshedliketotalk.org
-                  </a>
-                  ，我們很期待收到妳的來信。
-                </p>
-                <p className="text-sm text-[#1E2A5E]/50 mt-1">
-                  Your free intro session is complete. Want to keep talking? Email us anytime — we&apos;d love to hear from you.
-                </p>
-              </div>
-              <a
-                href="mailto:hello@maybeshedliketotalk.org"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[#F28BAE]/40 text-[#F28BAE] font-semibold text-sm hover:bg-[#F28BAE]/10 transition-colors duration-200 whitespace-nowrap"
-              >
-                寫信給我們
-                <span className="opacity-70 font-normal">| Email Us</span>
-              </a>
-            </div>
-          )
-        ) : (
-          /* --- Legacy credits user (existing data) --- */
-          profile.credits > 0 ? (
-            <div className="bg-white rounded-2xl border border-[#5BBFB5]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-[#1E2A5E]">
-                  妳還有 {profile.credits} 次 session
-                </h3>
-                <p className="text-sm text-[#1E2A5E]/50 mt-1">
-                  You have {profile.credits} session{profile.credits !== 1 ? 's' : ''}{' '}
-                  remaining. Ready to chat?
-                </p>
-              </div>
-              <Link
-                href="/booking"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors duration-200 whitespace-nowrap shadow-sm"
-              >
-                預約聊聊
-                <span className="opacity-70 font-normal">| Book a Session</span>
-              </Link>
-            </div>
-          ) : (
-            <div className="bg-white rounded-2xl border border-[#1E2A5E]/10 shadow-sm p-6">
-              <h3 className="text-lg font-bold text-[#1E2A5E]">Credits 已用完</h3>
-              <p className="text-sm text-[#1E2A5E]/50 mt-1">
-                You&apos;ve used all your sessions. Reach out if you&apos;d like more.
-              </p>
-              <a
-                href="mailto:hello@maybeshedliketotalk.org"
-                className="inline-block mt-4 px-5 py-2.5 rounded-xl border border-[#F28BAE]/40 text-[#F28BAE] font-semibold text-sm hover:bg-[#F28BAE]/10 transition-colors"
-              >
-                聯絡我們 | Contact Us
-              </a>
-            </div>
-          )
-        )}
+      <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+        <div className="flex-1">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
+            即將開放 | Coming Soon
+          </span>
+          <h3 className="text-lg font-bold text-[#1E2A5E]">
+            40 週旅程，一份完整方案
+          </h3>
+          <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
+            每週情緒引導與冥想練習，會收成一份付費的完整旅程。現在還沒有開放，寫信到{' '}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-semibold text-[#F28BAE] hover:underline"
+            >
+              {CONTACT_EMAIL}
+            </a>
+            ，取得早鳥資格。
+          </p>
+          <p className="text-sm text-[#1E2A5E]/50 mt-1">
+            One complete package, coming soon. Email us for early access.
+          </p>
+        </div>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors duration-200 whitespace-nowrap shadow-sm"
+        >
+          來信取得早鳥資格
+          <span className="opacity-70 font-normal">| Early Access</span>
+        </a>
       </div>
 
-      {/* Recent bookings */}
       <div>
         <h3 className="text-base font-bold text-[#1E2A5E] mb-4">
-          最近預約紀錄{' '}
-          <span className="text-[#1E2A5E]/40 font-normal text-sm">Recent Bookings</span>
+          旅程預覽{' '}
+          <span className="text-[#1E2A5E]/40 font-normal text-sm">Journey Preview</span>
         </h3>
-
-        {bookings.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-[#F28BAE]/15 p-8 text-center">
-            <p className="text-4xl mb-3">🌸</p>
-            <p className="text-[#1E2A5E]/50 text-sm">
-              尚無預約紀錄。
-              <br />
-              <span className="text-xs">No bookings yet — your journey starts here.</span>
-            </p>
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-[#F28BAE]/15 shadow-sm divide-y divide-[#F28BAE]/10 overflow-hidden">
-            {bookings.map((booking) => (
-              <div
-                key={booking.id}
-                className="flex items-center justify-between px-5 py-4 hover:bg-[#FFF5F0]/60 transition-colors"
-              >
-                <div>
-                  <p className="text-sm font-medium text-[#1E2A5E]">
-                    {booking.booking_type === 'free_intro'
-                      ? '免費體驗 · Free Intro'
-                      : booking.booking_type === 'paid_session'
-                      ? '深度聊聊 · Paid Session'
-                      : booking.booking_type}
-                  </p>
-                  <p className="text-xs text-[#1E2A5E]/40 mt-0.5">
-                    {formatDate(booking.created_at)}
-                  </p>
-                </div>
-                <StatusBadge status={booking.status} />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {TRIMESTERS.map((trimester) => (
+            <div
+              key={trimester.period}
+              className="bg-white rounded-2xl border border-[#F28BAE]/15 shadow-sm p-5"
+            >
+              <p className="text-xs font-semibold text-[#F28B6E] tracking-wide">
+                {trimester.weeks}
+                <span className="text-[#1E2A5E]/30 font-normal ml-1.5">{trimester.en}</span>
+              </p>
+              <p className="text-base font-bold text-[#1E2A5E] mt-1">{trimester.period}</p>
+              <p className="text-sm text-[#5BBFB5] font-semibold mb-3">{trimester.theme}</p>
+              <ul className="space-y-1.5">
+                {trimester.items.map((item) => (
+                  <li key={item} className="text-sm text-[#1E2A5E]/70 flex items-start gap-2">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#F28BAE] flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

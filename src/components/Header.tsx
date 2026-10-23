@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { label: "關於", href: "/#about" },
   { label: "旅程", href: "/#journey" },
   { label: "方案", href: "/#pricing" },
-  { label: "預約", href: "/#booking" },
 ];
 
 export default function Header() {
@@ -167,12 +166,12 @@ export default function Header() {
                   >
                     登入
                   </Link>
-                  <Link
-                    href="/auth/signup"
+                  <a
+                    href="mailto:hello@maybeshedliketotalk.org"
                     className="btn-primary text-sm"
                   >
-                    免費體驗
-                  </Link>
+                    早鳥資格
+                  </a>
                 </>
               )}
             </div>
@@ -262,13 +261,13 @@ export default function Header() {
                   >
                     登入
                   </Link>
-                  <Link
-                    href="/auth/signup"
+                  <a
+                    href="mailto:hello@maybeshedliketotalk.org"
                     onClick={closeMenu}
                     className="block btn-primary text-center"
                   >
-                    免費體驗第一次聊聊
-                  </Link>
+                    來信取得早鳥資格
+                  </a>
                 </>
               )}
             </div>
