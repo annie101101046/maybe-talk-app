@@ -4,14 +4,19 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLocale } from "@/components/LocaleProvider";
+import { pick } from "@/lib/locale";
 
 const NAV_LINKS = [
-  { label: "關於", href: "/#about" },
-  { label: "旅程", href: "/#journey" },
-  { label: "方案", href: "/#pricing" },
+  { href: "/#about", zh: "關於", en: "About" },
+  { href: "/#journey", zh: "旅程", en: "Journey" },
+  { href: "/#pricing", zh: "方案", en: "Pricing" },
 ];
 
 export default function Header() {
+  const { locale } = useLocale();
+  const t = (zh: string, en: string) => pick(locale, zh, en);
   const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -70,18 +75,18 @@ export default function Header() {
         }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between gap-3 min-h-16 md:min-h-20 py-2">
             {/* Logo */}
             <Link
               href="/"
-              className="flex-shrink-0 group"
+              className="flex-shrink-0 group min-w-0"
               onClick={closeMenu}
             >
               <span
-                className="font-bold text-base md:text-lg leading-tight tracking-tight transition-opacity group-hover:opacity-80"
+                className="block font-bold text-sm md:text-base leading-tight tracking-tight transition-opacity group-hover:opacity-80"
                 style={{ color: "var(--coral)", fontFamily: "var(--font-noto), sans-serif" }}
               >
-                也許妳想找人聊一聊
+                {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
               </span>
             </Link>
 
@@ -102,13 +107,14 @@ export default function Header() {
                     (e.currentTarget as HTMLElement).style.color = "var(--navy)";
                   }}
                 >
-                  {link.label}
+                  {t(link.zh, link.en)}
                 </Link>
               ))}
             </nav>
 
             {/* Desktop Auth */}
             <div className="hidden md:flex items-center gap-3">
+              <LanguageToggle />
               {user ? (
                 <div className="flex items-center gap-3">
                   {/* Avatar */}
@@ -142,7 +148,7 @@ export default function Header() {
                       (e.currentTarget as HTMLElement).style.color = "var(--navy)";
                     }}
                   >
-                    登出
+                    {t("登出", "Log out")}
                   </button>
                 </div>
               ) : (
@@ -164,23 +170,24 @@ export default function Header() {
                       (e.currentTarget as HTMLElement).style.color = "var(--coral)";
                     }}
                   >
-                    登入
+                    {t("登入", "Log in")}
                   </Link>
                   <Link
                     href="/#pricing"
                     className="btn-primary text-sm"
                   >
-                    立即購買
+                    {t("立即購買", "Buy now")}
                   </Link>
                 </>
               )}
             </div>
 
-            {/* Mobile Hamburger */}
-            <button
+            <div className="md:hidden flex items-center gap-2 flex-shrink-0">
+              <LanguageToggle />
+              <button
               className="md:hidden p-2 rounded-lg transition-colors"
               style={{ color: "var(--navy)" }}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-label={menuOpen ? t("關閉選單", "Close menu") : t("開啟選單", "Open menu")}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((v) => !v)}
             >
@@ -208,6 +215,7 @@ export default function Header() {
                 )}
               </svg>
             </button>
+            </div>
           </div>
         </div>
 
@@ -230,7 +238,7 @@ export default function Header() {
                 className="block px-4 py-3 rounded-xl text-base font-semibold transition-colors"
                 style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
               >
-                {link.label}
+                {t(link.zh, link.en)}
               </Link>
             ))}
 
@@ -241,14 +249,14 @@ export default function Header() {
                     className="px-4 py-2 text-sm font-medium"
                     style={{ color: "var(--navy)" }}
                   >
-                    歡迎，{userDisplayName}
+                    {t("歡迎，", "Hi,")} {userDisplayName}
                   </div>
                   <button
                     onClick={handleSignOut}
                     className="w-full text-left px-4 py-3 rounded-xl text-base font-semibold transition-colors"
                     style={{ color: "var(--coral)" }}
                   >
-                    登出
+                    {t("登出", "Log out")}
                   </button>
                 </>
               ) : (
@@ -259,14 +267,14 @@ export default function Header() {
                     className="block px-4 py-3 rounded-xl text-base font-semibold transition-colors"
                     style={{ color: "var(--coral)" }}
                   >
-                    登入
+                    {t("登入", "Log in")}
                   </Link>
                   <Link
                     href="/#pricing"
                     onClick={closeMenu}
                     className="block btn-primary text-center"
                   >
-                    立即購買
+                    {t("立即購買", "Buy now")}
                   </Link>
                 </>
               )}

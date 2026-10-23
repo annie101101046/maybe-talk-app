@@ -2,7 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Sans_TC, Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import LocaleProvider from "@/components/LocaleProvider";
 import SiteFooter from "@/components/SiteFooter";
+import { htmlLang } from "@/lib/locale";
+import { getLocale } from "@/lib/locale-server";
 
 /* ─────────────────────────────────────────
    Font Loading
@@ -25,45 +28,51 @@ const quicksand = Quicksand({
 /* ─────────────────────────────────────────
    Metadata
    ───────────────────────────────────────── */
-export const metadata: Metadata = {
-  title: {
-    default: "也許妳想找人聊一聊 | Maybe She'd Like to Talk",
-    template: "%s | 也許妳想找人聊一聊",
-  },
-  description:
-    "為孕期媽咪設計的 40 週旅程。每週一則情緒引導，加上冥想與呼吸練習。現在可以買，內容每週寄到信箱。A 40-week pregnancy journey for expecting mothers — a weekly emotional guide and meditation practices. Buy now. New content is emailed each week.",
-  keywords: [
-    "孕期",
-    "孕婦",
-    "心靈陪伴",
-    "冥想",
-    "呼吸練習",
-    "pregnancy wellness",
-    "prenatal",
-    "mindfulness",
-    "也許妳想找人聊一聊",
-    "Maybe She'd Like to Talk",
-  ],
-  openGraph: {
-    type: "website",
-    locale: "zh_TW",
-    alternateLocale: "en_US",
-    title: "也許妳想找人聊一聊 | Maybe She'd Like to Talk",
-    description:
-      "40 週孕期旅程。每週情緒引導、冥想與呼吸練習。現在可以買，內容每週寄到信箱。",
-    siteName: "也許妳想找人聊一聊",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "也許妳想找人聊一聊 | Maybe She'd Like to Talk",
-    description:
-      "40 週孕期旅程。每週情緒引導、冥想與呼吸練習。現在可以買，內容每週寄到信箱。",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const zh = locale === "zh";
+  const title = zh ? "也許妳想找人聊一聊" : "Maybe She'd Like to Talk";
+  const description = zh
+    ? "為孕期媽咪設計的 40 週旅程。每週一則情緒引導，加上冥想與呼吸練習。現在可以買，內容每週寄到信箱。"
+    : "A 40-week pregnancy journey. A weekly emotional guide, plus meditation and breathing. Buy now. Content is emailed each week.";
+
+  return {
+    title: {
+      default: title,
+      template: `%s | ${title}`,
+    },
+    description,
+    keywords: [
+      "孕期",
+      "孕婦",
+      "心靈陪伴",
+      "冥想",
+      "呼吸練習",
+      "pregnancy wellness",
+      "prenatal",
+      "mindfulness",
+      "也許妳想找人聊一聊",
+      "Maybe She'd Like to Talk",
+    ],
+    openGraph: {
+      type: "website",
+      locale: zh ? "zh_TW" : "en_US",
+      alternateLocale: zh ? "en_US" : "zh_TW",
+      title,
+      description,
+      siteName: title,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#FFF5F0",
@@ -74,14 +83,17 @@ export const viewport: Viewport = {
 /* ─────────────────────────────────────────
    Root Layout
    ───────────────────────────────────────── */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+
   return (
     <html
-      lang="zh-TW"
+      lang={htmlLang(locale)}
+      data-locale={locale}
       className={`${notoSansTC.variable} ${quicksand.variable}`}
     >
       <body
@@ -91,9 +103,11 @@ export default function RootLayout({
             "var(--font-noto), var(--font-quicksand), 'Noto Sans TC', Quicksand, sans-serif",
         }}
       >
-        <Header />
-        <main>{children}</main>
-        <SiteFooter />
+        <LocaleProvider initialLocale={locale}>
+          <Header />
+          <main>{children}</main>
+          <SiteFooter />
+        </LocaleProvider>
       </body>
     </html>
   );
