@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Sans_TC, Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import SiteFooter from "@/components/SiteFooter";
 
 /* ─────────────────────────────────────────
    Font Loading
@@ -92,6 +93,7 @@ export default function RootLayout({
       >
         <Header />
         <main>{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

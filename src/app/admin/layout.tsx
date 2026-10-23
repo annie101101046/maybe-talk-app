@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server'
 const NAV_LINKS = [
   { href: '/admin', label: '總覽', labelEn: 'Overview', icon: '◈' },
   { href: '/admin/users', label: '用戶', labelEn: 'Users', icon: '◉' },
-  { href: '/admin/payments', label: '付款', labelEn: 'Payments', icon: '◎' },
   { href: '/admin/bookings', label: '預約', labelEn: 'Bookings', icon: '◍' },
 ]
 

@@ -246,27 +246,32 @@ export default function BookingPage() {
             <h2 className="text-xl font-bold text-[#1E2A5E] mb-2">
               {isPaid ? 'Credits 已用完' : '免費體驗已使用'}
             </h2>
-            <p className="text-sm text-[#1E2A5E]/50 mb-6 leading-relaxed">
+            <p className="text-sm text-[#1E2A5E]/60 leading-relaxed">
               {isPaid
-                ? '妳的 session credits 已全部使用完畢。如需繼續，請聯絡我們。\nYou\'ve used all your session credits. Contact us for more.'
-                : '妳的免費體驗已完成。升級方案繼續妳的旅程！\nYour free session has been used. Upgrade to continue your journey!'}
+                ? '妳的 session credits 已全部使用完畢。'
+                : '妳的免費體驗已完成。'}
+              想繼續聊聊嗎？歡迎寫信到{' '}
+              <a
+                href="mailto:hello@maybeshedliketotalk.org"
+                className="font-semibold text-[#F28B6E] hover:underline"
+              >
+                hello@maybeshedliketotalk.org
+              </a>
+              ，我們很期待收到妳的來信。
+            </p>
+            <p className="text-sm text-[#1E2A5E]/50 mt-2 mb-6 leading-relaxed">
+              {isPaid
+                ? 'You\'ve used all your session credits.'
+                : 'Your free intro session has been used.'}{' '}
+              Want to keep talking? Email us anytime — we&apos;d love to hear from you.
             </p>
 
-            {isPaid ? (
-              <a
-                href="mailto:hello@maybetalk.com"
-                className="inline-block px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors"
-              >
-                聯絡我們 | Contact Us
-              </a>
-            ) : (
-              <Link
-                href="/checkout"
-                className="inline-block px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors"
-              >
-                升級方案 | Upgrade Now
-              </Link>
-            )}
+            <a
+              href="mailto:hello@maybeshedliketotalk.org"
+              className="inline-block px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors"
+            >
+              寫信給我們 | Email Us
+            </a>
 
             <div className="mt-4">
               <Link

@@ -752,15 +752,16 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <SectionHeader
-              label="方案 | Pricing"
-              title="為妳的孕期旅程選擇陪伴"
-              subtitle="從免費體驗開始，感受被溫柔接住的感覺。準備好了，再考慮完整方案也不遲。"
+              label="免費體驗 | Free Session"
+              title="為妳的孕期旅程找一份陪伴"
+              subtitle="從一次免費的聊聊開始，感受被溫柔接住的感覺。"
               center
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 gap-8 max-w-md mx-auto">
             <PricingCard
+              highlighted
               title="初次體驗"
               subtitle="First Free Session"
               price="免費"
@@ -775,34 +776,16 @@ export default function LandingPage() {
               ctaHref="/auth/signup"
               delay={100}
             />
-            <PricingCard
-              highlighted
-              badge="最受歡迎"
-              title="孕期陪伴方案"
-              subtitle="Pregnancy Support Package"
-              price="$250"
-              priceNote="USD"
-              features={[
-                "4 次 45 分 1:1 聊聊 Credits",
-                "全站課程內容無限觀看",
-                "40 週 Inner Engineering 完整計劃",
-                "引導冥想 + 呼吸練習音頻庫",
-                "未來 Bootcamp 早鳥優先資格",
-              ]}
-              ctaLabel="立即加入 →"
-              ctaHref="/auth/signup"
-              delay={200}
-            />
           </div>
 
           <FadeIn delay={350} className="text-center mt-10">
             <p className="text-sm" style={{ color: "#8A93B2" }}>
-              所有方案均包含初次免費體驗。付費方案可隨時取消，詳見服務條款。
-              <br />
-              有任何疑問？
-              <a href="mailto:hello@maybetalk.co" className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
-                聯絡我們
+              體驗之後想繼續聊聊，或有任何疑問？歡迎寫信到
+              <a href="mailto:hello@maybeshedliketotalk.org" className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
+                hello@maybeshedliketotalk.org
               </a>
+              <br />
+              Want to keep talking after your free session? Just email us.
             </p>
           </FadeIn>
         </div>
@@ -1089,7 +1072,7 @@ export default function LandingPage() {
                 {[
                   { label: "關於我們", href: "#about" },
                   { label: "40 週旅程", href: "#journey" },
-                  { label: "方案定價", href: "#pricing" },
+                  { label: "免費體驗", href: "#pricing" },
                   { label: "預約聊聊", href: "#booking" },
                 ].map(({ label, href }) => (
                   <li key={href}>
@@ -1112,11 +1095,11 @@ export default function LandingPage() {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="mailto:hello@maybetalk.co"
+                    href="mailto:hello@maybeshedliketotalk.org"
                     className="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2"
                   >
                     <span>✉</span>
-                    hello@maybetalk.co
+                    hello@maybeshedliketotalk.org
                   </a>
                 </li>
                 <li className="pt-4">
@@ -1134,6 +1117,15 @@ export default function LandingPage() {
           <div
             className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
           >
+            <p className="text-xs text-white/60">
+              聯絡我們 Contact:{" "}
+              <a
+                href="mailto:hello@maybeshedliketotalk.org"
+                className="font-semibold text-white/80 hover:text-white transition-colors"
+              >
+                hello@maybeshedliketotalk.org
+              </a>
+            </p>
             <p className="text-xs text-white/30">
               © 2024 也許妳想找人聊一聊 · Maybe She&apos;d Like to Talk. All rights reserved.
             </p>

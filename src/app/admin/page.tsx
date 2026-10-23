@@ -14,16 +14,6 @@ interface Profile {
   email?: string | null
 }
 
-interface Payment {
-  id: string
-  user_id: string
-  stripe_session_id: string | null
-  amount: number
-  currency: string
-  status: string
-  created_at: string
-}
-
 interface Booking {
   id: string
   user_id: string
@@ -43,14 +33,6 @@ function formatDate(iso: string) {
     month: 'short',
     day: 'numeric',
   })
-}
-
-function formatCurrency(amount: number, currency: string) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency.toUpperCase(),
-    minimumFractionDigits: 0,
-  }).format(amount / 100) // assume Stripe amount is in cents
 }
 
 function StatusPill({
@@ -107,19 +89,10 @@ async function fetchStats() {
     email: emailMap[p.id] ?? null,
   }))
 
-  // Payments
-  const { data: payments, error: paymentsErr } = await supabase
-    .from('payments')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(20)
-
-  if (paymentsErr) console.error('payments fetch error:', paymentsErr)
-
   // Bookings
-  const { data: bookings, error: bookingsErr } = await supabase
+  const { data: bookings, error: bookingsErr, count: bookingsCount } = await supabase
     .from('bookings')
-    .select('*')
+    .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
     .limit(20)
 
@@ -127,17 +100,13 @@ async function fetchStats() {
 
   // Compute stats
   const totalUsers = enrichedProfiles.length
-  const paidUsers = enrichedProfiles.filter((p) => p.is_paid).length
-  const totalRevenue = (payments ?? [])
-    .filter((p) => p.status === 'paid' || p.status === 'complete' || p.status === 'succeeded')
-    .reduce((sum, p) => sum + (p.amount ?? 0), 0)
-  const activeCredits = enrichedProfiles.reduce((sum, p) => sum + (p.credits ?? 0), 0)
+  const freeSessionsUsed = enrichedProfiles.filter((p) => p.first_free_used).length
+  const totalBookings = bookingsCount ?? (bookings ?? []).length
 
   return {
     profiles: enrichedProfiles,
-    payments: (payments ?? []) as Payment[],
     bookings: (bookings ?? []) as Booking[],
-    stats: { totalUsers, paidUsers, totalRevenue, activeCredits },
+    stats: { totalUsers, freeSessionsUsed, totalBookings },
   }
 }
 
@@ -151,7 +120,7 @@ export default async function AdminPage({
   searchParams: Promise<{ q?: string }>
 }) {
   const { q } = await searchParams
-  const { profiles, payments, bookings, stats } = await fetchStats()
+  const { profiles, bookings, stats } = await fetchStats()
 
   // Filter profiles
   const query = (q ?? '').toLowerCase().trim()
@@ -175,17 +144,11 @@ export default async function AdminPage({
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: '總用戶數', labelEn: 'Total Users', value: stats.totalUsers, color: 'text-[#1E2A5E]' },
-          { label: '付費用戶', labelEn: 'Paid Users', value: stats.paidUsers, color: 'text-[#F28BAE]' },
-          {
-            label: '總收入',
-            labelEn: 'Total Revenue',
-            value: formatCurrency(stats.totalRevenue, 'USD'),
-            color: 'text-[#F28B6E]',
-          },
-          { label: '剩餘 Credits', labelEn: 'Active Credits', value: stats.activeCredits, color: 'text-[#5BBFB5]' },
+          { label: '已用免費體驗', labelEn: 'Free Sessions Used', value: stats.freeSessionsUsed, color: 'text-[#F28BAE]' },
+          { label: '總預約數', labelEn: 'Total Bookings', value: stats.totalBookings, color: 'text-[#5BBFB5]' },
         ].map((card) => (
           <div
             key={card.label}
@@ -304,76 +267,6 @@ export default async function AdminPage({
               顯示 {filteredProfiles.length} / {profiles.length} 位用戶
             </p>
           )}
-        </div>
-      </section>
-
-      {/* Recent payments */}
-      <section>
-        <h3 className="text-base font-bold text-[#1E2A5E] mb-4">
-          最近付款{' '}
-          <span className="text-[#1E2A5E]/30 font-normal text-sm">Recent Payments</span>
-        </h3>
-        <div className="bg-white rounded-2xl border border-[#F28BAE]/15 shadow-sm overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#F28BAE]/10">
-                <th className="text-left px-5 py-3 text-[#1E2A5E]/40 font-semibold text-xs uppercase tracking-wider">
-                  Session ID
-                </th>
-                <th className="text-right px-4 py-3 text-[#1E2A5E]/40 font-semibold text-xs uppercase tracking-wider">
-                  金額
-                </th>
-                <th className="text-center px-4 py-3 text-[#1E2A5E]/40 font-semibold text-xs uppercase tracking-wider">
-                  狀態
-                </th>
-                <th className="text-left px-4 py-3 text-[#1E2A5E]/40 font-semibold text-xs uppercase tracking-wider hidden sm:table-cell">
-                  日期
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {payments.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="text-center py-10 text-[#1E2A5E]/30 text-sm">
-                    尚無付款紀錄
-                  </td>
-                </tr>
-              ) : (
-                payments.map((payment, idx) => {
-                  const statusVariant: Record<string, 'green' | 'yellow' | 'grey'> = {
-                    paid: 'green',
-                    succeeded: 'green',
-                    complete: 'green',
-                    pending: 'yellow',
-                  }
-                  return (
-                    <tr
-                      key={payment.id}
-                      className={`border-b border-[#F28BAE]/5 hover:bg-[#FFF5F0]/60 transition-colors ${
-                        idx % 2 === 0 ? '' : 'bg-[#FFF5F0]/30'
-                      }`}
-                    >
-                      <td className="px-5 py-3.5 font-mono text-xs text-[#1E2A5E]/50 truncate max-w-[140px]">
-                        {payment.stripe_session_id ?? payment.id}
-                      </td>
-                      <td className="px-4 py-3.5 text-right font-bold text-[#1E2A5E]">
-                        {formatCurrency(payment.amount, payment.currency)}
-                      </td>
-                      <td className="px-4 py-3.5 text-center">
-                        <StatusPill
-                          label={payment.status}
-                          variant={statusVariant[payment.status] ?? 'grey'}
-                        />
-                      </td>
-                      <td className="px-4 py-3.5 text-[#1E2A5E]/40 text-xs hidden sm:table-cell">
-                        {formatDate(payment.created_at)}
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
         </div>
       </section>
 

@@ -7,7 +7,6 @@ export interface Profile {
   credits: number
   is_paid: boolean
   first_free_used: boolean
-  stripe_customer_id: string | null
   created_at: string
 }
 
@@ -114,10 +113,6 @@ export default async function DashboardLayout({
       />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">{children}</main>
-
-      <footer className="mt-16 pb-8 text-center text-xs text-[#1E2A5E]/30">
-        © {new Date().getFullYear()} 也許妳想找人聊一聊 · 妳的隱私受到保護
-      </footer>
     </div>
   )
 }
