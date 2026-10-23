@@ -1,5 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { buildContentSecurityPolicy, createNonce } from '@/lib/content-security-policy'
+import { applySecurityHeaders } from '@/lib/security-headers'
 
 /**
  * Routes that require an authenticated user.
@@ -11,10 +13,36 @@ const PROTECTED_ROUTES = ['/dashboard']
  */
 const ADMIN_ROUTES = ['/admin']
 
-export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
+function contentSecurityPolicy(request: NextRequest) {
+  const host = request.nextUrl.hostname
+  const isLocal = host === 'localhost' || host === '127.0.0.1'
+  return buildContentSecurityPolicy({
+    nonce: createNonce(),
+    allowEval: process.env.NODE_ENV === 'development',
+    upgradeInsecureRequests: !isLocal,
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
   })
+}
+
+function nextWithSecurity(request: NextRequest, csp: string) {
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('Content-Security-Policy', csp)
+  const cookie = request.cookies
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join('; ')
+  if (cookie) requestHeaders.set('cookie', cookie)
+
+  const response = NextResponse.next({
+    request: { headers: requestHeaders },
+  })
+  applySecurityHeaders(response.headers, csp)
+  return response
+}
+
+export async function middleware(request: NextRequest) {
+  const csp = contentSecurityPolicy(request)
+  let supabaseResponse = nextWithSecurity(request, csp)
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,9 +56,7 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
-          supabaseResponse = NextResponse.next({
-            request,
-          })
+          supabaseResponse = nextWithSecurity(request, csp)
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           )
@@ -55,14 +81,14 @@ export async function middleware(request: NextRequest) {
       const redirectUrl = request.nextUrl.clone()
       redirectUrl.pathname = '/auth/login'
       redirectUrl.searchParams.set('redirectTo', pathname)
-      return NextResponse.redirect(redirectUrl)
+      return secureRedirect(redirectUrl, csp)
     }
 
     const adminEmail = process.env.ADMIN_EMAIL
     if (!adminEmail || user.email !== adminEmail) {
       const redirectUrl = request.nextUrl.clone()
       redirectUrl.pathname = '/'
-      return NextResponse.redirect(redirectUrl)
+      return secureRedirect(redirectUrl, csp)
     }
 
     return supabaseResponse
@@ -76,10 +102,16 @@ export async function middleware(request: NextRequest) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/auth/login'
     redirectUrl.searchParams.set('redirectTo', pathname)
-    return NextResponse.redirect(redirectUrl)
+    return secureRedirect(redirectUrl, csp)
   }
 
   return supabaseResponse
+}
+
+function secureRedirect(url: URL, csp: string) {
+  const response = NextResponse.redirect(url)
+  applySecurityHeaders(response.headers, csp)
+  return response
 }
 
 export const config = {
