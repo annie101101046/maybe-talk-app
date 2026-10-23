@@ -1,11 +1,14 @@
 import Link from "next/link";
 import FadeIn from "@/components/FadeIn";
+import { formatUsd, planPurchaseHref, PRICING } from "@/lib/pricing";
+import { pick, type Locale } from "@/lib/locale";
+import { getLocale } from "@/lib/locale-server";
 
 /* ─────────────────────────────────────────
    Inline SVG: Geometric Blob Pregnant Woman
    (Headspace / Buck design style)
    ───────────────────────────────────────── */
-function HeroIllustration() {
+function HeroIllustration({ locale }: { locale: Locale }) {
   return (
     <div className="relative flex items-center justify-center w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto select-none">
       {/* Background decorative blobs */}
@@ -163,16 +166,18 @@ function HeroIllustration() {
         {/* ── Floating week badge ── */}
         <g transform="translate(330, 150)">
           <rect width="76" height="36" rx="18" fill="#FFB627" />
-          <text x="38" y="14" textAnchor="middle" fill="#1E2A5E" fontSize="9" fontWeight="700" fontFamily="sans-serif">40 週</text>
-          <text x="38" y="26" textAnchor="middle" fill="#1E2A5E" fontSize="8" fontWeight="600" fontFamily="sans-serif">Journey</text>
+          <text x="38" y="22" textAnchor="middle" fill="#1E2A5E" fontSize="11" fontWeight="700" fontFamily="sans-serif">
+            {locale === "zh" ? "40 週" : "40 wks"}
+          </text>
         </g>
 
         {/* ── Floating chat bubble ── */}
         <g transform="translate(68, 200)">
           <rect width="72" height="34" rx="17" fill="#5BBFB5" />
           <path d="M20 34 L28 44 L36 34" fill="#5BBFB5" />
-          <text x="36" y="13" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="700" fontFamily="sans-serif">妳還好嗎</text>
-          <text x="36" y="25" textAnchor="middle" fill="white" fontSize="8" fontWeight="500" fontFamily="sans-serif">How r u?</text>
+          <text x="36" y="21" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" fontFamily="sans-serif">
+            {locale === "zh" ? "妳還好嗎" : "You okay?"}
+          </text>
         </g>
       </svg>
     </div>
@@ -185,13 +190,11 @@ function HeroIllustration() {
 function FeatureCard({
   icon,
   title,
-  subtitle,
   description,
   delay,
 }: {
   icon: string;
   title: string;
-  subtitle: string;
   description: string;
   delay?: number;
 }) {
@@ -213,13 +216,7 @@ function FeatureCard({
         >
           {title}
         </h3>
-        <p
-          className="text-sm font-semibold mb-3"
-          style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
-        >
-          {subtitle}
-        </p>
-        <p className="text-sm leading-relaxed" style={{ color: "#5A6480" }}>
+        <p className="text-sm leading-relaxed mt-3" style={{ color: "#5A6480" }}>
           {description}
         </p>
       </div>
@@ -299,6 +296,8 @@ function PricingCard({
   title,
   subtitle,
   price,
+  compareAt,
+  compareAtNote,
   priceNote,
   features,
   ctaLabel,
@@ -310,6 +309,8 @@ function PricingCard({
   title: string;
   subtitle: string;
   price: string;
+  compareAt?: string;
+  compareAtNote?: string;
   priceNote?: string;
   features: string[];
   ctaLabel: string;
@@ -319,10 +320,8 @@ function PricingCard({
   return (
     <FadeIn
       delay={delay}
-      className={`relative rounded-3xl p-8 flex flex-col gap-6 card-hover ${
-        highlighted
-          ? "bg-white"
-          : "bg-white"
+      className={`relative rounded-3xl p-8 flex flex-col gap-6 card-hover h-full bg-white ${
+        highlighted ? "mt-8 lg:mt-0" : ""
       }`}
       style={
         {
@@ -356,23 +355,40 @@ function PricingCard({
         </p>
       </div>
 
-      <div className="flex items-end gap-2">
-        <span
-          className="text-5xl font-black leading-none"
-          style={{ color: highlighted ? "var(--coral)" : "var(--navy)", fontFamily: "var(--font-quicksand), sans-serif" }}
-        >
-          {price}
-        </span>
-        {priceNote && (
-          <span className="text-sm mb-1" style={{ color: "#8A93B2" }}>
-            {priceNote}
+      <div>
+        <div className="flex items-end gap-3 flex-wrap">
+          <span
+            className="text-5xl font-black leading-none"
+            style={{ color: highlighted ? "var(--coral)" : "var(--navy)", fontFamily: "var(--font-quicksand), sans-serif" }}
+          >
+            {price}
           </span>
+          {compareAt && (
+            <span className="mb-1 text-left">
+              {compareAtNote && (
+                <span className="block text-[11px] leading-none mb-1" style={{ color: "#8A93B2" }}>
+                  {compareAtNote}
+                </span>
+              )}
+              <span
+                className="text-lg line-through"
+                style={{ color: "#8A93B2", fontFamily: "var(--font-quicksand), sans-serif" }}
+              >
+                {compareAt}
+              </span>
+            </span>
+          )}
+        </div>
+        {priceNote && (
+          <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
+            {priceNote}
+          </p>
         )}
       </div>
 
       <ul className="space-y-3 flex-1">
-        {features.map((f, i) => (
-          <li key={i} className="flex items-start gap-3 text-sm" style={{ color: "#3A4165" }}>
+        {features.map((feature) => (
+          <li key={feature} className="flex items-start gap-3 text-sm" style={{ color: "#3A4165" }}>
             <svg
               className="flex-shrink-0 mt-0.5"
               width="18"
@@ -389,17 +405,29 @@ function PricingCard({
                 strokeLinejoin="round"
               />
             </svg>
-            {f}
+            <span>{feature}</span>
           </li>
         ))}
       </ul>
 
-      <Link
-        href={ctaHref}
-        className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
-      >
-        {ctaLabel}
-      </Link>
+      {ctaHref.startsWith("mailto:") || ctaHref.startsWith("http") ? (
+        <a
+          href={ctaHref}
+          {...(ctaHref.startsWith("http")
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+          className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
+        >
+          {ctaLabel}
+        </a>
+      ) : (
+        <Link
+          href={ctaHref}
+          className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
+        >
+          {ctaLabel}
+        </Link>
+      )}
     </FadeIn>
   );
 }
@@ -415,7 +443,7 @@ function SectionHeader({
 }: {
   label: string;
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   center?: boolean;
 }) {
   return (
@@ -441,7 +469,10 @@ function SectionHeader({
 /* ─────────────────────────────────────────
    Page
    ───────────────────────────────────────── */
-export default function LandingPage() {
+export default async function LandingPage() {
+  const locale = await getLocale();
+  const t = (zh: string, en: string) => pick(locale, zh, en);
+
   return (
     <div className="overflow-x-hidden">
 
@@ -470,7 +501,7 @@ export default function LandingPage() {
             {/* Text column */}
             <div className="order-2 lg:order-1">
               <FadeIn>
-                <p className="section-label mb-4">Pregnancy Wellness Platform</p>
+                <p className="section-label mb-4">{t("40 週旅程", "40-week journey")}</p>
               </FadeIn>
 
               <FadeIn delay={100}>
@@ -478,9 +509,9 @@ export default function LandingPage() {
                   className="display-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-4"
                   style={{ fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  也許妳想
+                  {t("陪妳走完", "We'll walk with you")}
                   <br />
-                  <span style={{ color: "var(--coral)" }}>找人聊一聊</span>
+                  <span style={{ color: "var(--coral)" }}>{t("這四十週", "these forty weeks")}</span>
                 </h1>
               </FadeIn>
 
@@ -489,7 +520,7 @@ export default function LandingPage() {
                   className="text-lg lg:text-xl font-semibold mb-2"
                   style={{ color: "var(--teal)", fontFamily: "var(--font-quicksand), sans-serif" }}
                 >
-                  Maybe She&apos;d Like to Talk
+                  {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
                 </p>
               </FadeIn>
 
@@ -502,30 +533,26 @@ export default function LandingPage() {
 
               <FadeIn delay={250}>
                 <p
-                  className="text-base lg:text-lg leading-relaxed mb-2 font-medium"
+                  className="text-base lg:text-lg leading-relaxed mb-8 font-medium"
                   style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  為孕期媽咪設計的心靈陪伴平台
-                </p>
-                <p
-                  className="text-sm lg:text-base leading-relaxed mb-8"
-                  style={{ color: "#6B7599" }}
-                >
-                  A pregnancy wellness companion designed for expecting mothers —
-                  because this journey deserves gentle, professional support.
+                  {t(
+                    "每週一則情緒引導，加上冥想與呼吸練習。現在可以買，內容每週寄到信箱。",
+                    "A weekly emotional guide, plus meditation and breathing. Buy now. Content is emailed each week.",
+                  )}
                 </p>
               </FadeIn>
 
               <FadeIn delay={350}>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/auth/signup" className="btn-primary text-base">
-                    免費體驗第一次聊聊
+                  <a href="#pricing" className="btn-primary text-base">
+                    {t("立即購買", "Buy now")}
                     <svg className="ml-2" width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </Link>
-                  <a href="#about" className="btn-secondary text-base">
-                    了解更多
+                  </a>
+                  <a href="#journey" className="btn-secondary text-base">
+                    {t("了解這四十週", "See the forty weeks")}
                   </a>
                 </div>
               </FadeIn>
@@ -540,13 +567,13 @@ export default function LandingPage() {
                         className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white"
                         style={{ background: c }}
                       >
-                        {["媽", "咪", "孕", "寶"][i]}
+                        {(locale === "zh" ? ["媽", "咪", "孕", "寶"] : ["M", "A", "Y", "B"])[i]}
                       </div>
                     ))}
                   </div>
                   <p className="text-sm" style={{ color: "#8A93B2" }}>
                     <span className="font-bold" style={{ color: "var(--navy)" }}>200+</span>
-                    {" "}位媽咪已加入旅程
+                    {" "}{t("位媽咪已加入旅程", "mothers have joined")}
                   </p>
                 </div>
               </FadeIn>
@@ -555,7 +582,7 @@ export default function LandingPage() {
             {/* Illustration column */}
             <div className="order-1 lg:order-2 flex justify-center">
               <div className="float-anim w-full max-w-[420px]">
-                <HeroIllustration />
+                <HeroIllustration locale={locale} />
               </div>
             </div>
 
@@ -574,33 +601,42 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <SectionHeader
-              label="關於我們 | About Us"
-              title="妳不需要一個人走"
-              subtitle="孕期是一段美麗卻複雜的旅程。我們相信每位媽咪都值得被溫柔地陪伴，在每一個當下感受到支持與理解。"
+              label={t("關於我們", "About")}
+              title={t("妳不需要一個人走", "You don't have to do this alone")}
+              subtitle={t(
+                "孕期是一段美麗卻複雜的旅程。我們相信每位媽咪都值得被溫柔地陪伴，在每一個當下感受到支持與理解。",
+                "Pregnancy is beautiful, and it's a lot. Every mother deserves someone gentle beside her.",
+              )}
               center
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FeatureCard
-              icon="🧘"
-              title="40 週 Inner Engineering"
-              subtitle="Full Pregnancy Journey"
-              description="從第 1 週到第 40 週，每個階段都有量身設計的情緒引導、正念練習與心靈功課，陪伴妳從接納到準備、從迷惘到篤定。"
+              icon="💌"
+              title={t("每週情緒引導", "Weekly emotional guide")}
+              description={t(
+                "每一週一則情緒引導，寫給那個週數。身體在變、焦慮講不出口、期待慢慢來，都寫在裡面。",
+                "One note each week, written for that week. A changing body, worry that's hard to say, hope that comes slowly. It's all in there.",
+              )}
               delay={100}
             />
             <FeatureCard
-              icon="💬"
-              title="1:1 專業陪伴"
-              subtitle="Personal Support Sessions"
-              description="每次 45 分鐘，透過 Google Meet 與訓練有素的孕期陪伴師深度聊聊。不評判、只傾聽，讓妳的感受被好好接住。"
+              icon="🧘"
+              title={t("40 週完整旅程", "The full 40 weeks")}
+              description={t(
+                "從第 1 週到第 40 週，三個孕期收在同一份方案裡。一次走完，不必一週一週另外找。",
+                "Week 1 through week 40, three trimesters in one plan. Walk it once. You don't have to hunt week by week.",
+              )}
               delay={200}
             />
             <FeatureCard
               icon="🌙"
-              title="呼吸・冥想・好眠"
-              subtitle="Breathwork & Sleep Support"
-              description="精心設計的引導冥想音頻、孕期呼吸練習與好眠儀式，讓妳在身體變化最劇烈的時候，仍能找回內心的平靜與安定。"
+              title={t("呼吸、冥想、好眠", "Breathing, meditation, sleep")}
+              description={t(
+                "引導冥想、孕期呼吸練習、好眠儀式。身體變化很大的時候，還是可以靜一下。",
+                "Guided meditation, pregnancy breathing, and a wind-down for sleep. When your body is changing fast, you can still get quiet.",
+              )}
               delay={300}
             />
           </div>
@@ -608,10 +644,10 @@ export default function LandingPage() {
           {/* Stats bar */}
           <FadeIn delay={400} className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { num: "45", unit: "分鐘", label: "每次深度聊聊" },
-              { num: "40", unit: "週", label: "完整陪伴旅程" },
-              { num: "1:1", unit: "", label: "個人化陪伴" },
-              { num: "∞", unit: "", label: "站內內容無限看" },
+              { num: "40", unit: t("週", "wks"), label: t("完整情緒旅程", "Full emotional journey") },
+              { num: "3", unit: t("期", ""), label: t("三種孕期節奏", "Trimester rhythms") },
+              { num: t("每週", "Weekly"), unit: "", label: t("一則心靈引導", "One guide") },
+              { num: "∞", unit: "", label: t("冥想練習隨時聽", "Meditation, any time") },
             ].map(({ num, unit, label }) => (
               <div
                 key={label}
@@ -640,54 +676,87 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
             <SectionHeader
-              label="40 週旅程 | 40-Week Journey"
-              title="每一個孕期階段，都有妳需要的陪伴"
-              subtitle="三個孕期，三種節奏，三種陪伴的方式。無論妳現在在哪個週數，都有適合妳的功課在等著妳。"
+              label={t("40 週旅程", "40-week journey")}
+              title={t("每一個孕期階段，都有妳需要的陪伴", "Each trimester has what you need")}
+              subtitle={t(
+                "三個孕期，三種節奏，三種陪伴的方式。無論妳現在在哪個週數，都有適合妳的功課在等著妳。",
+                "Three trimesters, three paces. Wherever you are in the weeks, there's something for you.",
+              )}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <TrimesterCard
-              period="第一孕期"
-              weeks="1–12 週 | First Trimester"
-              theme="接納與安定"
+              period={t("第一孕期", "First trimester")}
+              weeks={t("1–12 週", "Weeks 1–12")}
+              theme={t("接納與安定", "Acceptance and steadiness")}
               color="#FFF0F3"
               delay={100}
-              items={[
-                "認識身體的驚人變化",
-                "孕吐期情緒穩定練習",
-                "焦慮與不確定感的引導",
-                "與寶寶的第一次連結冥想",
-                "建立安定的日常儀式",
-              ]}
+              items={
+                locale === "zh"
+                  ? [
+                      "認識身體的驚人變化",
+                      "孕吐期情緒穩定練習",
+                      "焦慮與不確定感的引導",
+                      "與寶寶的第一次連結冥想",
+                      "建立安定的日常儀式",
+                    ]
+                  : [
+                      "Getting to know how your body is changing",
+                      "A steadier mood through the nausea",
+                      "When you feel anxious or unsure",
+                      "A first meditation with the baby",
+                      "A small daily ritual",
+                    ]
+              }
             />
             <TrimesterCard
-              period="第二孕期"
-              weeks="13–27 週 | Second Trimester"
-              theme="連結與探索"
+              period={t("第二孕期", "Second trimester")}
+              weeks={t("13–27 週", "Weeks 13–27")}
+              theme={t("連結與探索", "Connection")}
               color="#E8F8F7"
               delay={200}
-              items={[
-                "感受第一次胎動的儀式",
-                "伴侶溝通與關係陪伴",
-                "身體形象與自我接納",
-                "工作與孕期的平衡探索",
-                "深化與寶寶的情感連結",
-              ]}
+              items={
+                locale === "zh"
+                  ? [
+                      "感受第一次胎動的儀式",
+                      "伴侶溝通與關係陪伴",
+                      "身體形象與自我接納",
+                      "工作與孕期的平衡探索",
+                      "深化與寶寶的情感連結",
+                    ]
+                  : [
+                      "A ritual for the first kicks",
+                      "Talking with your partner",
+                      "Body image, and being okay with it",
+                      "Work and pregnancy at the same time",
+                      "Feeling closer to the baby",
+                    ]
+              }
             />
             <TrimesterCard
-              period="第三孕期"
-              weeks="28–40 週 | Third Trimester"
-              theme="準備與期待"
+              period={t("第三孕期", "Third trimester")}
+              weeks={t("28–40 週", "Weeks 28–40")}
+              theme={t("準備與期待", "Getting ready")}
               color="#FFF5DC"
               delay={300}
-              items={[
-                "生產恐懼的溫柔鬆綁",
-                "孕期好眠呼吸練習",
-                "母親角色的心理準備",
-                "寫給寶寶的第一封信",
-                "迎接分娩的正念陪伴",
-              ]}
+              items={
+                locale === "zh"
+                  ? [
+                      "生產恐懼的溫柔鬆綁",
+                      "孕期好眠呼吸練習",
+                      "母親角色的心理準備",
+                      "寫給寶寶的第一封信",
+                      "迎接分娩的正念陪伴",
+                    ]
+                  : [
+                      "When you're scared of giving birth",
+                      "Breathing practice for sleep",
+                      "Getting used to the idea of being a mother",
+                      "A first letter to the baby",
+                      "Company as labor gets closer",
+                    ]
+              }
             />
           </div>
 
@@ -706,13 +775,13 @@ export default function LandingPage() {
                 className="text-xs font-bold uppercase tracking-widest mb-3"
                 style={{ color: "var(--coral)" }}
               >
-                Timeline
+                {t("時間軸", "Timeline")}
               </p>
               <h3
                 className="text-2xl md:text-3xl font-bold text-white mb-6"
                 style={{ fontFamily: "var(--font-noto), sans-serif" }}
               >
-                從懷孕第一天，到寶寶出生的那一刻
+                {t("從懷孕第一天，到寶寶出生的那一刻", "From the first day of pregnancy to the moment the baby arrives")}
               </h3>
               {/* Progress bar */}
               <div className="relative">
@@ -726,15 +795,17 @@ export default function LandingPage() {
                   />
                 </div>
                 <div className="flex justify-between mt-3 text-xs text-white/60 font-semibold">
-                  <span>第 1 週</span>
-                  <span>第 13 週</span>
-                  <span>第 27 週</span>
-                  <span>第 40 週</span>
+                  <span>{t("第 1 週", "Week 1")}</span>
+                  <span>{t("第 13 週", "Week 13")}</span>
+                  <span>{t("第 27 週", "Week 27")}</span>
+                  <span>{t("第 40 週", "Week 40")}</span>
                 </div>
               </div>
               <p className="text-white/60 text-sm mt-6">
-                妳的旅程是獨一無二的。我們的 40 週 Inner Engineering 計劃，
-                為妳在每個關鍵時刻提供最需要的心靈功課與陪伴。
+                {t(
+                  "妳的旅程是獨一無二的。我們的 40 週 Inner Engineering 計劃，為妳在每個關鍵時刻提供最需要的心靈功課與陪伴。",
+                  "Your journey is yours. The 40-week Inner Engineering plan meets you at the moments that need it, with a practice and some company.",
+                )}
               </p>
             </div>
           </FadeIn>
@@ -746,72 +817,85 @@ export default function LandingPage() {
           ════════════════════════════════════════ */}
       <section
         id="pricing"
-        className="section-padding"
+        className="section-padding scroll-mt-24"
         style={{ backgroundColor: "var(--pink-soft)" }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <SectionHeader
-              label="免費體驗 | Free Session"
-              title="為妳的孕期旅程找一份陪伴"
-              subtitle="從一次免費的聊聊開始，感受被溫柔接住的感覺。"
+              label={t("方案", "Pricing")}
+              title={t("四十週，三種方案", "Forty weeks, three plans")}
+              subtitle={t(
+                `每週的情緒引導，加上呼吸、冥想練習。${PRICING.freeWeeksNote.zh}，${PRICING.currencyNote.zh}。`,
+                `A weekly emotional guide, plus breathing and meditation. ${PRICING.freeWeeksNote.en}. ${PRICING.currencyNote.en}.`,
+              )}
               center
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-8 max-w-md mx-auto">
-            <PricingCard
-              highlighted
-              title="初次體驗"
-              subtitle="First Free Session"
-              price="免費"
-              priceNote="Free"
-              features={[
-                "45 分鐘 1:1 聊聊（Google Meet）",
-                "體驗孕期陪伴的感覺",
-                "了解個人化需求與方向",
-                "無任何費用，無需信用卡",
-              ]}
-              ctaLabel="免費預約 →"
-              ctaHref="/auth/signup"
-              delay={100}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12 lg:gap-8 items-stretch pt-6">
+            {PRICING.plans.map((plan, index) => (
+              <PricingCard
+                key={plan.id}
+                highlighted={plan.highlighted}
+                badge={plan.badge ? pick(locale, plan.badge) : undefined}
+                title={pick(locale, plan.title)}
+                subtitle={pick(locale, plan.subtitle)}
+                price={formatUsd(plan.priceUsd)}
+                compareAt={plan.compareAtUsd ? formatUsd(plan.compareAtUsd) : undefined}
+                compareAtNote={plan.compareAtNote ? pick(locale, plan.compareAtNote) : undefined}
+                priceNote={plan.priceNote ? pick(locale, plan.priceNote) : undefined}
+                features={plan.features.map((feature) => pick(locale, feature))}
+                ctaLabel={pick(locale, plan.cta)}
+                ctaHref={planPurchaseHref(plan)}
+                delay={(index + 1) * 100}
+              />
+            ))}
           </div>
 
           <FadeIn delay={350} className="text-center mt-10">
-            <p className="text-sm" style={{ color: "#8A93B2" }}>
-              體驗之後想繼續聊聊，或有任何疑問？歡迎寫信到
-              <a href="mailto:hello@maybeshedliketotalk.org" className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
-                hello@maybeshedliketotalk.org
+            <p className="text-sm font-semibold" style={{ color: "var(--navy)" }}>
+              {pick(locale, PRICING.currencyNote)}
+            </p>
+            <p className="text-sm mt-1" style={{ color: "#5A6480" }}>
+              {pick(locale, PRICING.freeWeeksNote)}
+            </p>
+            <p className="text-sm mt-3" style={{ color: "#5A6480" }}>
+              {pick(locale, PRICING.checkoutNote)}
+            </p>
+            <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
+              {t("想問別的，寫到", "For anything else, email")}
+              <a href={`mailto:${PRICING.email}`} className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
+                {PRICING.email}
               </a>
-              <br />
-              Want to keep talking after your free session? Just email us.
             </p>
           </FadeIn>
         </div>
       </section>
 
       {/* ════════════════════════════════════════
-          BOOKING SECTION
+          EARLY ACCESS SECTION
           ════════════════════════════════════════ */}
-      <section id="booking" className="section-padding" style={{ backgroundColor: "var(--cream)" }}>
+      <section id="early-access" className="section-padding" style={{ backgroundColor: "var(--cream)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-            {/* Text */}
             <div>
               <SectionHeader
-                label="預約聊聊 | Book a Session"
-                title="找一個時間，讓我們好好聊聊"
-                subtitle="透過 Google Meet，從家裡的沙發、臥室、甚至哺乳椅，都可以開始這段對話。妳不需要準備什麼——帶著妳自己就夠了。"
+                label={t("怎麼拿到", "How you get it")}
+                title={t("買了之後，每週寄到信箱", "After you buy, it arrives by email each week")}
+                subtitle={t(
+                  "沙發上、臥室裡，或半夜醒著的時候，都可以打開。信用卡或 PayPal，在 Gumroad 結帳。",
+                  "Open it from the couch, bed, or in the middle of the night. Pay by card or PayPal on Gumroad.",
+                )}
               />
               <FadeIn delay={200} className="mt-8">
                 <ul className="space-y-4">
                   {[
-                    { icon: "📅", text: "彈性選擇妳方便的時間，週間週末皆有" },
-                    { icon: "💻", text: "Google Meet 線上進行，無需安裝任何程式" },
-                    { icon: "🔒", text: "完全保密，妳說的話只在這個空間裡" },
-                    { icon: "🌸", text: "第一次完全免費，感受陪伴的溫度" },
+                    { icon: "💌", text: t("每週一則情緒引導，跟著週數走", "One emotional guide each week, matched to that week") },
+                    { icon: "🌙", text: t("冥想、呼吸與好眠練習，想聽的時候就回來", "Meditation, breathing, and sleep. Come back when you want to listen") },
+                    { icon: "🌸", text: t("三個孕期都在同一份方案裡", "Three trimesters in the same plan") },
+                    { icon: "✦", text: t("信用卡或 PayPal，在 Gumroad 付款", "Pay by card or PayPal on Gumroad") },
                   ].map(({ icon, text }) => (
                     <li key={text} className="flex items-start gap-3">
                       <span className="text-xl flex-shrink-0 mt-0.5">{icon}</span>
@@ -823,22 +907,20 @@ export default function LandingPage() {
                 </ul>
               </FadeIn>
               <FadeIn delay={300} className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link href="/auth/signup" className="btn-primary text-base">
-                  登入後立即預約
-                </Link>
+                <a href="#pricing" className="btn-primary text-base">
+                  {t("立即購買", "Buy now")}
+                </a>
                 <Link href="/auth/login" className="btn-secondary text-base">
-                  已有帳號？登入
+                  {t("已有帳號？登入", "Already have an account? Log in")}
                 </Link>
               </FadeIn>
             </div>
 
-            {/* Booking preview card */}
             <FadeIn delay={200}>
               <div
                 className="rounded-3xl p-8 relative overflow-hidden"
                 style={{ background: "white", boxShadow: "var(--shadow-card)" }}
               >
-                {/* Decorative top bar */}
                 <div
                   className="h-2 rounded-full mb-8 -mx-8 -mt-8 px-8"
                   style={{
@@ -852,43 +934,47 @@ export default function LandingPage() {
                     className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
                     style={{ background: "var(--cream)" }}
                   >
-                    💬
+                    🌙
                   </div>
                   <div>
                     <p
                       className="font-bold text-base"
                       style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                     >
-                      初次免費體驗聊聊
+                      {t("40 週完整方案", "The full 40-week plan")}
                     </p>
                     <p className="text-sm" style={{ color: "#8A93B2" }}>
-                      45 分鐘 · Google Meet · 完全免費
+                      {t("每週情緒引導 · 冥想練習 · 每週寄到信箱", "Weekly guide · meditation · emailed each week")}
                     </p>
                   </div>
                 </div>
 
-                {/* Fake time slots */}
                 <p
                   className="text-xs font-bold uppercase tracking-wider mb-3"
                   style={{ color: "var(--coral)" }}
                 >
-                  可預約時間
+                  {t("旅程裡有什麼", "What's in it")}
                 </p>
-                <div className="grid grid-cols-3 gap-2 mb-6">
+                <div className="space-y-2 mb-6">
                   {[
-                    "週一 10:00", "週二 14:00", "週三 11:00",
-                    "週四 16:00", "週五 09:00", "週六 15:00",
-                  ].map((slot) => (
+                    { weeks: t("第 1–12 週", "Weeks 1–12"), theme: t("接納與安定", "Acceptance and steadiness") },
+                    { weeks: t("第 13–27 週", "Weeks 13–27"), theme: t("連結與探索", "Connection") },
+                    { weeks: t("第 28–40 週", "Weeks 28–40"), theme: t("準備與期待", "Getting ready") },
+                  ].map(({ weeks, theme }) => (
                     <div
-                      key={slot}
-                      className="rounded-xl py-2.5 px-2 text-center text-xs font-semibold border-2 transition-colors cursor-pointer"
+                      key={weeks}
+                      className="rounded-xl py-3 px-4 flex items-center justify-between border-2"
                       style={{
                         borderColor: "var(--coral)",
-                        color: "var(--coral)",
-                        fontFamily: "var(--font-quicksand), sans-serif",
+                        color: "var(--navy)",
                       }}
                     >
-                      {slot}
+                      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-noto), sans-serif" }}>
+                        {weeks}
+                      </span>
+                      <span className="text-xs font-semibold" style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}>
+                        {theme}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -897,15 +983,17 @@ export default function LandingPage() {
                   className="text-xs text-center mb-4"
                   style={{ color: "#8A93B2" }}
                 >
-                  登入後查看完整可預約時段
+                  {pick(locale, PRICING.checkoutNote)}
                 </p>
 
-                <Link
-                  href="/auth/signup"
+                <a
+                  href={planPurchaseHref(PRICING.plans.find((plan) => plan.id === "full-pass")!)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn-primary w-full text-center block text-sm"
                 >
-                  免費註冊並預約
-                </Link>
+                  {pick(locale, PRICING.plans.find((plan) => plan.id === "full-pass")!.cta)}
+                </a>
               </div>
             </FadeIn>
 
@@ -926,36 +1014,45 @@ export default function LandingPage() {
               className="text-xs font-bold uppercase tracking-widest mb-2"
               style={{ color: "var(--coral)" }}
             >
-              媽咪們說 | What They Say
+              {t("媽咪們說", "From mothers")}
             </p>
             <h2
               className="text-2xl md:text-3xl font-bold text-white"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              被聽見的感覺，真的很不一樣
+              {t("睡前會聽，孕吐時會看", "She listens at bedtime, and reads it through the nausea")}
             </h2>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                quote: "第一次聊聊就哭了，但哭完之後覺得好輕鬆。終於有人懂我孕期的焦慮不是無理取鬧。",
+                quote: t(
+                  "孕吐最難的那幾週，每週的情緒引導讓我把心情放下來。",
+                  "In the hardest weeks of nausea, the weekly guide helped me set my feelings down.",
+                ),
                 name: "小涵",
-                week: "孕 28 週",
+                week: t("孕 12 週", "Week 12"),
                 color: "var(--coral)",
                 delay: 100,
               },
               {
-                quote: "40 週課程裡的冥想音頻變成我每天睡前必聽。有了這個陪伴，整個孕期都安心很多。",
+                quote: t(
+                  "40 週的冥想音檔變成我每天睡前必聽，孕期安穩一點。",
+                  "The 40 weeks of meditation audio became what I play before sleep. Pregnancy felt a bit steadier.",
+                ),
                 name: "Mei",
-                week: "孕 36 週",
+                week: t("孕 36 週", "Week 36"),
                 color: "var(--teal)",
                 delay: 200,
               },
               {
-                quote: "原本不知道自己需要什麼，聊了幾次之後，才發現一直壓著的情緒有了出口。謝謝妳們。",
+                quote: t(
+                  "第三孕期睡不著，呼吸練習有用。這四十週我沒有一直硬撐。",
+                  "I couldn't sleep in the third trimester. The breathing practice helped. I didn't spend all forty weeks just pushing through.",
+                ),
                 name: "Amanda",
-                week: "已生產，回顧",
+                week: t("孕 34 週", "Week 34"),
                 color: "var(--yellow)",
                 delay: 300,
               },
@@ -971,7 +1068,7 @@ export default function LandingPage() {
                   style={{ background: color }}
                 />
                 <p className="text-sm text-white/80 leading-relaxed mb-6 italic">
-                  &ldquo;{quote}&rdquo;
+                  {locale === "zh" ? `「${quote}」` : `“${quote}”`}
                 </p>
                 <div className="flex items-center gap-3">
                   <div
@@ -1009,31 +1106,29 @@ export default function LandingPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <FadeIn>
             <p className="text-white/80 text-sm font-bold uppercase tracking-widest mb-4">
-              開始妳的旅程
+              {t("開始妳的旅程", "Start here")}
             </p>
             <h2
               className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              也許，現在就是
+              {t("想走這四十週，", "If you want these forty weeks,")}
               <br />
-              找人聊聊的好時機
+              {t("現在可以買", "you can buy now")}
             </h2>
             <p className="text-white/80 text-base mb-8 leading-relaxed">
-              第一次完全免費。不需要準備什麼，帶著妳自己就夠了。
-              <br />
-              <span className="font-semibold">Maybe now is a good time to talk.</span>
+              {pick(locale, PRICING.checkoutNote)}
             </p>
-            <Link
-              href="/auth/signup"
+            <a
+              href="#pricing"
               className="inline-flex items-center gap-2 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
               style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
             >
-              免費體驗第一次聊聊
+              {t("立即購買", "Buy now")}
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </Link>
+            </a>
           </FadeIn>
         </div>
       </section>
@@ -1054,26 +1149,24 @@ export default function LandingPage() {
                 className="text-lg font-bold mb-2"
                 style={{ color: "var(--coral)", fontFamily: "var(--font-noto), sans-serif" }}
               >
-                也許妳想找人聊一聊
+                {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                Maybe She&apos;d Like to Talk
-                <br />
-                孕期心靈陪伴平台
+                {t("40 週孕期心靈旅程", "A 40-week pregnancy journey")}
               </p>
             </div>
 
             {/* Links */}
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">
-                導覽
+                {t("導覽", "Explore")}
               </p>
               <ul className="space-y-2">
                 {[
-                  { label: "關於我們", href: "#about" },
-                  { label: "40 週旅程", href: "#journey" },
-                  { label: "免費體驗", href: "#pricing" },
-                  { label: "預約聊聊", href: "#booking" },
+                  { label: t("關於我們", "About"), href: "#about" },
+                  { label: t("40 週旅程", "40-week journey"), href: "#journey" },
+                  { label: t("完整方案", "Plans"), href: "#pricing" },
+                  { label: t("怎麼拿到", "How you get it"), href: "#early-access" },
                 ].map(({ label, href }) => (
                   <li key={href}>
                     <a
@@ -1090,7 +1183,7 @@ export default function LandingPage() {
             {/* Contact */}
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">
-                聯絡
+                {t("聯絡", "Contact")}
               </p>
               <ul className="space-y-2">
                 <li>
@@ -1103,12 +1196,12 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li className="pt-4">
-                  <Link
-                    href="/auth/signup"
+                  <a
+                    href="#pricing"
                     className="text-sm font-bold text-white py-2.5 px-5 rounded-full border-2 border-white/30 hover:border-white transition-colors"
                   >
-                    免費體驗 →
-                  </Link>
+                    {t("立即購買 →", "Buy now →")}
+                  </a>
                 </li>
               </ul>
             </div>
@@ -1118,7 +1211,7 @@ export default function LandingPage() {
             className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
           >
             <p className="text-xs text-white/60">
-              聯絡我們 Contact:{" "}
+              {t("聯絡我們", "Contact")}:{" "}
               <a
                 href="mailto:hello@maybeshedliketotalk.org"
                 className="font-semibold text-white/80 hover:text-white transition-colors"
@@ -1127,14 +1220,14 @@ export default function LandingPage() {
               </a>
             </p>
             <p className="text-xs text-white/30">
-              © 2024 也許妳想找人聊一聊 · Maybe She&apos;d Like to Talk. All rights reserved.
+              © 2024 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-xs text-white/30 hover:text-white/60 transition-colors">
-                隱私政策
+                {t("隱私政策", "Privacy")}
               </a>
               <a href="#" className="text-xs text-white/30 hover:text-white/60 transition-colors">
-                服務條款
+                {t("服務條款", "Terms")}
               </a>
             </div>
           </div>

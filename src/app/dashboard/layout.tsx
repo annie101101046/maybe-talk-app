@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { pick } from '@/lib/locale'
+import { getLocale } from '@/lib/locale-server'
 
 export interface Profile {
   id: string
@@ -49,6 +51,9 @@ export default async function DashboardLayout({
     redirect('/auth/login')
   }
 
+  const locale = await getLocale()
+  const t = (zh: string, en: string) => pick(locale, zh, en)
+
   return (
     <div className="min-h-screen bg-[#FFF5F0]">
       {/* Top nav bar */}
@@ -56,11 +61,8 @@ export default async function DashboardLayout({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-[#1E2A5E] leading-tight">
-              也許妳想找人聊一聊
+              {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
             </h1>
-            <p className="text-xs text-[#1E2A5E]/40 font-light tracking-wide">
-              Maybe She&apos;d Like to Talk
-            </p>
           </div>
 
           <nav className="flex items-center gap-4">
@@ -68,13 +70,7 @@ export default async function DashboardLayout({
               href="/dashboard"
               className="text-sm font-medium text-[#1E2A5E]/70 hover:text-[#1E2A5E] transition-colors"
             >
-              主頁
-            </a>
-            <a
-              href="/booking"
-              className="text-sm font-medium text-[#1E2A5E]/70 hover:text-[#1E2A5E] transition-colors"
-            >
-              預約
+              {t("旅程", "Journey")}
             </a>
 
             {/* Profile chip */}
@@ -95,7 +91,7 @@ export default async function DashboardLayout({
                 type="submit"
                 className="text-xs text-[#1E2A5E]/40 hover:text-[#F28B6E] transition-colors"
               >
-                登出
+                {t("登出", "Log out")}
               </button>
             </form>
           </nav>
