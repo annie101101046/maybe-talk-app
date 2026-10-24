@@ -1,7 +1,17 @@
 /**
- * Journey pricing. Buy buttons use `checkoutUrl` (Gumroad).
- * Leave `checkoutUrl` null only if a plan should fall back to a mailto.
+ * Journey pricing.
+ *
+ * All three checkout links live in `GUMROAD_CHECKOUT_URLS`.
+ * Swap that block together when the Gumroad account changes.
+ * Leave a plan's `checkoutUrl` null only if it should fall back to mailto.
  */
+
+/** The only checkout URLs in the app. Change these three together. */
+export const GUMROAD_CHECKOUT_URLS = {
+  singleTrimester: "https://kincode.gumroad.com/l/single-trimester",
+  fullPregnancyPass: "https://kincode.gumroad.com/l/full-pregnancy-pass",
+  giftEdition: "https://kincode.gumroad.com/l/gift-edition",
+} as const
 
 export type Bilingual = {
   zh: string
@@ -33,91 +43,97 @@ export const PRICING = {
   currencyNote: { zh: "價格以美金計", en: "Prices in USD" } satisfies Bilingual,
   freeWeeksNote: { zh: "第 1–4 週免費", en: "Weeks 1–4 are free" } satisfies Bilingual,
   checkoutNote: {
-    zh: "信用卡或 PayPal 都可以，在 Gumroad 結帳。內容每週寄到信箱。",
-    en: "Pay by card or PayPal on Gumroad. Content is emailed weekly.",
+    zh: "用信用卡或 PayPal，在 Gumroad 付款。每週的內容會寄到妳的信箱。",
+    en: "Pay by card or PayPal on Gumroad. Each week's content is emailed to you.",
   } satisfies Bilingual,
   plans: [
     {
       id: "single-trimester",
       title: { zh: "單一孕期", en: "Single Trimester" },
-      subtitle: { zh: "孕到一半再加入也行", en: "Join mid-pregnancy" },
+      subtitle: {
+        zh: "適合孕期中途才加入。選一段週數，跟著那一段走。",
+        en: "For joining mid-pregnancy. Pick one set of weeks and follow that stretch.",
+      },
       priceUsd: 15,
-      priceNote: { zh: "挑一個孕期", en: "Choose one trimester" },
       features: [
         {
-          zh: "第 1–12、13–27、28–40 週，挑一個",
-          en: "Weeks 1–12, 13–27, or 28–40 — choose one",
+          zh: "自選第 1–12、13–27 或 28–40 週",
+          en: "Choose weeks 1–12, 13–27, or 28–40",
         },
         {
-          zh: "給孕期走到一半才開始的人",
-          en: "For people joining mid-pregnancy",
+          zh: "該段的每週情緒陪伴",
+          en: "Weekly emotional guide for those weeks",
         },
         {
-          zh: "這個孕期的情緒引導、呼吸跟冥想音檔",
-          en: "Emotional guide plus breathing and meditation audio for that trimester",
+          zh: "該段的呼吸與冥想練習",
+          en: "Breathing and meditation for those weeks",
         },
       ],
       cta: { zh: "立即購買", en: "Buy now" },
-      subject: "Pre-order: Single Trimester US$15 / 預購：單一孕期 US$15",
-      checkoutUrl: "https://kincode.gumroad.com/l/single-trimester",
+      subject: "Single Trimester US$15 / 單一孕期 US$15",
+      checkoutUrl: GUMROAD_CHECKOUT_URLS.singleTrimester,
     },
     {
       id: "full-pass",
       title: { zh: "全孕期通行證", en: "Full Pregnancy Pass" },
-      subtitle: { zh: "四十週一次走完", en: "All 40 weeks" },
+      subtitle: {
+        zh: "全部 40 週的情緒陪伴，加上中英文呼吸與冥想語音。",
+        en: "All 40 weeks of emotional guidance, plus breathing and meditation audio in Chinese and English.",
+      },
       priceUsd: 29,
       compareAtUsd: 39,
-      compareAtNote: { zh: "原價", en: "Regular" },
       priceNote: { zh: "早鳥價", en: "Early bird" },
       highlighted: true,
-      badge: { zh: "最受歡迎", en: "Most Popular" },
+      badge: { zh: "最受歡迎", en: "Most popular" },
       features: [
         {
-          zh: "四十週的情緒引導",
-          en: "All 40 weeks of the emotional guide",
+          zh: "全部 40 週的情緒陪伴",
+          en: "All 40 weeks of emotional guidance",
         },
         {
-          zh: "呼吸跟冥想音檔",
-          en: "Breathing and meditation audio",
+          zh: "呼吸與冥想語音，中文與英文",
+          en: "Breathing and meditation audio in Chinese and English",
         },
         {
-          zh: "每週更新",
+          zh: "每週釋出",
           en: "Released weekly",
         },
         {
-          zh: "買了可以一直用",
-          en: "Lifetime access",
+          zh: "一次買斷，永久使用",
+          en: "One-time purchase, lifetime access",
         },
       ],
       cta: { zh: "立即購買", en: "Buy now" },
-      subject: "Pre-order: Full Pregnancy Pass US$29 / 預購：全孕期通行證 US$29",
-      checkoutUrl: "https://kincode.gumroad.com/l/full-pregnancy-pass",
+      subject: "Full Pregnancy Pass US$29 / 全孕期通行證 US$29",
+      checkoutUrl: GUMROAD_CHECKOUT_URLS.fullPregnancyPass,
     },
     {
       id: "gift-edition",
       title: { zh: "送禮版", en: "Gift Edition" },
-      subtitle: { zh: "把這份旅程送出去", en: "Give the journey" },
+      subtitle: {
+        zh: "全孕期通行證，再加一份數位禮卡。送給伴侶、家人或朋友。",
+        en: "The Full Pregnancy Pass, plus a digital gift card. For a partner, family, or friend.",
+      },
       priceUsd: 45,
-      priceNote: { zh: "含全孕期通行證", en: "Includes the Full Pass" },
       features: [
         {
-          zh: "包含全孕期通行證",
+          zh: "含完整的全孕期通行證",
           en: "Includes the Full Pregnancy Pass",
         },
         {
-          zh: "再加一張電子心意卡",
-          en: "Plus a digital gift card",
+          zh: "加一份數位禮卡，可以轉贈",
+          en: "Plus a digital gift card to pass on",
         },
         {
           zh: "送給伴侶、家人或朋友",
-          en: "For a partner, family, or friends",
+          en: "For a partner, family, or friend",
         },
       ],
       cta: { zh: "送給她", en: "Send as a gift" },
-      subject: "Pre-order: Gift Edition US$45 / 預購：送禮版 US$45",
-      checkoutUrl: "https://kincode.gumroad.com/l/gift-edition",
+      subject: "Gift Edition US$45 / 送禮版 US$45",
+      checkoutUrl: GUMROAD_CHECKOUT_URLS.giftEdition,
     },
-  ] satisfies PricingPlan[],
+  ] as PricingPlan[],
 }
 
 export function formatUsd(amount: number) {

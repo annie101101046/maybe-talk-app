@@ -4,6 +4,12 @@ import { formatUsd, planPurchaseHref, PRICING } from "@/lib/pricing";
 import { pick, type Locale } from "@/lib/locale";
 import { getLocale } from "@/lib/locale-server";
 
+/**
+ * Placeholder quotes from 小涵 / Mei / Amanda.
+ * Hidden until Annie confirms they are real. Flip this one line to show them.
+ */
+const SHOW_TESTIMONIALS = false;
+
 /* ─────────────────────────────────────────
    Inline SVG: Geometric Blob Pregnant Woman
    (Headspace / Buck design style)
@@ -556,27 +562,6 @@ export default async function LandingPage() {
                   </a>
                 </div>
               </FadeIn>
-
-              {/* Social proof */}
-              <FadeIn delay={450}>
-                <div className="flex items-center gap-4 mt-10">
-                  <div className="flex -space-x-2">
-                    {["#F28B6E", "#5BBFB5", "#FFB627", "#F28BAE"].map((c, i) => (
-                      <div
-                        key={i}
-                        className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white"
-                        style={{ background: c }}
-                      >
-                        {(locale === "zh" ? ["媽", "咪", "孕", "寶"] : ["M", "A", "Y", "B"])[i]}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-sm" style={{ color: "#8A93B2" }}>
-                    <span className="font-bold" style={{ color: "var(--navy)" }}>200+</span>
-                    {" "}{t("位媽咪已加入旅程", "mothers have joined")}
-                  </p>
-                </div>
-              </FadeIn>
             </div>
 
             {/* Illustration column */}
@@ -1003,7 +988,9 @@ export default async function LandingPage() {
 
       {/* ════════════════════════════════════════
           TESTIMONIAL STRIP
+          Off unless SHOW_TESTIMONIALS is true. No nav anchor points here.
           ════════════════════════════════════════ */}
+      {SHOW_TESTIMONIALS ? (
       <section
         className="py-16 overflow-hidden"
         style={{ backgroundColor: "var(--navy)" }}
@@ -1087,6 +1074,7 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+      ) : null}
 
       {/* ════════════════════════════════════════
           FINAL CTA BANNER
@@ -1220,7 +1208,7 @@ export default async function LandingPage() {
               </a>
             </p>
             <p className="text-xs text-white/30">
-              © 2024 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
+              © 2026 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-xs text-white/30 hover:text-white/60 transition-colors">
