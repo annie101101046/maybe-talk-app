@@ -563,12 +563,12 @@ export default async function LandingPage() {
                     <>
                       每週一頁情緒陪伴，放在這趟旅程裡。
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                      ，可以先看。其餘現在預購，後面的週會一週一週放進來。
+                      。
                     </>
                   ) : (
                     <>
                       One page of company each week, in this journey.{" "}
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. The rest is a pre-order, released week by week.
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                     </>
                   )}
                 </p>
@@ -577,7 +577,7 @@ export default async function LandingPage() {
               <FadeIn delay={350}>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <a href="#pricing" className="btn-primary text-base">
-                    {t("現在預購", "Pre-order now")}
+                    {t("現在加入", "Join now")}
                     <svg className="ml-2" width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -630,12 +630,12 @@ export default async function LandingPage() {
                   <>
                     每一週一頁，寫給那個週數，放在旅程裡。
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    ，可以先看。後面的週會慢慢放上來。
+                    。
                   </>
                 ) : (
                   <>
                     One page each week, written for that week, in the journey.{" "}
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Later weeks arrive over time.
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                   </>
                 )
               }
@@ -721,11 +721,11 @@ export default async function LandingPage() {
                   <>
                     下面的卡片是預覽。
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    ，可以先看。其餘會一週一週放進旅程。
+                    。
                   </>
                 ) : (
                   <>
-                    The cards below are a preview. <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. The rest goes into the journey week by week.
+                    The cards below are a preview. <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                   </>
                 )
               }
@@ -855,11 +855,10 @@ export default async function LandingPage() {
                 {locale === "zh" ? (
                   <>
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    ，可以先看。後面的週會一週一週放進這趟旅程。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Later weeks go into the journey one at a time.
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
                   </>
                 )}
               </p>
@@ -897,11 +896,11 @@ export default async function LandingPage() {
                 locale === "zh" ? (
                   <>
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    ，可以先看。內容每週放到旅程裡，完整內容會分批上線，所以現在是預購。{pick(locale, PRICING.currencyNote)}。
+                    。{pick(locale, PRICING.currencyNote)}。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Each week goes into the journey, and the full set rolls out in batches, so this is a pre-order. {pick(locale, PRICING.currencyNote)}.
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. {pick(locale, PRICING.currencyNote)}.
                   </>
                 )
               }
@@ -964,11 +963,10 @@ export default async function LandingPage() {
                   locale === "zh" ? (
                     <>
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                      ，可以先看。其餘用信用卡或 PayPal，在 Gumroad 預購。
                     </>
                   ) : (
                     <>
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Pre-order the rest by card or PayPal on Gumroad.
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
                     </>
                   )
                 }
@@ -1004,7 +1002,7 @@ export default async function LandingPage() {
               </FadeIn>
               <FadeIn delay={300} className="mt-8 flex flex-col sm:flex-row gap-4">
                 <a href="#pricing" className="btn-primary text-base">
-                  {t("現在預購", "Pre-order now")}
+                  {t("現在加入", "Join now")}
                 </a>
                 <Link href="/auth/login" className="btn-secondary text-base">
                   {t("已有帳號？登入", "Already have an account? Log in")}
@@ -1133,7 +1131,7 @@ export default async function LandingPage() {
               className="inline-flex items-center gap-2 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
               style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
             >
-              {t("現在預購", "Pre-order now")}
+              {t("現在加入", "Join now")}
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -1209,7 +1207,7 @@ export default async function LandingPage() {
                     href="#pricing"
                     className="text-sm font-bold text-white py-2.5 px-5 rounded-full border-2 border-white/30 hover:border-white transition-colors"
                   >
-                    {t("預購 →", "Pre-order →")}
+                    {t("現在加入 →", "Join now →")}
                   </a>
                 </li>
               </ul>
