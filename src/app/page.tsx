@@ -4,12 +4,6 @@ import { formatUsd, planPurchaseHref, PRICING } from "@/lib/pricing";
 import { pick, type Locale } from "@/lib/locale";
 import { getLocale } from "@/lib/locale-server";
 
-/**
- * Placeholder quotes from 小涵 / Mei / Amanda.
- * Hidden until Annie confirms they are real. Flip this one line to show them.
- */
-const SHOW_TESTIMONIALS = false;
-
 /* ─────────────────────────────────────────
    Inline SVG: Geometric Blob Pregnant Woman
    (Headspace / Buck design style)
@@ -201,7 +195,7 @@ function FeatureCard({
 }: {
   icon: string;
   title: string;
-  description: string;
+  description: React.ReactNode;
   delay?: number;
 }) {
   return (
@@ -241,6 +235,7 @@ function TrimesterCard({
   textColor,
   delay,
   items,
+  preview,
 }: {
   period: string;
   weeks: string;
@@ -249,6 +244,7 @@ function TrimesterCard({
   textColor?: string;
   delay?: number;
   items: string[];
+  preview?: string;
 }) {
   return (
     <FadeIn delay={delay} className="rounded-3xl overflow-hidden card-hover">
@@ -257,6 +253,14 @@ function TrimesterCard({
         style={{ backgroundColor: color }}
       >
         <div className="mb-6">
+          {preview && (
+            <p
+              className="text-xs font-bold uppercase tracking-widest mb-2"
+              style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
+            >
+              {preview}
+            </p>
+          )}
           <span
             className="text-xs font-bold uppercase tracking-widest"
             style={{ color: textColor ?? "rgba(30,42,94,0.6)", fontFamily: "var(--font-quicksand), sans-serif" }}
@@ -448,7 +452,7 @@ function SectionHeader({
   center,
 }: {
   label: string;
-  title: string;
+  title: React.ReactNode;
   subtitle?: React.ReactNode;
   center?: boolean;
 }) {
@@ -475,9 +479,22 @@ function SectionHeader({
 /* ─────────────────────────────────────────
    Page
    ───────────────────────────────────────── */
+function FreeWeeksLink({ children }: { children: React.ReactNode }) {
+  return (
+    <a
+      href={PRICING.freeWeeksUrl}
+      className="underline underline-offset-2"
+      style={{ color: "var(--coral)" }}
+    >
+      {children}
+    </a>
+  );
+}
+
 export default async function LandingPage() {
   const locale = await getLocale();
   const t = (zh: string, en: string) => pick(locale, zh, en);
+  const freeWeeks = pick(locale, PRICING.freeWeeksNote);
 
   return (
     <div className="overflow-x-hidden">
@@ -542,9 +559,17 @@ export default async function LandingPage() {
                   className="text-base lg:text-lg leading-relaxed mb-8 font-medium"
                   style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  {t(
-                    "每週一則情緒引導，加上冥想與呼吸練習。現在可以買，內容每週寄到信箱。",
-                    "A weekly emotional guide, plus meditation and breathing. Buy now. Content is emailed each week.",
+                  {locale === "zh" ? (
+                    <>
+                      每週一頁情緒陪伴，放在這趟旅程裡。
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                      ，可以先看。其餘現在預購，後面的週會一週一週放進來。
+                    </>
+                  ) : (
+                    <>
+                      One page of company each week, in this journey.{" "}
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. The rest is a pre-order, released week by week.
+                    </>
                   )}
                 </p>
               </FadeIn>
@@ -552,7 +577,7 @@ export default async function LandingPage() {
               <FadeIn delay={350}>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <a href="#pricing" className="btn-primary text-base">
-                    {t("立即購買", "Buy now")}
+                    {t("現在預購", "Pre-order now")}
                     <svg className="ml-2" width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -599,29 +624,57 @@ export default async function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FeatureCard
               icon="💌"
-              title={t("每週情緒引導", "Weekly emotional guide")}
-              description={t(
-                "每一週一則情緒引導，寫給那個週數。身體在變、焦慮講不出口、期待慢慢來，都寫在裡面。",
-                "One note each week, written for that week. A changing body, worry that's hard to say, hope that comes slowly. It's all in there.",
-              )}
+              title={t("每週情緒陪伴", "Weekly company")}
+              description={
+                locale === "zh" ? (
+                  <>
+                    每一週一頁，寫給那個週數，放在旅程裡。
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    ，可以先看。後面的週會慢慢放上來。
+                  </>
+                ) : (
+                  <>
+                    One page each week, written for that week, in the journey.{" "}
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Later weeks arrive over time.
+                  </>
+                )
+              }
               delay={100}
             />
             <FeatureCard
               icon="🧘"
               title={t("40 週完整旅程", "The full 40 weeks")}
-              description={t(
-                "從第 1 週到第 40 週，三個孕期收在同一份方案裡。一次走完，不必一週一週另外找。",
-                "Week 1 through week 40, three trimesters in one plan. Walk it once. You don't have to hunt week by week.",
-              )}
+              description={
+                locale === "zh" ? (
+                  <>
+                    三個孕期收在同一份預購裡。先從
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    開始，不必一週一週另外找。
+                  </>
+                ) : (
+                  <>
+                    Three trimesters in one pre-order. Start here:{" "}
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. You don&apos;t have to hunt week by week.
+                  </>
+                )
+              }
               delay={200}
             />
             <FeatureCard
               icon="🌙"
-              title={t("呼吸、冥想、好眠", "Breathing, meditation, sleep")}
-              description={t(
-                "引導冥想、孕期呼吸練習、好眠儀式。身體變化很大的時候，還是可以靜一下。",
-                "Guided meditation, pregnancy breathing, and a wind-down for sleep. When your body is changing fast, you can still get quiet.",
-              )}
+              title={t("引導呼吸與冥想文字", "Guided breathing and meditation text")}
+              description={
+                locale === "zh" ? (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    的那幾頁裡，有引導呼吸，和可以照著唸的冥想文字。
+                  </>
+                ) : (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> and include guided breathing and read-aloud meditation text.
+                  </>
+                )
+              }
               delay={300}
             />
           </div>
@@ -632,7 +685,7 @@ export default async function LandingPage() {
               { num: "40", unit: t("週", "wks"), label: t("完整情緒旅程", "Full emotional journey") },
               { num: "3", unit: t("期", ""), label: t("三種孕期節奏", "Trimester rhythms") },
               { num: t("每週", "Weekly"), unit: "", label: t("一則心靈引導", "One guide") },
-              { num: "∞", unit: "", label: t("冥想練習隨時聽", "Meditation, any time") },
+              { num: t("文字", "Text"), unit: "", label: t("引導呼吸與朗讀冥想", "Guided breathing, read-aloud meditation") },
             ].map(({ num, unit, label }) => (
               <div
                 key={label}
@@ -662,16 +715,26 @@ export default async function LandingPage() {
           <div className="mb-14">
             <SectionHeader
               label={t("40 週旅程", "40-week journey")}
-              title={t("每一個孕期階段，都有妳需要的陪伴", "Each trimester has what you need")}
-              subtitle={t(
-                "三個孕期，三種節奏，三種陪伴的方式。無論妳現在在哪個週數，都有適合妳的功課在等著妳。",
-                "Three trimesters, three paces. Wherever you are in the weeks, there's something for you.",
-              )}
+              title={t("三個孕期，先看方向", "Three trimesters, a first look")}
+              subtitle={
+                locale === "zh" ? (
+                  <>
+                    下面的卡片是預覽。
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    ，可以先看。其餘會一週一週放進旅程。
+                  </>
+                ) : (
+                  <>
+                    The cards below are a preview. <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. The rest goes into the journey week by week.
+                  </>
+                )
+              }
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <TrimesterCard
+              preview={t("預覽", "Preview")}
               period={t("第一孕期", "First trimester")}
               weeks={t("1–12 週", "Weeks 1–12")}
               theme={t("接納與安定", "Acceptance and steadiness")}
@@ -696,6 +759,7 @@ export default async function LandingPage() {
               }
             />
             <TrimesterCard
+              preview={t("預覽", "Preview")}
               period={t("第二孕期", "Second trimester")}
               weeks={t("13–27 週", "Weeks 13–27")}
               theme={t("連結與探索", "Connection")}
@@ -720,6 +784,7 @@ export default async function LandingPage() {
               }
             />
             <TrimesterCard
+              preview={t("預覽", "Preview")}
               period={t("第三孕期", "Third trimester")}
               weeks={t("28–40 週", "Weeks 28–40")}
               theme={t("準備與期待", "Getting ready")}
@@ -787,9 +852,15 @@ export default async function LandingPage() {
                 </div>
               </div>
               <p className="text-white/60 text-sm mt-6">
-                {t(
-                  "妳的旅程是獨一無二的。我們的 40 週 Inner Engineering 計劃，為妳在每個關鍵時刻提供最需要的心靈功課與陪伴。",
-                  "Your journey is yours. The 40-week Inner Engineering plan meets you at the moments that need it, with a practice and some company.",
+                {locale === "zh" ? (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    ，可以先看。後面的週會一週一週放進這趟旅程。
+                  </>
+                ) : (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Later weeks go into the journey one at a time.
+                  </>
                 )}
               </p>
             </div>
@@ -809,11 +880,31 @@ export default async function LandingPage() {
           <div className="text-center mb-14">
             <SectionHeader
               label={t("方案", "Pricing")}
-              title={t("四十週，三種方案", "Forty weeks, three plans")}
-              subtitle={t(
-                `每週的情緒引導，加上呼吸、冥想練習。${PRICING.freeWeeksNote.zh}，${PRICING.currencyNote.zh}。`,
-                `A weekly emotional guide, plus breathing and meditation. ${PRICING.freeWeeksNote.en}. ${PRICING.currencyNote.en}.`,
-              )}
+              title={
+                locale === "zh" ? (
+                  <>
+                    <FreeWeeksLink>前 4 週免費</FreeWeeksLink>
+                    ，其餘現在預購
+                  </>
+                ) : (
+                  <>
+                    <FreeWeeksLink>The first 4 weeks are free</FreeWeeksLink>
+                    . Pre-order the rest.
+                  </>
+                )
+              }
+              subtitle={
+                locale === "zh" ? (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    ，可以先看。內容每週放到旅程裡，完整內容會分批上線，所以現在是預購。{pick(locale, PRICING.currencyNote)}。
+                  </>
+                ) : (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Each week goes into the journey, and the full set rolls out in batches, so this is a pre-order. {pick(locale, PRICING.currencyNote)}.
+                  </>
+                )
+              }
               center
             />
           </div>
@@ -843,7 +934,7 @@ export default async function LandingPage() {
               {pick(locale, PRICING.currencyNote)}
             </p>
             <p className="text-sm mt-1" style={{ color: "#5A6480" }}>
-              {pick(locale, PRICING.freeWeeksNote)}
+              <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
             </p>
             <p className="text-sm mt-3" style={{ color: "#5A6480" }}>
               {pick(locale, PRICING.checkoutNote)}
@@ -868,21 +959,41 @@ export default async function LandingPage() {
             <div>
               <SectionHeader
                 label={t("怎麼拿到", "How you get it")}
-                title={t("買了之後，每週寄到信箱", "After you buy, it arrives by email each week")}
-                subtitle={t(
-                  "沙發上、臥室裡，或半夜醒著的時候，都可以打開。信用卡或 PayPal，在 Gumroad 結帳。",
-                  "Open it from the couch, bed, or in the middle of the night. Pay by card or PayPal on Gumroad.",
-                )}
+                title={t("預購之後，每週放進旅程", "After you pre-order, each week goes into the journey")}
+                subtitle={
+                  locale === "zh" ? (
+                    <>
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                      ，可以先看。其餘用信用卡或 PayPal，在 Gumroad 預購。
+                    </>
+                  ) : (
+                    <>
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> to read now. Pre-order the rest by card or PayPal on Gumroad.
+                    </>
+                  )
+                }
               />
               <FadeIn delay={200} className="mt-8">
                 <ul className="space-y-4">
                   {[
-                    { icon: "💌", text: t("每週一則情緒引導，跟著週數走", "One emotional guide each week, matched to that week") },
-                    { icon: "🌙", text: t("冥想、呼吸與好眠練習，想聽的時候就回來", "Meditation, breathing, and sleep. Come back when you want to listen") },
-                    { icon: "🌸", text: t("三個孕期都在同一份方案裡", "Three trimesters in the same plan") },
+                    { icon: "💌", text: t("每週一頁情緒陪伴，跟著週數，放在旅程裡", "One page of company each week, for that week, in the journey") },
+                    {
+                      icon: "🌙",
+                      text: locale === "zh" ? (
+                        <>
+                          <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                          的那幾頁裡，有引導呼吸，和可以照著唸的冥想文字。
+                        </>
+                      ) : (
+                        <>
+                          <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> and include guided breathing and read-aloud meditation text.
+                        </>
+                      ),
+                    },
+                    { icon: "🌸", text: t("三個孕期都在同一份預購裡", "Three trimesters in the same pre-order") },
                     { icon: "✦", text: t("信用卡或 PayPal，在 Gumroad 付款", "Pay by card or PayPal on Gumroad") },
                   ].map(({ icon, text }) => (
-                    <li key={text} className="flex items-start gap-3">
+                    <li key={icon} className="flex items-start gap-3">
                       <span className="text-xl flex-shrink-0 mt-0.5">{icon}</span>
                       <span className="text-sm leading-relaxed" style={{ color: "#5A6480" }}>
                         {text}
@@ -893,7 +1004,7 @@ export default async function LandingPage() {
               </FadeIn>
               <FadeIn delay={300} className="mt-8 flex flex-col sm:flex-row gap-4">
                 <a href="#pricing" className="btn-primary text-base">
-                  {t("立即購買", "Buy now")}
+                  {t("現在預購", "Pre-order now")}
                 </a>
                 <Link href="/auth/login" className="btn-secondary text-base">
                   {t("已有帳號？登入", "Already have an account? Log in")}
@@ -929,7 +1040,7 @@ export default async function LandingPage() {
                       {t("40 週完整方案", "The full 40-week plan")}
                     </p>
                     <p className="text-sm" style={{ color: "#8A93B2" }}>
-                      {t("每週情緒引導 · 冥想練習 · 每週寄到信箱", "Weekly guide · meditation · emailed each week")}
+                      {t("每週情緒陪伴 · 引導呼吸與朗讀冥想 · 放在旅程裡", "Weekly company · guided breathing and read-aloud meditation · in the journey")}
                     </p>
                   </div>
                 </div>
@@ -987,96 +1098,6 @@ export default async function LandingPage() {
       </section>
 
       {/* ════════════════════════════════════════
-          TESTIMONIAL STRIP
-          Off unless SHOW_TESTIMONIALS is true. No nav anchor points here.
-          ════════════════════════════════════════ */}
-      {SHOW_TESTIMONIALS ? (
-      <section
-        className="py-16 overflow-hidden"
-        style={{ backgroundColor: "var(--navy)" }}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-10">
-            <p
-              className="text-xs font-bold uppercase tracking-widest mb-2"
-              style={{ color: "var(--coral)" }}
-            >
-              {t("媽咪們說", "From mothers")}
-            </p>
-            <h2
-              className="text-2xl md:text-3xl font-bold text-white"
-              style={{ fontFamily: "var(--font-noto), sans-serif" }}
-            >
-              {t("睡前會聽，孕吐時會看", "She listens at bedtime, and reads it through the nausea")}
-            </h2>
-          </FadeIn>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: t(
-                  "孕吐最難的那幾週，每週的情緒引導讓我把心情放下來。",
-                  "In the hardest weeks of nausea, the weekly guide helped me set my feelings down.",
-                ),
-                name: "小涵",
-                week: t("孕 12 週", "Week 12"),
-                color: "var(--coral)",
-                delay: 100,
-              },
-              {
-                quote: t(
-                  "40 週的冥想音檔變成我每天睡前必聽，孕期安穩一點。",
-                  "The 40 weeks of meditation audio became what I play before sleep. Pregnancy felt a bit steadier.",
-                ),
-                name: "Mei",
-                week: t("孕 36 週", "Week 36"),
-                color: "var(--teal)",
-                delay: 200,
-              },
-              {
-                quote: t(
-                  "第三孕期睡不著，呼吸練習有用。這四十週我沒有一直硬撐。",
-                  "I couldn't sleep in the third trimester. The breathing practice helped. I didn't spend all forty weeks just pushing through.",
-                ),
-                name: "Amanda",
-                week: t("孕 34 週", "Week 34"),
-                color: "var(--yellow)",
-                delay: 300,
-              },
-            ].map(({ quote, name, week, color, delay }) => (
-              <FadeIn
-                key={name}
-                delay={delay}
-                className="rounded-2xl p-6"
-                style={{ background: "rgba(255,255,255,0.06)" } as React.CSSProperties}
-              >
-                <div
-                  className="w-8 h-1 rounded-full mb-4"
-                  style={{ background: color }}
-                />
-                <p className="text-sm text-white/80 leading-relaxed mb-6 italic">
-                  {locale === "zh" ? `「${quote}」` : `“${quote}”`}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                    style={{ background: color }}
-                  >
-                    {name[0]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">{name}</p>
-                    <p className="text-xs text-white/50">{week}</p>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-      ) : null}
-
-      {/* ════════════════════════════════════════
           FINAL CTA BANNER
           ════════════════════════════════════════ */}
       <section
@@ -1102,7 +1123,7 @@ export default async function LandingPage() {
             >
               {t("想走這四十週，", "If you want these forty weeks,")}
               <br />
-              {t("現在可以買", "you can buy now")}
+              {t("現在可以預購", "you can pre-order")}
             </h2>
             <p className="text-white/80 text-base mb-8 leading-relaxed">
               {pick(locale, PRICING.checkoutNote)}
@@ -1112,7 +1133,7 @@ export default async function LandingPage() {
               className="inline-flex items-center gap-2 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
               style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
             >
-              {t("立即購買", "Buy now")}
+              {t("現在預購", "Pre-order now")}
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -1188,7 +1209,7 @@ export default async function LandingPage() {
                     href="#pricing"
                     className="text-sm font-bold text-white py-2.5 px-5 rounded-full border-2 border-white/30 hover:border-white transition-colors"
                   >
-                    {t("立即購買 →", "Buy now →")}
+                    {t("預購 →", "Pre-order →")}
                   </a>
                 </li>
               </ul>

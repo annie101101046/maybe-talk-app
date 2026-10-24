@@ -33,8 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const zh = locale === "zh";
   const title = zh ? "也許妳想找人聊一聊" : "Maybe She'd Like to Talk";
   const description = zh
-    ? "為孕期媽咪設計的 40 週旅程。每週一則情緒引導，加上冥想與呼吸練習。現在可以買，內容每週寄到信箱。"
-    : "A 40-week pregnancy journey. A weekly emotional guide, plus meditation and breathing. Buy now. Content is emailed each week.";
+    ? "40 週孕期旅程，現在預購。每週一頁情緒陪伴，放在旅程裡。第 1–4 週免費。"
+    : "A 40-week pregnancy journey, on pre-order. One page of company each week, in the journey. Weeks 1–4 are free.";
 
   return {
     title: {

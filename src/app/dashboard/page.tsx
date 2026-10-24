@@ -148,30 +148,43 @@ export default function DashboardPage() {
             {t('情緒引導', 'Weekly guide')}
           </p>
           <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">{t('每週', 'Weekly')}</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('一週一則，寫給這個週數', 'One note a week, written for that week')}</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('一週一頁，放進這個旅程', 'One page a week, added to this journey')}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
             {t('冥想練習', 'Meditation')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">∞</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('呼吸、冥想與好眠，隨時可以回來', 'Breathing, meditation, and sleep, whenever you come back')}</p>
+          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">{t('文字', 'Text')}</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('引導呼吸，和可以照著唸的冥想文字', 'Guided breathing and read-aloud meditation text')}</p>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
           <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
-            {t('現在可以買', 'Available now')}
+            {t('現在預購', 'Pre-order')}
           </span>
           <h3 className="text-lg font-bold text-[#1E2A5E]">
             {t('40 週旅程，三種方案', '40-week journey, three plans')}
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
-            {t(
-              `${planList}。${PRICING.freeWeeksNote.zh}，${PRICING.currencyNote.zh}。${PRICING.checkoutNote.zh}`,
-              `${planList}. ${PRICING.freeWeeksNote.en}. ${PRICING.currencyNote.en}. ${PRICING.checkoutNote.en}`,
+            {locale === 'zh' ? (
+              <>
+                {planList}。
+                <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
+                  {PRICING.freeWeeksNote.zh}
+                </a>
+                ，{PRICING.currencyNote.zh}。{PRICING.checkoutNote.zh}
+              </>
+            ) : (
+              <>
+                {planList}.{' '}
+                <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
+                  {PRICING.freeWeeksNote.en}
+                </a>
+                . {PRICING.currencyNote.en}. {PRICING.checkoutNote.en}
+              </>
             )}
           </p>
         </div>
