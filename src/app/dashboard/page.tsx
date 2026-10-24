@@ -111,6 +111,11 @@ export default function DashboardPage() {
   if (!profile) return null
 
   const firstName = profile.full_name?.split(' ')[0] ?? t('妳', 'there')
+  const planNames = PRICING.plans.map((plan) => pick(locale, plan.title))
+  const planList =
+    locale === 'zh'
+      ? planNames.join('、')
+      : `${planNames.slice(0, -1).join(', ')}, and ${planNames[planNames.length - 1]}`
 
   return (
     <div className="space-y-8">
@@ -165,8 +170,8 @@ export default function DashboardPage() {
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
             {t(
-              `單一孕期、全孕期通行證、送禮版。${PRICING.freeWeeksNote.zh}，${PRICING.currencyNote.zh}。${PRICING.checkoutNote.zh}`,
-              `Single Trimester, Full Pregnancy Pass, and Gift Edition. ${PRICING.freeWeeksNote.en}. ${PRICING.currencyNote.en}. ${PRICING.checkoutNote.en}`,
+              `${planList}。${PRICING.freeWeeksNote.zh}，${PRICING.currencyNote.zh}。${PRICING.checkoutNote.zh}`,
+              `${planList}. ${PRICING.freeWeeksNote.en}. ${PRICING.currencyNote.en}. ${PRICING.checkoutNote.en}`,
             )}
           </p>
         </div>
