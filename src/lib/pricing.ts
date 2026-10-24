@@ -42,9 +42,11 @@ export const PRICING = {
   email: "hello@maybeshedliketotalk.org",
   currencyNote: { zh: "價格以美金計", en: "Prices in USD" } satisfies Bilingual,
   freeWeeksNote: { zh: "第 1–4 週免費", en: "Weeks 1–4 are free" } satisfies Bilingual,
+  /** Live free weeks on the static site. Same-tab link from every free-weeks mention. */
+  freeWeeksUrl: "https://www.maybeshedliketotalk.org/free",
   checkoutNote: {
-    zh: "用信用卡或 PayPal，在 Gumroad 付款。每週的內容會寄到妳的信箱。",
-    en: "Pay by card or PayPal on Gumroad. Each week's content is emailed to you.",
+    zh: "用信用卡或 PayPal，在 Gumroad 付款。每週的內容放在旅程裡。",
+    en: "Pay by card or PayPal on Gumroad. Each week's content is in the journey.",
   } satisfies Bilingual,
   plans: [
     {
@@ -65,11 +67,11 @@ export const PRICING = {
           en: "Weekly emotional guide for those weeks",
         },
         {
-          zh: "該段的呼吸與冥想練習",
-          en: "Breathing and meditation for those weeks",
+          zh: "該段的引導呼吸，和可以照著唸的冥想文字",
+          en: "Guided breathing and read-aloud meditation text for those weeks",
         },
       ],
-      cta: { zh: "立即購買", en: "Buy now" },
+      cta: { zh: "預購", en: "Pre-order" },
       subject: "Single Trimester US$15 / 單一孕期 US$15",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.singleTrimester,
     },
@@ -77,8 +79,8 @@ export const PRICING = {
       id: "full-pass",
       title: { zh: "全孕期通行證", en: "Full Pregnancy Pass" },
       subtitle: {
-        zh: "全部 40 週的情緒陪伴，加上中英文呼吸與冥想語音。",
-        en: "All 40 weeks of emotional guidance, plus breathing and meditation audio in Chinese and English.",
+        zh: "全部 40 週的情緒陪伴，加上引導呼吸，和可以照著唸的冥想文字。",
+        en: "All 40 weeks of emotional guidance, plus guided breathing and read-aloud meditation text.",
       },
       priceUsd: 29,
       compareAtUsd: 39,
@@ -91,8 +93,8 @@ export const PRICING = {
           en: "All 40 weeks of emotional guidance",
         },
         {
-          zh: "呼吸與冥想語音，中文與英文",
-          en: "Breathing and meditation audio in Chinese and English",
+          zh: "引導呼吸，和可以照著唸的冥想文字",
+          en: "Guided breathing and read-aloud meditation text",
         },
         {
           zh: "每週釋出",
@@ -103,7 +105,7 @@ export const PRICING = {
           en: "One-time purchase, lifetime access",
         },
       ],
-      cta: { zh: "立即購買", en: "Buy now" },
+      cta: { zh: "預購", en: "Pre-order" },
       subject: "Full Pregnancy Pass US$29 / 全孕期通行證 US$29",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.fullPregnancyPass,
     },
