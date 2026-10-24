@@ -176,7 +176,7 @@ export default function Header() {
                     href="/#pricing"
                     className="btn-primary text-sm"
                   >
-                    {t("預購", "Pre-order")}
+                    {t("現在加入", "Join now")}
                   </Link>
                 </>
               )}
@@ -274,7 +274,7 @@ export default function Header() {
                     onClick={closeMenu}
                     className="block btn-primary text-center"
                   >
-                    {t("預購", "Pre-order")}
+                    {t("現在加入", "Join now")}
                   </Link>
                 </>
               )}
