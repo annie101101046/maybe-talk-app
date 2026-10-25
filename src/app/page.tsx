@@ -588,6 +588,18 @@ function jsonLd(locale: Locale) {
           availability: "https://schema.org/InStock",
         })),
       },
+      {
+        "@type": "FAQPage",
+        url: MAIN_SITE_URL,
+        mainEntity: FAQ.map((item) => ({
+          "@type": "Question",
+          name: pick(locale, item.q),
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: pick(locale, item.a),
+          },
+        })),
+      },
     ],
   };
 }
@@ -600,7 +612,7 @@ export default async function LandingPage() {
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-clip">
       <script
         type="application/ld+json"
         nonce={nonce}
@@ -914,12 +926,6 @@ export default async function LandingPage() {
             ))}
           </div>
 
-          <FadeIn delay={350} className="text-center mt-10">
-            <p className="text-sm leading-relaxed" style={{ color: "#5A6480" }}>
-              <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-              {t("。第 5 週起才付費。", ". You pay from week 5.")}
-            </p>
-          </FadeIn>
         </div>
       </section>
 

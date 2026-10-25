@@ -55,8 +55,8 @@ export const FAQ = [
   {
     q: { zh: "要怎麼付款？", en: "How do I pay?" },
     a: {
-      zh: "信用卡或 PayPal，在 Gumroad。想先問一句，寫到 hello@maybeshedliketotalk.org。",
-      en: "Card or PayPal, on Gumroad. To ask something first, write to hello@maybeshedliketotalk.org.",
+      zh: "我們透過 Gumroad 收費。如有問題請聯繫我們：hello@maybeshedliketotalk.org",
+      en: "We charge through Gumroad. If you have any questions, please contact us at hello@maybeshedliketotalk.org.",
     },
   },
 ]
