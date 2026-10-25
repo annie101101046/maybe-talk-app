@@ -48,8 +48,8 @@ export const FAQ = [
   {
     q: { zh: "孕到一半才加入，可以嗎？", en: "Can I join midway through pregnancy?" },
     a: {
-      zh: "可以。買一個階段就好：第 1–12 週、第 13–27 週，或第 28–40 週。",
-      en: "Yes. Buy one trimester: weeks 1–12, 13–27, or 28–40.",
+      zh: "可以的。妳可以只買一個階段，第 1 到 12 週、第 13 到 27 週，或第 28 到 40 週都可以。",
+      en: "Yes. You can buy just one stage: weeks 1–12, weeks 13–27, or weeks 28–40.",
     },
   },
   {
@@ -63,7 +63,7 @@ export const FAQ = [
 
 export const PRICING = {
   email: "hello@maybeshedliketotalk.org",
-  currencyNote: { zh: "價格以美金計", en: "Prices in USD" } satisfies Bilingual,
+  currencyNote: { zh: "以下價格都以美金計算。", en: "Prices below are in US dollars." } satisfies Bilingual,
   freeWeeksNote: { zh: "前 4 週免費", en: "The first 4 weeks are free" } satisfies Bilingual,
   /** Live free weeks on the static site. Same-tab link from every free-weeks mention. */
   freeWeeksUrl: "https://www.maybeshedliketotalk.org/free",
@@ -71,16 +71,16 @@ export const PRICING = {
   membersUrl: "https://www.maybeshedliketotalk.org/members",
   membersLinkLabel: { zh: "會員頁", en: "Members page" } satisfies Bilingual,
   notMedicalAdvice: {
-    zh: "這不是醫療建議，也不能取代產檢。身體的事問醫師或助產師。",
-    en: "Not medical advice, and not a substitute for prenatal care. For your body, ask a doctor or midwife.",
+    zh: "這不是醫療建議，也不能取代產檢。身體上的事，請問醫師或助產師。",
+    en: "This isn't medical advice, and it doesn't replace prenatal care. For anything about your body, ask a doctor or midwife.",
   } satisfies Bilingual,
   plans: [
     {
       id: "single-trimester",
       title: { zh: "單一孕期", en: "Single Trimester" },
       subtitle: {
-        zh: "選一段就好：第 1–12 週、第 13–27 週，或第 28–40 週。",
-        en: "Pick one stretch: weeks 1–12, 13–27, or 28–40.",
+        zh: "挑一段就好，可以是第 1 到 12 週、第 13 到 27 週，或第 28 到 40 週。",
+        en: "Choose one part: weeks 1–12, weeks 13–27, or weeks 28–40.",
       },
       priceUsd: 15,
       features: [],
@@ -92,8 +92,8 @@ export const PRICING = {
       id: "full-pass",
       title: { zh: "全孕期通行證", en: "Full Pregnancy Pass" },
       subtitle: {
-        zh: "從第 1 週陪到第 40 週。",
-        en: "From week 1 through week 40.",
+        zh: "從第 1 週陪妳走到第 40 週。",
+        en: "We stay with you from week 1 through week 40.",
       },
       priceUsd: 29,
       compareAtUsd: 39,
@@ -108,8 +108,8 @@ export const PRICING = {
       id: "gift-edition",
       title: { zh: "送禮版", en: "Gift Edition" },
       subtitle: {
-        zh: "把全孕期通行證當禮物。授權碼轉給她，再附一張可列印的心意卡。",
-        en: "The Full Pass as a gift. Forward her the license key, and a printable gift card.",
+        zh: "把全孕期通行證當成一份禮物。授權碼轉給她，再附上一張可以列印的心意卡。",
+        en: "Give the Full Pass as a gift. Pass the license key on to her, with a card she can print.",
       },
       priceUsd: 45,
       features: [],

@@ -14,7 +14,7 @@ import { MAIN_SITE_URL, pageMetadata } from "@/lib/seo";
 function HeroIllustration({ locale }: { locale: Locale }) {
   const label =
     locale === "zh"
-      ? "一位懷孕的人安靜坐著，旁邊標著 40 週"
+      ? "一位懷孕的人安靜地坐著，旁邊寫著 40 週"
       : "A pregnant person sitting quietly, with a note that says 40 weeks";
   return (
     <div className="relative flex items-center justify-center w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto select-none">
@@ -283,8 +283,8 @@ function TrimesterCard({
             {period}
           </h3>
           <p
-            className="text-lg font-bold"
-            style={{ color: textColor ?? "var(--navy)", opacity: 0.85, fontFamily: "var(--font-quicksand), sans-serif" }}
+            className="text-base leading-relaxed mt-3"
+            style={{ color: textColor ?? "var(--navy)", fontFamily: "var(--font-noto), sans-serif", fontWeight: 400 }}
           >
             {theme}
           </p>
@@ -542,8 +542,8 @@ export async function generateMetadata(): Promise<Metadata> {
       ? "孕期 40 週陪伴｜也許妳想找人聊一聊"
       : "40 weeks of pregnancy support | Maybe She'd Like to Talk",
     description: zh
-      ? "懷孕時，想有人按懷孕週數陪著妳。孕期 40 週的陪伴，分成孕期三階段，也照顧孕期心情。前 4 週免費。"
-      : "Pregnancy week by week, with someone beside you. Pregnancy support across 40 weeks of pregnancy, in three trimesters. The first 4 weeks are free.",
+      ? "懷孕的時候，是不是也想有人陪著妳？我們按週數陪妳走完這 40 週，三個階段都會照顧到妳的身體和心情。前 4 週可以先免費看。"
+      : "When you're pregnant, you may want someone beside you. We stay with you through these 40 weeks, and all three stages look after your body and how you feel. The first 4 weeks are free to read.",
     canonical: MAIN_SITE_URL,
     languages: {
       "zh-Hant": MAIN_SITE_URL,
@@ -564,8 +564,8 @@ function jsonLd(locale: Locale) {
         alternateName: "Maybe She'd Like to Talk",
         url: MAIN_SITE_URL,
         description: zh
-          ? "孕期 40 週的陪伴，按懷孕週數，一週一週陪妳。"
-          : "Pregnancy support, week by week, across 40 weeks of pregnancy.",
+          ? "一週一週陪妳走完這 40 週。"
+          : "Someone with you, week by week, through 40 weeks of pregnancy.",
         inLanguage: ["zh-Hant", "en"],
       },
       {
@@ -652,7 +652,7 @@ export default async function LandingPage() {
                   className="display-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-4"
                   style={{ fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  {t("孕期 40 週", "40 weeks of pregnancy")}
+                  {t("孕期 40 週，", "40 weeks of pregnancy,")}
                   <br />
                   <span style={{ color: "var(--coral)" }}>{t("有人陪著妳", "with someone beside you")}</span>
                 </h1>
@@ -683,15 +683,15 @@ export default async function LandingPage() {
                     <>
                       懷孕時，是不是也想有人系統性地陪著妳、照顧妳？這 40 週，我們從身體、心靈到新生兒照顧，一週一週陪妳。妳並不孤單。
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                      。第 5 週起要加入，
+                      ，可以先慢慢看。第 5 週起如果想繼續，加入之後就能在
                       <MembersLink>會員頁</MembersLink>
-                      才打得開。
+                      打開。
                     </>
                   ) : (
                     <>
-                      When you&apos;re pregnant, you may also want steady, thoughtful company, and someone looking after you. Over these 40 weeks we look after your body, your mind, and getting ready for the baby, one week at a time. You&apos;re not alone.{" "}
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. From week 5, the{" "}
-                      <MembersLink>Members page</MembersLink> opens when you join.
+                      When you&apos;re pregnant, you may want someone to stay with you and look after you. Over these 40 weeks we look after your body, your feelings, and getting ready for the baby, one week at a time. You&apos;re not alone.{" "}
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>, so you can start gently. From week 5, once you join, the{" "}
+                      <MembersLink>Members page</MembersLink> opens.
                     </>
                   )}
                 </p>
@@ -734,8 +734,8 @@ export default async function LandingPage() {
               label={t("關於我們", "About")}
               title={t("孕期陪伴", "Pregnancy support")}
               subtitle={t(
-                "懷孕這段路很長。我們按懷孕週數，一週陪一頁。",
-                "Pregnancy is a long road. We stay for one week at a time.",
+                "懷孕這段路很長。我們按週數陪著妳，一週一頁。",
+                "Pregnancy is a long road. We stay with you, one week and one page at a time.",
               )}
               center
             />
@@ -748,11 +748,11 @@ export default async function LandingPage() {
               description={
                 locale === "zh" ? (
                   <>
-                    妳買的那些懷孕週數，<MembersLink>會員頁</MembersLink>一週開一頁。身體、孕期心情、準備寶寶，都在那一頁。
+                    妳買了哪幾週，<MembersLink>會員頁</MembersLink>就開哪幾週，一週一頁。那一頁裡有身體、心情，也有準備寶寶的事。
                   </>
                 ) : (
                   <>
-                    The <MembersLink>Members page</MembersLink> opens the weeks you bought. Body, mood, and getting ready for the baby, on that page.
+                    The <MembersLink>Members page</MembersLink> opens the weeks you bought, one page a week. That page is about your body, your mood, and getting ready for the baby.
                   </>
                 )
               }
@@ -762,8 +762,8 @@ export default async function LandingPage() {
               icon="🧘"
               title={t("孕期心情", "A note for your mood")}
               description={t(
-                "每週記一則，寫給自己就好。",
-                "One note a week, just for you.",
+                "每一週可以記一則心情，寫給自己就好。",
+                "Each week you can write one note, just for yourself.",
               )}
               delay={200}
             />
@@ -771,8 +771,8 @@ export default async function LandingPage() {
               icon="🌙"
               title={t("3 次陪妳聊聊", "Three chats with us")}
               description={t(
-                "整個孕期，我們陪妳聊三次。另外附一份可列印的 PDF。",
-                "Over the pregnancy, three chats with us. A printable PDF comes with it.",
+                "整個孕期有 3 次陪妳聊聊，另外還附一份可以列印的 PDF。",
+                "Through the pregnancy there are three chats with us, and a PDF you can print.",
               )}
               delay={300}
             />
@@ -791,8 +791,8 @@ export default async function LandingPage() {
               label={t("懷孕週數", "Pregnancy week by week")}
               title={t("孕期三階段", "Three trimesters")}
               subtitle={t(
-                "第 1–12 週、第 13–27 週、第 28–40 週。每一段都能單獨買。",
-                "Weeks 1–12, 13–27, and 28–40. You can buy one trimester on its own.",
+                "三個階段是第 1 到 12 週、第 13 到 27 週，還有第 28 到 40 週。每一段都可以單獨買。",
+                "The three stages are weeks 1–12, 13–27, and 28–40. You can buy any one of them on its own.",
               )}
             />
           </div>
@@ -801,31 +801,42 @@ export default async function LandingPage() {
             <TrimesterCard
               period={t("第一階段", "First trimester")}
               weeks={t("第 1–12 週", "Weeks 1–12")}
-              theme={t("懷孕剛開始，變化還很安靜。", "The beginning, while things are still quiet.")}
+              theme={t(
+                "第一次產檢之前，心裡常常忐忑不安。別擔心，我們陪著妳，讓妳慢慢安心。",
+                "Before the first prenatal visit, it's natural to feel uneasy. Don't worry. We're with you, so you can settle in.",
+              )}
               color="#FFF0F3"
               delay={100}
               items={[
-                t("前 4 週免費。", "The first 4 weeks are free."),
-                t("這一段可以單獨買。", "You can buy this trimester on its own."),
+                t("前 4 週可以先免費看。", "The first 4 weeks are free to read."),
+                t("若只想走第 1 到 12 週，這一段也可以單獨買。", "If you only want weeks 1–12, you can buy just this part."),
               ]}
             />
             <TrimesterCard
               period={t("第二階段", "Second trimester")}
               weeks={t("第 13–27 週", "Weeks 13–27")}
-              theme={t("身體慢慢有感覺的那一段。", "The middle, when your body starts to feel different.")}
+              theme={t(
+                "這段時間身體比較有感覺，日子也比較辛苦。放鬆心情，我們還是陪著妳。",
+                "Your body starts to feel the pregnancy, and the days take more out of you. Ease your mind. We're still with you.",
+              )}
               color="#E8F8F7"
               delay={200}
-              items={[t("這一段可以單獨買。", "You can buy this trimester on its own.")]}
+              items={[
+                t("第 13 到 27 週可以單獨買，不一定要一次走完全程。", "You can buy weeks 13–27 on their own. You don't have to take the whole pregnancy at once."),
+              ]}
             />
             <TrimesterCard
               period={t("第三階段", "Third trimester")}
               weeks={t("第 28–40 週", "Weeks 28–40")}
-              theme={t("快要見到寶寶了。", "The last stretch, closer to meeting the baby.")}
+              theme={t(
+                "快要見到寶寶了，心裡是期待，也請記得休息。辛苦了。",
+                "You're close to meeting the baby. There's hope in that, so please rest. You've worked hard.",
+              )}
               color="#FFF5DC"
               delay={300}
               items={[
-                t("走到第 40 週。", "It goes through week 40."),
-                t("這一段可以單獨買。", "You can buy this trimester on its own."),
+                t("這一段會陪妳走到第 40 週。", "This part stays with you through week 40."),
+                t("如果只要最後這段，也可以單獨買。", "If you only want this last stretch, you can buy it on its own."),
               ]}
             />
           </div>
@@ -851,7 +862,7 @@ export default async function LandingPage() {
                 className="text-2xl md:text-3xl font-bold text-white mb-6"
                 style={{ fontFamily: "var(--font-noto), sans-serif" }}
               >
-                {t("從懷孕第一天，到寶寶出生的那一刻", "From the first day of pregnancy to the moment the baby arrives")}
+                {t("從懷孕的第一天，一直陪到寶寶出生", "From the first day of pregnancy until the baby is born")}
               </h3>
               {/* Progress bar */}
               <div className="relative">
@@ -875,11 +886,11 @@ export default async function LandingPage() {
                 {locale === "zh" ? (
                   <>
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    。第 5 週起到第 40 週，是付費的部分。
+                    。從第 5 週到第 40 週，就是需要付費的部分。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, that part is paid.
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, those weeks are paid.
                   </>
                 )}
               </p>
@@ -900,7 +911,7 @@ export default async function LandingPage() {
           <div className="text-center mb-14">
             <SectionHeader
               label={t("方案", "Pricing")}
-              title={t("三個方案", "Three ways in")}
+              title={t("三種方式，選一種就好", "Three ways to join. Pick the one that fits.")}
               subtitle={pick(locale, PRICING.currencyNote)}
               center
             />
@@ -937,7 +948,7 @@ export default async function LandingPage() {
           <div className="text-center mb-10">
             <SectionHeader
               label={t("常見問題", "Questions")}
-              title={t("先問這兩件", "Two things people ask")}
+              title={t("大家常常先問這兩件事", "Two things people often ask first")}
               center
             />
           </div>
@@ -977,13 +988,13 @@ export default async function LandingPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <FadeIn>
             <p className="text-white/80 text-sm font-bold uppercase tracking-widest mb-4">
-              {t("如果妳也想有人陪", "If you want someone with you")}
+              {t("如果妳也想有人陪著", "If you want someone with you")}
             </p>
             <h2
               className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-8 leading-tight"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              {t("第 5 週之後，我們還在。", "After week 5, we're still here.")}
+              {t("第 5 週之後，我們還是陪著妳。", "After week 5, we're still with you.")}
             </h2>
             <a
               href={PRICING.freeWeeksUrl}
@@ -1013,7 +1024,7 @@ export default async function LandingPage() {
                 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
               </p>
               <p className="text-sm text-white/70 leading-relaxed">
-                {t("一週一週，陪妳走到第 40 週。", "Week by week, with you through week 40.")}
+                {t("一週一週陪著妳，走到第 40 週。", "Week by week, with you, through week 40.")}
               </p>
             </div>
 
@@ -1027,7 +1038,7 @@ export default async function LandingPage() {
                   { label: t("孕期三階段", "Three trimesters"), href: "#journey" },
                   { label: t("方案與價格", "Plans and prices"), href: "#pricing" },
                   { label: t("常見問題", "Common questions"), href: "#faq" },
-                  { label: t("到會員頁看每週內容", "Read each week on the Members page"), href: PRICING.membersUrl },
+                  { label: t("到會員頁看每一週", "Read each week on the Members page"), href: PRICING.membersUrl },
                 ].map(({ label, href }) => (
                   <li key={href}>
                     <a

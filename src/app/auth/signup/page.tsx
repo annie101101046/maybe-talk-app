@@ -82,18 +82,18 @@ export default function SignupPage() {
             </div>
 
             <h2 className="text-xl font-bold text-[#1E2A5E] mb-2">
-              請確認您的電子郵件
+              請到信箱確認一下
             </h2>
             <p className="text-sm text-[#1E2A5E]/50 mb-1">
-              Check your email for confirmation
+              Please check your email
             </p>
             <p className="text-sm text-[#1E2A5E]/60 mt-4 leading-relaxed">
-              我們已傳送確認信至 <span className="font-semibold text-[#F28B6E]">{email}</span>。
+              確認信已經寄到 <span className="font-semibold text-[#F28B6E]">{email}</span>。
               <br />
-              請點擊信中的連結以完成註冊。
+              點開信裡的連結，註冊就完成了。
             </p>
             <p className="text-xs text-[#1E2A5E]/40 mt-2">
-              We&apos;ve sent a confirmation link to your email. Please click it to complete your registration.
+              We sent a confirmation note to your email. Open the link, and your account is ready.
             </p>
 
             <Link
@@ -127,9 +127,9 @@ export default function SignupPage() {
             註冊 <span className="text-[#1E2A5E]/40 font-normal text-base">| Sign Up</span>
           </h2>
           <p className="text-sm text-[#1E2A5E]/50 mb-7">
-            先留個名字。第 1–4 週可以先看。
+            先留下妳的名字吧。第 1 到 4 週可以先看。
             <br />
-            <span className="text-xs">Leave your name. Weeks 1–4 are there to read.</span>
+            <span className="text-xs">Leave your name. Weeks 1–4 are there for you to read.</span>
           </p>
 
           {/* Error Message */}
@@ -273,9 +273,9 @@ export default function SignupPage() {
 
         {/* Footer note */}
         <p className="mt-6 text-center text-xs text-[#1E2A5E]/30 leading-relaxed">
-          妳的隱私受到保護。我們不會分享妳的資料。
+          妳的資料我們會好好保護，不會拿去跟別人分享。
           <br />
-          Your privacy is protected. We never share your data.
+          We look after your information, and we don&apos;t share it.
         </p>
       </div>
     </main>

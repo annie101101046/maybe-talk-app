@@ -10,8 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
     locale,
     title: zh ? "登入｜也許妳想找人聊一聊" : "Log in | Maybe She'd Like to Talk",
     description: zh
-      ? "登入，回到妳的頁面。"
-      : "Log in to Maybe She'd Like to Talk and get back to your page.",
+      ? "登入之後，就能回到妳的頁面。"
+      : "Log in, and you can get back to your page.",
     canonical,
     languages: {
       "zh-Hant": `${canonical}?lang=zh`,

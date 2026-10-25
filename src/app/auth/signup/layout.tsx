@@ -10,8 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
     locale,
     title: zh ? "註冊｜也許妳想找人聊一聊" : "Sign up | Maybe She'd Like to Talk",
     description: zh
-      ? "先留個名字。第 1–4 週可以先看。"
-      : "Leave your name. Weeks 1–4 of pregnancy support are there to read.",
+      ? "先留下妳的名字吧。第 1 到 4 週可以先看。"
+      : "Leave your name. Weeks 1–4 are there for you to read.",
     canonical,
     languages: {
       "zh-Hant": `${canonical}?lang=zh`,

@@ -88,7 +88,7 @@ export default function DashboardPage() {
         <p className="text-[#1E2A5E]/50 text-sm mt-1">
           {locale === 'zh' ? (
             <>
-              第 1–4 週可以先看。第 5 週之後，到
+              第 1 到 4 週可以先看。第 5 週之後，請到
               <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
                 會員頁
               </a>
@@ -96,7 +96,7 @@ export default function DashboardPage() {
             </>
           ) : (
             <>
-              Weeks 1–4 are there to read. From week 5, enter your license key on the{' '}
+              Weeks 1–4 are there to read. From week 5, please enter your license key on the{' '}
               <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
                 Members page
               </a>
@@ -109,17 +109,17 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-sm text-[#1E2A5E] leading-relaxed">
-            {t('妳買的週次在會員頁，一週一頁。', 'The weeks you bought are on the Members page, one page a week.')}
+            {t('妳買的那些週，都在會員頁，一週一頁。', 'The weeks you bought are on the Members page, one page each week.')}
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-sm text-[#1E2A5E] leading-relaxed">
-            {t('每週可以記一則心情。', 'You can keep one mood note a week.')}
+            {t('每一週可以記一則心情，寫給自己就好。', 'Each week you can write one note, just for yourself.')}
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-sm text-[#1E2A5E] leading-relaxed">
-            {t('整個孕期，我們陪妳聊三次。', 'Over the pregnancy, three chats with us.')}
+            {t('整個孕期有 3 次陪妳聊聊。', 'Through the pregnancy there are three chats with us.')}
           </p>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function DashboardPage() {
       <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
           <h3 className="text-lg font-bold text-[#1E2A5E]">
-            {t('想一起走下去', 'If you want to keep going')}
+            {t('如果還想繼續走下去', "If you'd like to keep going")}
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
             {locale === 'zh' ? (
@@ -135,14 +135,14 @@ export default function DashboardPage() {
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.zh}
                 </a>
-                。第 5 週起才付費。{PRICING.currencyNote.zh}。{PRICING.notMedicalAdvice.zh}
+                。第 5 週起才需要付費。{PRICING.currencyNote.zh}{PRICING.notMedicalAdvice.zh}
               </>
             ) : (
               <>
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.en}
                 </a>
-                . You pay from week 5. {PRICING.currencyNote.en}. {PRICING.notMedicalAdvice.en}
+                . You pay from week 5. {PRICING.currencyNote.en} {PRICING.notMedicalAdvice.en}
               </>
             )}
           </p>
@@ -157,8 +157,8 @@ export default function DashboardPage() {
 
       <p className="text-sm text-[#1E2A5E]/70 leading-relaxed">
         {t(
-          '每一週先寫身體，再寫心情，然後是準備寶寶。另外附一份可列印的 PDF。',
-          'Each week is about your body, then your mood, then getting ready for the baby. A printable PDF comes along too.',
+          '每一週會先寫身體，再寫心情，最後是怎麼準備寶寶。另外還有一份可以列印的 PDF。',
+          'Each week starts with your body, then your mood, then getting ready for the baby. There is also a PDF you can print.',
         )}
       </p>
     </div>

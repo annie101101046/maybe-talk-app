@@ -28,7 +28,7 @@ export default function SiteFooter() {
           {CONTACT_EMAIL}
         </a>
         <p className="text-xs text-[#1E2A5E]/40 min-h-11 flex items-center sm:justify-center">
-          © {new Date().getFullYear()} {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")} · {t("妳的隱私受到保護", "Your privacy stays yours")}
+          © {new Date().getFullYear()} {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")} · {t("妳的資料我們會好好保護", "We look after your information")}
         </p>
       </div>
     </footer>

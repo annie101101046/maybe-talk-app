@@ -34,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const zh = locale === "zh";
   const title = zh ? "也許妳想找人聊一聊" : "Maybe She'd Like to Talk";
   const description = zh
-    ? "懷孕時，想有人一週一週陪著妳、照顧妳。前 4 週免費。"
-    : "When you're pregnant, you may want steady company, one week at a time. The first 4 weeks are free.";
+    ? "懷孕的時候，想有人一週一週陪著妳、照顧妳嗎？前 4 週可以先免費看。"
+    : "When you're pregnant, you may want someone with you, one week at a time. The first 4 weeks are free to read.";
 
   return {
     metadataBase: new URL(APP_ORIGIN),
