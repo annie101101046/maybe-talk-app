@@ -33,8 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const zh = locale === "zh";
   const title = zh ? "也許妳想找人聊一聊" : "Maybe She'd Like to Talk";
   const description = zh
-    ? "40 週孕期 PDF，中英對照。買完就能從 Gumroad 下載。第 1–4 週免費。"
-    : "A 40-week pregnancy PDF, in Chinese and English. Download it from Gumroad right after you pay. Weeks 1–4 are free.";
+    ? "第 1–4 週免費。加入後，會員頁看得到妳買的週。"
+    : "Weeks 1–4 are free. After you join, the Members page shows the weeks you bought.";
 
   return {
     title: {

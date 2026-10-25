@@ -17,33 +17,21 @@ interface Profile {
 const PARTS = [
   {
     period: { zh: '身', en: 'Body' },
-    weeks: { zh: '每週都有', en: 'Every week' },
-    theme: { zh: '寫在 PDF 裡', en: 'In the PDF' },
-    items: [
-      { zh: '凱格爾運動', en: 'Kegel exercises' },
-      { zh: '各階段的營養和補充品', en: 'Nutrition and supplements by stage' },
-      { zh: '產前按摩、乳房按摩通常什麼時候會被考慮', en: 'When prenatal and breast massage are commonly considered' },
-    ],
+    weeks: { zh: '接著', en: 'Then' },
+    theme: { zh: '身體這一段', en: 'The body part' },
+    items: [] as { zh: string; en: string }[],
   },
   {
     period: { zh: '心', en: 'Mind' },
-    weeks: { zh: '每週都有', en: 'Every week' },
-    theme: { zh: '寫在 PDF 裡', en: 'In the PDF' },
-    items: [
-      { zh: '開頭：很多人這週在擔心什麼', en: 'Opens with what many people are worrying about' },
-      { zh: '具體的舒緩做法、數息、書寫', en: 'Specific relief methods, counted breathing, journaling' },
-      { zh: '可以照著唸的冥想、14 個適合孕期的瑜伽圖解', en: 'Read-aloud meditation text, 14 illustrated pregnancy-safe yoga poses' },
-    ],
+    weeks: { zh: '接著', en: 'Then' },
+    theme: { zh: '心情這一段', en: 'The mind part' },
+    items: [] as { zh: string; en: string }[],
   },
   {
     period: { zh: '新生兒', en: 'Newborn prep' },
-    weeks: { zh: '每週都有', en: 'Every week' },
-    theme: { zh: '寫在 PDF 裡', en: 'In the PDF' },
-    items: [
-      { zh: '一件要查的小事', en: 'One small research task' },
-      { zh: '決定可以怎麼想', en: 'Decision guides' },
-      { zh: '待產包清單', en: 'A hospital-bag checklist' },
-    ],
+    weeks: { zh: '接著', en: 'Then' },
+    theme: { zh: '準備寶寶這一段', en: 'The newborn part' },
+    items: [] as { zh: string; en: string }[],
   },
 ]
 
@@ -124,9 +112,22 @@ export default function DashboardPage() {
           {t('嗨，', 'Hi,')} {firstName} 👋
         </h2>
         <p className="text-[#1E2A5E]/50 text-sm mt-1">
-          {t(
-            '40 週在同一份 PDF 裡，中文和英文。買完就能下載。',
-            'All 40 weeks are in one PDF, in Chinese and English. It downloads right after you pay.',
+          {locale === 'zh' ? (
+            <>
+              授權碼寄到信箱。到
+              <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
+                會員頁
+              </a>
+              輸入。
+            </>
+          ) : (
+            <>
+              The license key comes by email. Enter it on the{' '}
+              <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
+                Members page
+              </a>
+              .
+            </>
           )}
         </p>
       </div>
@@ -134,39 +135,45 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('完整 PDF', 'Full PDF')}
+            {t('整個孕期', 'Whole pregnancy')}
           </p>
           <p className="text-5xl font-extrabold leading-none text-[#F28B6E]">
             40
             <span className="text-lg ml-1">{t('週', 'wks')}</span>
           </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('大約 270 頁，中英對照', 'About 270 pages, Chinese and English')}</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('在會員頁', 'On the Members page')}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('每週三部分', 'Three parts')}
+            {t('每週開頭', 'Opens each week')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">3</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('身、心、新生兒', 'Body, mind, newborn prep')}</p>
+          <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">
+            30
+            <span className="text-lg ml-1">{t('秒', 'sec')}</span>
+          </p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('再看身、心、新生兒', 'Then body, mind, newborn prep')}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('怎麼拿到', 'How you get it')}
+            {t('一對一', 'One-on-one')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">PDF</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('買完立刻從 Gumroad 下載', 'Instant download from Gumroad')}</p>
+          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">
+            3
+            <span className="text-lg ml-1">{t('次', '')}</span>
+          </p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">Google Meet</p>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
           <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
-            {t('買完即下載', 'Instant download')}
+            {t('會員頁', 'Members')}
           </span>
           <h3 className="text-lg font-bold text-[#1E2A5E]">
-            {t('40 週 PDF，三種方案', '40-week PDF, three plans')}
+            {t('三種方案', 'Three plans')}
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
             {locale === 'zh' ? (
@@ -175,7 +182,7 @@ export default function DashboardPage() {
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.zh}
                 </a>
-                ，{PRICING.currencyNote.zh}。{PRICING.checkoutNote.zh}
+                。{PRICING.includesNote.zh}
                 {PRICING.notMedicalAdvice.zh}
               </>
             ) : (
@@ -184,8 +191,7 @@ export default function DashboardPage() {
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.en}
                 </a>
-                . {PRICING.currencyNote.en}. {PRICING.checkoutNote.en}{' '}
-                {PRICING.notMedicalAdvice.en}
+                . {PRICING.includesNote.en} {PRICING.notMedicalAdvice.en}
               </>
             )}
           </p>
@@ -200,7 +206,7 @@ export default function DashboardPage() {
 
       <div>
         <h3 className="text-base font-bold text-[#1E2A5E] mb-4">
-          {t('PDF 裡每週有', "What's in each week")}
+          {t('先 30 秒，再看這三段', '30 seconds, then these three parts')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {PARTS.map((trimester) => (

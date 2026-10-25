@@ -44,9 +44,16 @@ export const PRICING = {
   freeWeeksNote: { zh: "第 1–4 週免費", en: "Weeks 1–4 are free" } satisfies Bilingual,
   /** Live free weeks on the static site. Same-tab link from every free-weeks mention. */
   freeWeeksUrl: "https://www.maybeshedliketotalk.org/free",
+  /** Members area on the static site. License keys are entered there. */
+  membersUrl: "https://www.maybeshedliketotalk.org/members",
+  membersLinkLabel: { zh: "會員頁", en: "Members page" } satisfies Bilingual,
+  includesNote: {
+    zh: "都有會員頁、每週心情紀錄、三次一對一 Google Meet，另附可列印 PDF。",
+    en: "Every plan includes the Members page, a weekly mood log, 3 one-on-one Google Meet chats, and a bonus printable PDF.",
+  } satisfies Bilingual,
   checkoutNote: {
-    zh: "用信用卡或 PayPal，在 Gumroad 付款。買完就能下載 PDF。",
-    en: "Pay by card or PayPal on Gumroad. The PDF downloads right after you pay.",
+    zh: "Gumroad 付完，授權碼寄到信箱。到會員頁輸入。",
+    en: "Pay on Gumroad. The license key comes by email. Enter it on the Members page.",
   } satisfies Bilingual,
   notMedicalAdvice: {
     zh: "這不是醫療建議，也不能取代產檢。身體的事問醫師或助產師。",
@@ -57,22 +64,14 @@ export const PRICING = {
       id: "single-trimester",
       title: { zh: "單一孕期", en: "Single Trimester" },
       subtitle: {
-        zh: "三份 PDF 選一份。孕到一半再買也行。",
-        en: "Choose one of three PDFs. Fine if you join mid-pregnancy.",
+        zh: "三個孕期選一個。",
+        en: "Pick one trimester.",
       },
       priceUsd: 15,
       features: [
         {
-          zh: "三份 PDF 選一份：第 1–12、13–27 或 28–40 週",
-          en: "Choose one PDF: weeks 1–12, 13–27, or 28–40",
-        },
-        {
-          zh: "中文和英文寫在同一份",
-          en: "Chinese and English in the same PDF",
-        },
-        {
-          zh: "買完立刻下載",
-          en: "Instant download",
+          zh: "第 1–12、13–27 或 28–40 週",
+          en: "Weeks 1–12, 13–27, or 28–40",
         },
       ],
       cta: { zh: "現在加入", en: "Join now" },
@@ -83,8 +82,8 @@ export const PRICING = {
       id: "full-pass",
       title: { zh: "全孕期通行證", en: "Full Pregnancy Pass" },
       subtitle: {
-        zh: "40 週全在一份 PDF，大約 270 頁。中文和英文寫在一起。",
-        en: "All 40 weeks in one PDF, about 270 pages. Chinese and English together.",
+        zh: "40 週都開通。",
+        en: "All 40 weeks.",
       },
       priceUsd: 29,
       compareAtUsd: 39,
@@ -93,20 +92,8 @@ export const PRICING = {
       badge: { zh: "最受歡迎", en: "Most popular" },
       features: [
         {
-          zh: "40 週全在一份 PDF，大約 270 頁",
-          en: "All 40 weeks in one PDF, about 270 pages",
-        },
-        {
-          zh: "中文和英文寫在同一份",
-          en: "Chinese and English in the same PDF",
-        },
-        {
-          zh: "一次買完",
-          en: "One-time purchase",
-        },
-        {
-          zh: "買完立刻下載",
-          en: "Instant download",
+          zh: "第 1–40 週",
+          en: "Weeks 1–40",
         },
       ],
       cta: { zh: "現在加入", en: "Join now" },
@@ -117,22 +104,18 @@ export const PRICING = {
       id: "gift-edition",
       title: { zh: "送禮版", en: "Gift Edition" },
       subtitle: {
-        zh: "全孕期通行證的 PDF，再加一份可列印的心意卡。送給伴侶、家人或朋友。",
-        en: "The Full Pregnancy Pass PDF, plus a printable gift card. For a partner, family, or a friend.",
+        zh: "全孕期通行證，當禮物送。",
+        en: "The Full Pass, as a gift.",
       },
       priceUsd: 45,
       features: [
         {
-          zh: "含全孕期通行證那份 PDF",
-          en: "Includes the Full Pregnancy Pass PDF",
+          zh: "把授權碼轉給她",
+          en: "Forward the license key",
         },
         {
-          zh: "再加一份可列印的心意卡 PDF",
-          en: "Plus a printable gift card PDF",
-        },
-        {
-          zh: "買完立刻下載",
-          en: "Instant download",
+          zh: "附可列印心意卡",
+          en: "A printable gift card",
         },
       ],
       cta: { zh: "送給她", en: "Send as a gift" },
