@@ -7,6 +7,7 @@ import type { User } from "@supabase/supabase-js";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLocale } from "@/components/LocaleProvider";
 import { pick } from "@/lib/locale";
+import { FREE_TRIAL_CTA, PRICING } from "@/lib/pricing";
 
 const NAV_LINKS = [
   { href: "/#about", zh: "關於", en: "About" },
@@ -172,12 +173,12 @@ export default function Header() {
                   >
                     {t("登入", "Log in")}
                   </Link>
-                  <Link
-                    href="/#pricing"
-                    className="btn-primary text-sm"
+                  <a
+                    href={PRICING.freeWeeksUrl}
+                    className="btn-primary text-sm min-h-11"
                   >
-                    {t("現在加入", "Join now")}
-                  </Link>
+                    {pick(locale, FREE_TRIAL_CTA)}
+                  </a>
                 </>
               )}
             </div>
@@ -185,7 +186,7 @@ export default function Header() {
             <div className="md:hidden flex items-center gap-2 flex-shrink-0">
               <LanguageToggle />
               <button
-              className="md:hidden p-2 rounded-lg transition-colors"
+              className="md:hidden inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg transition-colors"
               style={{ color: "var(--navy)" }}
               aria-label={menuOpen ? t("關閉選單", "Close menu") : t("開啟選單", "Open menu")}
               aria-expanded={menuOpen}
@@ -235,7 +236,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="block px-4 py-3 rounded-xl text-base font-semibold transition-colors"
+                className="flex items-center min-h-11 px-4 rounded-xl text-base font-semibold transition-colors"
                 style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
               >
                 {t(link.zh, link.en)}
@@ -253,7 +254,7 @@ export default function Header() {
                   </div>
                   <button
                     onClick={handleSignOut}
-                    className="w-full text-left px-4 py-3 rounded-xl text-base font-semibold transition-colors"
+                    className="w-full text-left flex items-center min-h-11 px-4 rounded-xl text-base font-semibold transition-colors"
                     style={{ color: "var(--coral)" }}
                   >
                     {t("登出", "Log out")}
@@ -264,18 +265,18 @@ export default function Header() {
                   <Link
                     href="/auth/login"
                     onClick={closeMenu}
-                    className="block px-4 py-3 rounded-xl text-base font-semibold transition-colors"
+                    className="flex items-center min-h-11 px-4 rounded-xl text-base font-semibold transition-colors"
                     style={{ color: "var(--coral)" }}
                   >
                     {t("登入", "Log in")}
                   </Link>
-                  <Link
-                    href="/#pricing"
+                  <a
+                    href={PRICING.freeWeeksUrl}
                     onClick={closeMenu}
-                    className="block btn-primary text-center"
+                    className="btn-primary text-center min-h-11"
                   >
-                    {t("現在加入", "Join now")}
-                  </Link>
+                    {pick(locale, FREE_TRIAL_CTA)}
+                  </a>
                 </>
               )}
             </div>

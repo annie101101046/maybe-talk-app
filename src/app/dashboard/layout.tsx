@@ -1,7 +1,16 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { pick } from '@/lib/locale'
 import { getLocale } from '@/lib/locale-server'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return {
+    title: locale === 'zh' ? '妳的頁面' : 'Your page',
+    robots: { index: false, follow: false },
+  }
+}
 
 export interface Profile {
   id: string

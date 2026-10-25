@@ -127,9 +127,9 @@ export default function SignupPage() {
             註冊 <span className="text-[#1E2A5E]/40 font-normal text-base">| Sign Up</span>
           </h2>
           <p className="text-sm text-[#1E2A5E]/50 mb-7">
-            加入我們，開始妳的旅程。
+            先留個名字。第 1–4 週可以先看。
             <br />
-            <span className="text-xs">Join us and begin your journey.</span>
+            <span className="text-xs">Leave your name. Weeks 1–4 are there to read.</span>
           </p>
 
           {/* Error Message */}

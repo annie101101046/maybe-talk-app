@@ -38,23 +38,38 @@ export type PricingPlan = {
   checkoutUrl: string | null
 }
 
+/** The only primary button label on the site. It opens the free weeks. */
+export const FREE_TRIAL_CTA = { zh: "免費體驗", en: "Try it free" } satisfies Bilingual
+
+/** Quiet text link on a plan card. Not a second primary button. */
+export const PAY_ON_GUMROAD = { zh: "在 Gumroad 付款", en: "Pay on Gumroad" } satisfies Bilingual
+
+export const FAQ = [
+  {
+    q: { zh: "孕到一半才加入，可以嗎？", en: "Can I join midway through pregnancy?" },
+    a: {
+      zh: "可以。買一個階段就好：第 1–12 週、第 13–27 週，或第 28–40 週。",
+      en: "Yes. Buy one trimester: weeks 1–12, 13–27, or 28–40.",
+    },
+  },
+  {
+    q: { zh: "要怎麼付款？", en: "How do I pay?" },
+    a: {
+      zh: "信用卡或 PayPal，在 Gumroad。想先問一句，寫到 hello@maybeshedliketotalk.org。",
+      en: "Card or PayPal, on Gumroad. To ask something first, write to hello@maybeshedliketotalk.org.",
+    },
+  },
+]
+
 export const PRICING = {
   email: "hello@maybeshedliketotalk.org",
   currencyNote: { zh: "價格以美金計", en: "Prices in USD" } satisfies Bilingual,
-  freeWeeksNote: { zh: "第 1–4 週免費", en: "Weeks 1–4 are free" } satisfies Bilingual,
+  freeWeeksNote: { zh: "前 4 週免費", en: "The first 4 weeks are free" } satisfies Bilingual,
   /** Live free weeks on the static site. Same-tab link from every free-weeks mention. */
   freeWeeksUrl: "https://www.maybeshedliketotalk.org/free",
   /** Members area on the static site. License keys are entered there. */
   membersUrl: "https://www.maybeshedliketotalk.org/members",
   membersLinkLabel: { zh: "會員頁", en: "Members page" } satisfies Bilingual,
-  includesNote: {
-    zh: "都有會員頁、每週心情紀錄、三次一對一 Google Meet，另附可列印 PDF。",
-    en: "Every plan includes the Members page, a weekly mood log, 3 one-on-one Google Meet chats, and a bonus printable PDF.",
-  } satisfies Bilingual,
-  checkoutNote: {
-    zh: "Gumroad 付完，授權碼寄到信箱。到會員頁輸入。",
-    en: "Pay on Gumroad. The license key comes by email. Enter it on the Members page.",
-  } satisfies Bilingual,
   notMedicalAdvice: {
     zh: "這不是醫療建議，也不能取代產檢。身體的事問醫師或助產師。",
     en: "Not medical advice, and not a substitute for prenatal care. For your body, ask a doctor or midwife.",
@@ -64,17 +79,12 @@ export const PRICING = {
       id: "single-trimester",
       title: { zh: "單一孕期", en: "Single Trimester" },
       subtitle: {
-        zh: "三個孕期選一個。",
-        en: "Pick one trimester.",
+        zh: "選一段就好：第 1–12 週、第 13–27 週，或第 28–40 週。",
+        en: "Pick one stretch: weeks 1–12, 13–27, or 28–40.",
       },
       priceUsd: 15,
-      features: [
-        {
-          zh: "第 1–12、13–27 或 28–40 週",
-          en: "Weeks 1–12, 13–27, or 28–40",
-        },
-      ],
-      cta: { zh: "現在加入", en: "Join now" },
+      features: [],
+      cta: PAY_ON_GUMROAD,
       subject: "Single Trimester US$15 / 單一孕期 US$15",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.singleTrimester,
     },
@@ -82,21 +92,15 @@ export const PRICING = {
       id: "full-pass",
       title: { zh: "全孕期通行證", en: "Full Pregnancy Pass" },
       subtitle: {
-        zh: "40 週都開通。",
-        en: "All 40 weeks.",
+        zh: "從第 1 週陪到第 40 週。",
+        en: "From week 1 through week 40.",
       },
       priceUsd: 29,
       compareAtUsd: 39,
       priceNote: { zh: "早鳥價", en: "Early bird" },
       highlighted: true,
-      badge: { zh: "最受歡迎", en: "Most popular" },
-      features: [
-        {
-          zh: "第 1–40 週",
-          en: "Weeks 1–40",
-        },
-      ],
-      cta: { zh: "現在加入", en: "Join now" },
+      features: [],
+      cta: PAY_ON_GUMROAD,
       subject: "Full Pregnancy Pass US$29 / 全孕期通行證 US$29",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.fullPregnancyPass,
     },
@@ -104,21 +108,12 @@ export const PRICING = {
       id: "gift-edition",
       title: { zh: "送禮版", en: "Gift Edition" },
       subtitle: {
-        zh: "全孕期通行證，當禮物送。",
-        en: "The Full Pass, as a gift.",
+        zh: "把全孕期通行證當禮物。授權碼轉給她，再附一張可列印的心意卡。",
+        en: "The Full Pass as a gift. Forward her the license key, and a printable gift card.",
       },
       priceUsd: 45,
-      features: [
-        {
-          zh: "把授權碼轉給她",
-          en: "Forward the license key",
-        },
-        {
-          zh: "附可列印心意卡",
-          en: "A printable gift card",
-        },
-      ],
-      cta: { zh: "送給她", en: "Send as a gift" },
+      features: [],
+      cta: PAY_ON_GUMROAD,
       subject: "Gift Edition US$45 / 送禮版 US$45",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.giftEdition,
     },

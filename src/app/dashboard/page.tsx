@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
-import { PRICING } from '@/lib/pricing'
+import { FREE_TRIAL_CTA, PRICING } from '@/lib/pricing'
 import { useLocale } from '@/components/LocaleProvider'
 import { pick } from '@/lib/locale'
 
@@ -14,26 +13,6 @@ interface Profile {
   created_at: string
 }
 
-const PARTS = [
-  {
-    period: { zh: '身', en: 'Body' },
-    weeks: { zh: '接著', en: 'Then' },
-    theme: { zh: '身體這一段', en: 'The body part' },
-    items: [] as { zh: string; en: string }[],
-  },
-  {
-    period: { zh: '心', en: 'Mind' },
-    weeks: { zh: '接著', en: 'Then' },
-    theme: { zh: '心情這一段', en: 'The mind part' },
-    items: [] as { zh: string; en: string }[],
-  },
-  {
-    period: { zh: '新生兒', en: 'Newborn prep' },
-    weeks: { zh: '接著', en: 'Then' },
-    theme: { zh: '準備寶寶這一段', en: 'The newborn part' },
-    items: [] as { zh: string; en: string }[],
-  },
-]
 
 export default function DashboardPage() {
   const { locale } = useLocale()
@@ -99,11 +78,6 @@ export default function DashboardPage() {
   if (!profile) return null
 
   const firstName = profile.full_name?.split(' ')[0] ?? t('妳', 'there')
-  const planNames = PRICING.plans.map((plan) => pick(locale, plan.title))
-  const planList =
-    locale === 'zh'
-      ? planNames.join('、')
-      : `${planNames.slice(0, -1).join(', ')}, and ${planNames[planNames.length - 1]}`
 
   return (
     <div className="space-y-8">
@@ -114,15 +88,15 @@ export default function DashboardPage() {
         <p className="text-[#1E2A5E]/50 text-sm mt-1">
           {locale === 'zh' ? (
             <>
-              授權碼寄到信箱。到
+              第 1–4 週可以先看。第 5 週之後，到
               <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
                 會員頁
               </a>
-              輸入。
+              輸入授權碼。
             </>
           ) : (
             <>
-              The license key comes by email. Enter it on the{' '}
+              Weeks 1–4 are there to read. From week 5, enter your license key on the{' '}
               <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
                 Members page
               </a>
@@ -134,103 +108,59 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
-          <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('整個孕期', 'Whole pregnancy')}
+          <p className="text-sm text-[#1E2A5E] leading-relaxed">
+            {t('妳買的週次在會員頁，一週一頁。', 'The weeks you bought are on the Members page, one page a week.')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#F28B6E]">
-            40
-            <span className="text-lg ml-1">{t('週', 'wks')}</span>
-          </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('在會員頁', 'On the Members page')}</p>
         </div>
-
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
-          <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('每週開頭', 'Opens each week')}
+          <p className="text-sm text-[#1E2A5E] leading-relaxed">
+            {t('每週可以記一則心情。', 'You can keep one mood note a week.')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">
-            30
-            <span className="text-lg ml-1">{t('秒', 'sec')}</span>
-          </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('再看身、心、新生兒', 'Then body, mind, newborn prep')}</p>
         </div>
-
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
-          <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('一對一', 'One-on-one')}
+          <p className="text-sm text-[#1E2A5E] leading-relaxed">
+            {t('整個孕期，我們陪妳聊三次。', 'Over the pregnancy, three chats with us.')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">
-            3
-            <span className="text-lg ml-1">{t('次', '')}</span>
-          </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">Google Meet</p>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
-            {t('會員頁', 'Members')}
-          </span>
           <h3 className="text-lg font-bold text-[#1E2A5E]">
-            {t('三種方案', 'Three plans')}
+            {t('想一起走下去', 'If you want to keep going')}
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
             {locale === 'zh' ? (
               <>
-                {planList}。
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.zh}
                 </a>
-                。{PRICING.includesNote.zh}
-                {PRICING.notMedicalAdvice.zh}
+                。第 5 週起才付費。{PRICING.currencyNote.zh}。{PRICING.notMedicalAdvice.zh}
               </>
             ) : (
               <>
-                {planList}.{' '}
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.en}
                 </a>
-                . {PRICING.includesNote.en} {PRICING.notMedicalAdvice.en}
+                . You pay from week 5. {PRICING.currencyNote.en}. {PRICING.notMedicalAdvice.en}
               </>
             )}
           </p>
         </div>
-        <Link
-          href="/#pricing"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors duration-200 whitespace-nowrap shadow-sm"
+        <a
+          href={PRICING.freeWeeksUrl}
+          className="inline-flex items-center justify-center min-h-11 gap-2 px-6 py-3 rounded-xl bg-[#F28B6E] hover:bg-[#e07a5d] text-white font-semibold text-sm transition-colors duration-200 whitespace-nowrap shadow-sm"
         >
-          {t('查看方案', 'See plans')}
-        </Link>
+          {pick(locale, FREE_TRIAL_CTA)}
+        </a>
       </div>
 
-      <div>
-        <h3 className="text-base font-bold text-[#1E2A5E] mb-4">
-          {t('先 30 秒，再看這三段', '30 seconds, then these three parts')}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {PARTS.map((trimester) => (
-            <div
-              key={trimester.period.en}
-              className="bg-white rounded-2xl border border-[#F28BAE]/15 shadow-sm p-5"
-            >
-              <p className="text-xs font-semibold text-[#F28B6E] tracking-wide">
-                {pick(locale, trimester.weeks)}
-              </p>
-              <p className="text-base font-bold text-[#1E2A5E] mt-1">{pick(locale, trimester.period)}</p>
-              <p className="text-sm text-[#5BBFB5] font-semibold mb-3">{pick(locale, trimester.theme)}</p>
-              <ul className="space-y-1.5">
-                {trimester.items.map((item) => (
-                  <li key={item.en} className="text-sm text-[#1E2A5E]/70 flex items-start gap-2">
-                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#F28BAE] flex-shrink-0" />
-                    {pick(locale, item)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
+      <p className="text-sm text-[#1E2A5E]/70 leading-relaxed">
+        {t(
+          '每一週先寫身體，再寫心情，然後是準備寶寶。另外附一份可列印的 PDF。',
+          'Each week is about your body, then your mood, then getting ready for the baby. A printable PDF comes along too.',
+        )}
+      </p>
     </div>
   )
 }

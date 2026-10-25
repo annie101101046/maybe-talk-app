@@ -70,9 +70,9 @@ export default function LoginPage() {
             登入 <span className="text-[#1E2A5E]/40 font-normal text-base">| Sign In</span>
           </h2>
           <p className="text-sm text-[#1E2A5E]/50 mb-7">
-            歡迎回來，我們很高興見到妳。
+            登入，回到妳的頁面。
             <br />
-            <span className="text-xs">Welcome back, we&apos;re glad you&apos;re here.</span>
+            <span className="text-xs">Sign in to get back to your page.</span>
           </p>
 
           {/* Error Message */}

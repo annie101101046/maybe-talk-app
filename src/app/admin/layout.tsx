@@ -1,6 +1,12 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+
+export const metadata: Metadata = {
+  title: '管理後台',
+  robots: { index: false, follow: false },
+}
 
 const NAV_LINKS = [
   { href: '/admin', label: '總覽', labelEn: 'Overview', icon: '◈' },
@@ -93,7 +99,7 @@ export default async function AdminLayout({
             <Link
               key={link.href}
               href={link.href}
-              className="flex-1 flex flex-col items-center py-3 gap-0.5 text-[#1E2A5E]/50 hover:text-[#F28B6E] transition-colors"
+              className="flex-1 flex flex-col items-center justify-center min-h-11 py-2 gap-0.5 text-[#1E2A5E]/50 hover:text-[#F28B6E] transition-colors"
             >
               <span className="text-lg leading-none">{link.icon}</span>
               <span className="text-[9px] font-medium">{link.label}</span>

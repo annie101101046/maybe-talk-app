@@ -28,7 +28,7 @@ export default function LanguageToggle({ className = "" }: { className?: string 
             onClick={() => {
               if (!active) setLocale(option.id)
             }}
-            className="px-2.5 py-1 rounded-full text-xs font-bold transition-colors"
+            className="inline-flex items-center justify-center min-h-11 min-w-11 px-3 rounded-full text-xs font-bold transition-colors"
             style={{
               background: active ? "var(--coral)" : "transparent",
               color: active ? "#fff" : "var(--navy)",
