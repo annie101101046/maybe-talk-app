@@ -493,12 +493,12 @@ function SectionHeader({
 /* ─────────────────────────────────────────
    Page
    ───────────────────────────────────────── */
-function FreeWeeksLink({ children }: { children: React.ReactNode }) {
+function FreeWeeksLink({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <a
       href={PRICING.freeWeeksUrl}
       className="underline underline-offset-2"
-      style={{ color: "var(--coral)" }}
+      style={{ color: color ?? "var(--coral)" }}
     >
       {children}
     </a>
@@ -787,12 +787,11 @@ export default async function LandingPage() {
       {/* ════════════════════════════════════════
           JOURNEY SECTION
           ════════════════════════════════════════ */}
-      <section id="journey" className="section-padding" style={{ backgroundColor: "#FFE9EE" }}>
+      <section id="journey" className="section-padding" style={{ backgroundColor: "var(--cream)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
             <SectionHeader
               label={t("懷孕週數", "Pregnancy week by week")}
-              labelColor="var(--navy)"
               title={t("孕期三階段", "Three trimesters")}
               subtitle={t(
                 "三個階段是第 1 到 12 週、第 13 到 27 週，還有第 28 到 40 週。每一段都可以單獨買。",
@@ -847,28 +846,29 @@ export default async function LandingPage() {
 
           <FadeIn delay={400}>
             <div
+              id="timeline"
               className="rounded-3xl p-8 md:p-10 relative overflow-hidden"
-              style={{ background: "var(--navy)" }}
+              style={{ background: "#FFD6E0" }}
             >
               <div
-                className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10 -translate-y-1/3 translate-x-1/4"
-                style={{ background: "var(--coral)" }}
+                className="absolute top-0 right-0 w-64 h-64 rounded-full -translate-y-1/3 translate-x-1/4"
+                style={{ background: "#fff", opacity: 0.35 }}
                 aria-hidden="true"
               />
               <p
-                className="text-xs font-bold uppercase tracking-widest mb-3"
-                style={{ color: "var(--coral)" }}
+                className="relative text-xs font-bold uppercase tracking-widest mb-3"
+                style={{ color: "var(--navy)" }}
               >
                 {t("時間軸", "Timeline")}
               </p>
               <h3
-                className="text-2xl md:text-3xl font-bold text-white mb-6"
-                style={{ fontFamily: "var(--font-noto), sans-serif" }}
+                className="relative text-2xl md:text-3xl font-bold mb-6"
+                style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
               >
                 {t("從懷孕的第一天，一直陪到寶寶出生", "From the first day of pregnancy until the baby is born")}
               </h3>
               <div className="relative">
-                <div className="h-3 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-3 rounded-full overflow-hidden" style={{ background: "rgba(30,42,94,0.08)" }}>
                   <div
                     className="h-full rounded-full"
                     style={{
@@ -877,22 +877,25 @@ export default async function LandingPage() {
                     }}
                   />
                 </div>
-                <div className="flex justify-between mt-3 text-xs text-white/60 font-semibold">
+                <div
+                  className="flex justify-between mt-3 text-xs font-semibold"
+                  style={{ color: "var(--navy)" }}
+                >
                   <span>{t("第 1 週", "Week 1")}</span>
                   <span>{t("第 13 週", "Week 13")}</span>
                   <span>{t("第 27 週", "Week 27")}</span>
                   <span>{t("第 40 週", "Week 40")}</span>
                 </div>
               </div>
-              <p className="text-white/70 text-sm mt-6 leading-relaxed">
+              <p className="relative text-sm mt-6 leading-relaxed" style={{ color: "var(--navy)" }}>
                 {locale === "zh" ? (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    <FreeWeeksLink color="var(--navy)">{freeWeeks}</FreeWeeksLink>
                     。從第 5 週到第 40 週，就是需要付費的部分。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, those weeks are paid.
+                    <FreeWeeksLink color="var(--navy)">{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, those weeks are paid.
                   </>
                 )}
               </p>
