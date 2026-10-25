@@ -561,13 +561,13 @@ export default async function LandingPage() {
                 >
                   {locale === "zh" ? (
                     <>
-                      每週一頁情緒陪伴，放在這趟旅程裡。
+                      40 週寫成一份 PDF，中文和英文在一起。買完就能從 Gumroad 下載。
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
                       。
                     </>
                   ) : (
                     <>
-                      One page of company each week, in this journey.{" "}
+                      A 40-week PDF, in Chinese and English. Download it from Gumroad right after you pay.{" "}
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                     </>
                   )}
@@ -624,57 +624,29 @@ export default async function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FeatureCard
               icon="💌"
-              title={t("每週情緒陪伴", "Weekly company")}
-              description={
-                locale === "zh" ? (
-                  <>
-                    每一週一頁，寫給那個週數，放在旅程裡。
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    。
-                  </>
-                ) : (
-                  <>
-                    One page each week, written for that week, in the journey.{" "}
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
-                  </>
-                )
-              }
+              title={t("身", "Body")}
+              description={t(
+                "凱格爾運動、各階段的營養和補充品，以及產前按摩、乳房按摩通常什麼時候會被考慮。寫在 PDF 裡。",
+                "Kegel exercises, nutrition and supplements by stage, and when prenatal massage and breast massage are commonly considered. Written in the PDF.",
+              )}
               delay={100}
             />
             <FeatureCard
               icon="🧘"
-              title={t("40 週完整旅程", "The full 40 weeks")}
-              description={
-                locale === "zh" ? (
-                  <>
-                    三個孕期收在同一份預購裡。先從
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    開始，不必一週一週另外找。
-                  </>
-                ) : (
-                  <>
-                    Three trimesters in one pre-order. Start here:{" "}
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. You don&apos;t have to hunt week by week.
-                  </>
-                )
-              }
+              title={t("心", "Mind")}
+              description={t(
+                "每週開頭寫著，很多人這週在擔心什麼。另外有具體的舒緩做法、數息、可以照著唸的冥想、書寫，和 14 個適合孕期的瑜伽圖解。",
+                "Each week opens with what many people are worrying about. Also specific relief methods, counted breathing, read-aloud meditation text, journaling, and 14 illustrated pregnancy-safe yoga poses.",
+              )}
               delay={200}
             />
             <FeatureCard
               icon="🌙"
-              title={t("引導呼吸與冥想文字", "Guided breathing and meditation text")}
-              description={
-                locale === "zh" ? (
-                  <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    的那幾頁裡，有引導呼吸，和可以照著唸的冥想文字。
-                  </>
-                ) : (
-                  <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> and include guided breathing and read-aloud meditation text.
-                  </>
-                )
-              }
+              title={t("新生兒", "Newborn prep")}
+              description={t(
+                "每週一件要查的小事、決定可以怎麼想、一份待產包清單。",
+                "One small research task each week, decision guides, and a hospital-bag checklist.",
+              )}
               delay={300}
             />
           </div>
@@ -682,10 +654,10 @@ export default async function LandingPage() {
           {/* Stats bar */}
           <FadeIn delay={400} className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { num: "40", unit: t("週", "wks"), label: t("完整情緒旅程", "Full emotional journey") },
-              { num: "3", unit: t("期", ""), label: t("三種孕期節奏", "Trimester rhythms") },
-              { num: t("每週", "Weekly"), unit: "", label: t("一則心靈引導", "One guide") },
-              { num: t("文字", "Text"), unit: "", label: t("引導呼吸與朗讀冥想", "Guided breathing, read-aloud meditation") },
+              { num: "40", unit: t("週", "wks"), label: t("寫在同一份 PDF", "In one PDF") },
+              { num: "3", unit: "", label: t("身、心、新生兒", "Body, mind, newborn") },
+              { num: t("中英", "EN + 中文"), unit: "", label: t("寫在同一份", "In the same file") },
+              { num: "PDF", unit: "", label: t("買完立刻下載", "Instant download") },
             ].map(({ num, unit, label }) => (
               <div
                 key={label}
@@ -715,17 +687,18 @@ export default async function LandingPage() {
           <div className="mb-14">
             <SectionHeader
               label={t("40 週旅程", "40-week journey")}
-              title={t("三個孕期，先看方向", "Three trimesters, a first look")}
+              title={t("每週都有這三部分", "Each week has these three parts")}
               subtitle={
                 locale === "zh" ? (
                   <>
-                    下面的卡片是預覽。
+                    寫在 PDF 裡，中文和英文。全孕期大約 270 頁。
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
                     。
                   </>
                 ) : (
                   <>
-                    The cards below are a preview. <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
+                    Written in the PDF, in Chinese and English. The full set is about 270 pages.{" "}
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                   </>
                 )
               }
@@ -734,77 +707,64 @@ export default async function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <TrimesterCard
-              preview={t("預覽", "Preview")}
-              period={t("第一孕期", "First trimester")}
-              weeks={t("1–12 週", "Weeks 1–12")}
-              theme={t("接納與安定", "Acceptance and steadiness")}
+              period={t("身", "Body")}
+              weeks={t("每週都有", "Every week")}
+              theme={t("寫在 PDF 裡", "In the PDF")}
               color="#FFF0F3"
               delay={100}
               items={
                 locale === "zh"
                   ? [
-                      "認識身體的驚人變化",
-                      "孕吐期情緒穩定練習",
-                      "焦慮與不確定感的引導",
-                      "與寶寶的第一次連結冥想",
-                      "建立安定的日常儀式",
+                      "凱格爾運動",
+                      "各階段的營養和補充品",
+                      "產前按摩、乳房按摩通常什麼時候會被考慮",
                     ]
                   : [
-                      "Getting to know how your body is changing",
-                      "A steadier mood through the nausea",
-                      "When you feel anxious or unsure",
-                      "A first meditation with the baby",
-                      "A small daily ritual",
+                      "Kegel exercises",
+                      "Nutrition and supplements by stage",
+                      "When prenatal and breast massage are commonly considered",
                     ]
               }
             />
             <TrimesterCard
-              preview={t("預覽", "Preview")}
-              period={t("第二孕期", "Second trimester")}
-              weeks={t("13–27 週", "Weeks 13–27")}
-              theme={t("連結與探索", "Connection")}
+              period={t("心", "Mind")}
+              weeks={t("每週都有", "Every week")}
+              theme={t("寫在 PDF 裡", "In the PDF")}
               color="#E8F8F7"
               delay={200}
               items={
                 locale === "zh"
                   ? [
-                      "感受第一次胎動的儀式",
-                      "伴侶溝通與關係陪伴",
-                      "身體形象與自我接納",
-                      "工作與孕期的平衡探索",
-                      "深化與寶寶的情感連結",
+                      "開頭：很多人這週在擔心什麼",
+                      "具體的舒緩做法、數息",
+                      "可以照著唸的冥想、書寫",
+                      "14 個適合孕期的瑜伽圖解",
                     ]
                   : [
-                      "A ritual for the first kicks",
-                      "Talking with your partner",
-                      "Body image, and being okay with it",
-                      "Work and pregnancy at the same time",
-                      "Feeling closer to the baby",
+                      "Opens with what many people are worrying about",
+                      "Specific relief methods, counted breathing",
+                      "Read-aloud meditation text, journaling",
+                      "14 illustrated pregnancy-safe yoga poses",
                     ]
               }
             />
             <TrimesterCard
-              preview={t("預覽", "Preview")}
-              period={t("第三孕期", "Third trimester")}
-              weeks={t("28–40 週", "Weeks 28–40")}
-              theme={t("準備與期待", "Getting ready")}
+              period={t("新生兒", "Newborn prep")}
+              weeks={t("每週都有", "Every week")}
+              theme={t("寫在 PDF 裡", "In the PDF")}
               color="#FFF5DC"
               delay={300}
               items={
                 locale === "zh"
                   ? [
-                      "生產恐懼的溫柔鬆綁",
-                      "孕期好眠呼吸練習",
-                      "母親角色的心理準備",
-                      "寫給寶寶的第一封信",
-                      "迎接分娩的正念陪伴",
+                      "一件要查的小事",
+                      "決定可以怎麼想",
+                      "待產包清單",
                     ]
                   : [
-                      "When you're scared of giving birth",
-                      "Breathing practice for sleep",
-                      "Getting used to the idea of being a mother",
-                      "A first letter to the baby",
-                      "Company as labor gets closer",
+                      "One small research task",
+                      "Decision guides",
+                      "A hospital-bag checklist",
                     ]
               }
             />
@@ -854,11 +814,14 @@ export default async function LandingPage() {
               <p className="text-white/60 text-sm mt-6">
                 {locale === "zh" ? (
                   <>
+                    全孕期是一份 PDF，大約 270 頁。買完就能下載。
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    The full 40 weeks are one PDF, about 270 pages. It downloads right after you pay.{" "}
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                   </>
                 )}
               </p>
@@ -883,24 +846,25 @@ export default async function LandingPage() {
                 locale === "zh" ? (
                   <>
                     <FreeWeeksLink>前 4 週免費</FreeWeeksLink>
-                    ，其餘現在預購
+                    。其餘是 PDF，買完就能下載。
                   </>
                 ) : (
                   <>
                     <FreeWeeksLink>The first 4 weeks are free</FreeWeeksLink>
-                    . Pre-order the rest.
+                    . The rest is a PDF you download right after you pay.
                   </>
                 )
               }
               subtitle={
                 locale === "zh" ? (
                   <>
+                    中文和英文寫在同一份。
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
                     。{pick(locale, PRICING.currencyNote)}。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. {pick(locale, PRICING.currencyNote)}.
+                    Chinese and English in the same file. <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. {pick(locale, PRICING.currencyNote)}.
                   </>
                 )
               }
@@ -938,6 +902,9 @@ export default async function LandingPage() {
             <p className="text-sm mt-3" style={{ color: "#5A6480" }}>
               {pick(locale, PRICING.checkoutNote)}
             </p>
+            <p className="text-sm mt-3" style={{ color: "#8A93B2" }}>
+              {pick(locale, PRICING.notMedicalAdvice)}
+            </p>
             <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
               {t("想問別的，寫到", "For anything else, email")}
               <a href={`mailto:${PRICING.email}`} className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
@@ -958,15 +925,16 @@ export default async function LandingPage() {
             <div>
               <SectionHeader
                 label={t("怎麼拿到", "How you get it")}
-                title={t("預購之後，每週放進旅程", "After you pre-order, each week goes into the journey")}
+                title={t("買完，PDF 立刻下載", "Pay, then the PDF downloads")}
                 subtitle={
                   locale === "zh" ? (
                     <>
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                      。其餘在 Gumroad 付款，買完就能下載。
                     </>
                   ) : (
                     <>
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. Everything else is a PDF from Gumroad, ready as soon as you pay.
                     </>
                   )
                 }
@@ -974,21 +942,9 @@ export default async function LandingPage() {
               <FadeIn delay={200} className="mt-8">
                 <ul className="space-y-4">
                   {[
-                    { icon: "💌", text: t("每週一頁情緒陪伴，跟著週數，放在旅程裡", "One page of company each week, for that week, in the journey") },
-                    {
-                      icon: "🌙",
-                      text: locale === "zh" ? (
-                        <>
-                          <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                          的那幾頁裡，有引導呼吸，和可以照著唸的冥想文字。
-                        </>
-                      ) : (
-                        <>
-                          <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> and include guided breathing and read-aloud meditation text.
-                        </>
-                      ),
-                    },
-                    { icon: "🌸", text: t("三個孕期都在同一份預購裡", "Three trimesters in the same pre-order") },
+                    { icon: "💌", text: t("中文和英文在同一份 PDF", "Chinese and English in the same PDF") },
+                    { icon: "🌙", text: t("每週都有身、心、新生兒", "Every week has body, mind, and newborn prep") },
+                    { icon: "🌸", text: t("可以只買一個孕期，或一次買 40 週", "Buy one trimester, or all 40 weeks at once") },
                     { icon: "✦", text: t("信用卡或 PayPal，在 Gumroad 付款", "Pay by card or PayPal on Gumroad") },
                   ].map(({ icon, text }) => (
                     <li key={icon} className="flex items-start gap-3">
@@ -1035,10 +991,10 @@ export default async function LandingPage() {
                       className="font-bold text-base"
                       style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                     >
-                      {t("40 週完整方案", "The full 40-week plan")}
+                      {t("40 週，一份 PDF", "40 weeks, one PDF")}
                     </p>
                     <p className="text-sm" style={{ color: "#8A93B2" }}>
-                      {t("每週情緒陪伴 · 引導呼吸與朗讀冥想 · 放在旅程裡", "Weekly company · guided breathing and read-aloud meditation · in the journey")}
+                      {t("中英對照 · 大約 270 頁 · 買完即下載", "Chinese and English · about 270 pages · instant download")}
                     </p>
                   </div>
                 </div>
@@ -1047,13 +1003,13 @@ export default async function LandingPage() {
                   className="text-xs font-bold uppercase tracking-wider mb-3"
                   style={{ color: "var(--coral)" }}
                 >
-                  {t("旅程裡有什麼", "What's in it")}
+                  {t("PDF 裡有什麼", "What's in the PDF")}
                 </p>
                 <div className="space-y-2 mb-6">
                   {[
-                    { weeks: t("第 1–12 週", "Weeks 1–12"), theme: t("接納與安定", "Acceptance and steadiness") },
-                    { weeks: t("第 13–27 週", "Weeks 13–27"), theme: t("連結與探索", "Connection") },
-                    { weeks: t("第 28–40 週", "Weeks 28–40"), theme: t("準備與期待", "Getting ready") },
+                    { weeks: t("身", "Body"), theme: t("凱格爾、營養、按摩時間", "Kegels, nutrition, massage timing") },
+                    { weeks: t("心", "Mind"), theme: t("擔心、數息、冥想文字、瑜伽圖解", "Worries, breathing, meditation text, yoga") },
+                    { weeks: t("新生兒", "Newborn"), theme: t("一件要查的事、決定、待產包", "A task, decisions, hospital bag") },
                   ].map(({ weeks, theme }) => (
                     <div
                       key={weeks}
@@ -1119,9 +1075,9 @@ export default async function LandingPage() {
               className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              {t("想走這四十週，", "If you want these forty weeks,")}
+              {t("想要這四十週的 PDF，", "If you want the 40-week PDF,")}
               <br />
-              {t("現在可以預購", "you can pre-order")}
+              {t("買完就能下載", "it downloads after you pay")}
             </h2>
             <p className="text-white/80 text-base mb-8 leading-relaxed">
               {pick(locale, PRICING.checkoutNote)}
@@ -1159,7 +1115,7 @@ export default async function LandingPage() {
                 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                {t("40 週孕期心靈旅程", "A 40-week pregnancy journey")}
+                {t("40 週孕期 PDF，中英對照", "A 40-week pregnancy PDF, in Chinese and English")}
               </p>
             </div>
 
