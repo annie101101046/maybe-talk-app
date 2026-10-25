@@ -491,6 +491,33 @@ function FreeWeeksLink({ children }: { children: React.ReactNode }) {
   );
 }
 
+function MembersLink({ children }: { children: React.ReactNode }) {
+  return (
+    <a
+      href={PRICING.membersUrl}
+      className="underline underline-offset-2"
+      style={{ color: "var(--coral)" }}
+    >
+      {children}
+    </a>
+  );
+}
+
+function NoteWithMembersLink({ text }: { text: string }) {
+  const label = text.includes(PRICING.membersLinkLabel.zh)
+    ? PRICING.membersLinkLabel.zh
+    : PRICING.membersLinkLabel.en;
+  const at = text.indexOf(label);
+  if (at < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, at)}
+      <MembersLink>{label}</MembersLink>
+      {text.slice(at + label.length)}
+    </>
+  );
+}
+
 export default async function LandingPage() {
   const locale = await getLocale();
   const t = (zh: string, en: string) => pick(locale, zh, en);
@@ -561,13 +588,13 @@ export default async function LandingPage() {
                 >
                   {locale === "zh" ? (
                     <>
-                      每週一頁情緒陪伴，放在這趟旅程裡。
+                      加入後，到<MembersLink>會員頁</MembersLink>看妳買的週。
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
                       。
                     </>
                   ) : (
                     <>
-                      One page of company each week, in this journey.{" "}
+                      After you join, the <MembersLink>Members page</MembersLink> shows the weeks you bought.{" "}
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                     </>
                   )}
@@ -624,57 +651,29 @@ export default async function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FeatureCard
               icon="💌"
-              title={t("每週情緒陪伴", "Weekly company")}
-              description={
-                locale === "zh" ? (
-                  <>
-                    每一週一頁，寫給那個週數，放在旅程裡。
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    。
-                  </>
-                ) : (
-                  <>
-                    One page each week, written for that week, in the journey.{" "}
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
-                  </>
-                )
-              }
+              title={t("30 秒", "30 seconds")}
+              description={t(
+                "每週開頭先看這個。",
+                "Each week opens with this.",
+              )}
               delay={100}
             />
             <FeatureCard
               icon="🧘"
-              title={t("40 週完整旅程", "The full 40 weeks")}
-              description={
-                locale === "zh" ? (
-                  <>
-                    三個孕期收在同一份預購裡。先從
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    開始，不必一週一週另外找。
-                  </>
-                ) : (
-                  <>
-                    Three trimesters in one pre-order. Start here:{" "}
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. You don&apos;t have to hunt week by week.
-                  </>
-                )
-              }
+              title={t("身、心、新生兒", "Body, mind, newborn")}
+              description={t(
+                "接著看這三段。寫得很短。",
+                "Then those three parts. They're short.",
+              )}
               delay={200}
             />
             <FeatureCard
               icon="🌙"
-              title={t("引導呼吸與冥想文字", "Guided breathing and meditation text")}
-              description={
-                locale === "zh" ? (
-                  <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    的那幾頁裡，有引導呼吸，和可以照著唸的冥想文字。
-                  </>
-                ) : (
-                  <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> and include guided breathing and read-aloud meditation text.
-                  </>
-                )
-              }
+              title={t("心情紀錄", "Mood log")}
+              description={t(
+                "每週記一則。",
+                "One entry each week.",
+              )}
               delay={300}
             />
           </div>
@@ -682,10 +681,10 @@ export default async function LandingPage() {
           {/* Stats bar */}
           <FadeIn delay={400} className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { num: "40", unit: t("週", "wks"), label: t("完整情緒旅程", "Full emotional journey") },
-              { num: "3", unit: t("期", ""), label: t("三種孕期節奏", "Trimester rhythms") },
-              { num: t("每週", "Weekly"), unit: "", label: t("一則心靈引導", "One guide") },
-              { num: t("文字", "Text"), unit: "", label: t("引導呼吸與朗讀冥想", "Guided breathing, read-aloud meditation") },
+              { num: "40", unit: t("週", "wks"), label: t("整個孕期", "The whole pregnancy") },
+              { num: "30", unit: t("秒", "sec"), label: t("每週開頭", "Opens each week") },
+              { num: "3", unit: "", label: t("身、心、新生兒", "Body, mind, newborn") },
+              { num: "3", unit: t("次", ""), label: t("一對一 Google Meet", "One-on-one Google Meet") },
             ].map(({ num, unit, label }) => (
               <div
                 key={label}
@@ -715,98 +714,35 @@ export default async function LandingPage() {
           <div className="mb-14">
             <SectionHeader
               label={t("40 週旅程", "40-week journey")}
-              title={t("三個孕期，先看方向", "Three trimesters, a first look")}
-              subtitle={
-                locale === "zh" ? (
-                  <>
-                    下面的卡片是預覽。
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    。
-                  </>
-                ) : (
-                  <>
-                    The cards below are a preview. <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
-                  </>
-                )
-              }
+              title={t("先看 30 秒", "Start with 30 seconds")}
+              subtitle={t("再看身、心、新生兒。", "Then body, mind, and newborn prep.")}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <TrimesterCard
-              preview={t("預覽", "Preview")}
-              period={t("第一孕期", "First trimester")}
-              weeks={t("1–12 週", "Weeks 1–12")}
-              theme={t("接納與安定", "Acceptance and steadiness")}
+              period={t("身", "Body")}
+              weeks={t("接著", "Then")}
+              theme={t("身體這一段", "The body part")}
               color="#FFF0F3"
               delay={100}
-              items={
-                locale === "zh"
-                  ? [
-                      "認識身體的驚人變化",
-                      "孕吐期情緒穩定練習",
-                      "焦慮與不確定感的引導",
-                      "與寶寶的第一次連結冥想",
-                      "建立安定的日常儀式",
-                    ]
-                  : [
-                      "Getting to know how your body is changing",
-                      "A steadier mood through the nausea",
-                      "When you feel anxious or unsure",
-                      "A first meditation with the baby",
-                      "A small daily ritual",
-                    ]
-              }
+              items={[]}
             />
             <TrimesterCard
-              preview={t("預覽", "Preview")}
-              period={t("第二孕期", "Second trimester")}
-              weeks={t("13–27 週", "Weeks 13–27")}
-              theme={t("連結與探索", "Connection")}
+              period={t("心", "Mind")}
+              weeks={t("接著", "Then")}
+              theme={t("心情這一段", "The mind part")}
               color="#E8F8F7"
               delay={200}
-              items={
-                locale === "zh"
-                  ? [
-                      "感受第一次胎動的儀式",
-                      "伴侶溝通與關係陪伴",
-                      "身體形象與自我接納",
-                      "工作與孕期的平衡探索",
-                      "深化與寶寶的情感連結",
-                    ]
-                  : [
-                      "A ritual for the first kicks",
-                      "Talking with your partner",
-                      "Body image, and being okay with it",
-                      "Work and pregnancy at the same time",
-                      "Feeling closer to the baby",
-                    ]
-              }
+              items={[]}
             />
             <TrimesterCard
-              preview={t("預覽", "Preview")}
-              period={t("第三孕期", "Third trimester")}
-              weeks={t("28–40 週", "Weeks 28–40")}
-              theme={t("準備與期待", "Getting ready")}
+              period={t("新生兒", "Newborn prep")}
+              weeks={t("接著", "Then")}
+              theme={t("準備寶寶這一段", "The newborn part")}
               color="#FFF5DC"
               delay={300}
-              items={
-                locale === "zh"
-                  ? [
-                      "生產恐懼的溫柔鬆綁",
-                      "孕期好眠呼吸練習",
-                      "母親角色的心理準備",
-                      "寫給寶寶的第一封信",
-                      "迎接分娩的正念陪伴",
-                    ]
-                  : [
-                      "When you're scared of giving birth",
-                      "Breathing practice for sleep",
-                      "Getting used to the idea of being a mother",
-                      "A first letter to the baby",
-                      "Company as labor gets closer",
-                    ]
-              }
+              items={[]}
             />
           </div>
 
@@ -854,11 +790,14 @@ export default async function LandingPage() {
               <p className="text-white/60 text-sm mt-6">
                 {locale === "zh" ? (
                   <>
+                    第 5–40 週在<MembersLink>會員頁</MembersLink>，加入後開通。
                     <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    Weeks 5–40 are on the <MembersLink>Members page</MembersLink> and unlock when you join.{" "}
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
                   </>
                 )}
               </p>
@@ -883,27 +822,16 @@ export default async function LandingPage() {
                 locale === "zh" ? (
                   <>
                     <FreeWeeksLink>前 4 週免費</FreeWeeksLink>
-                    ，其餘現在預購
+                    。第 5–40 週加入後開通。
                   </>
                 ) : (
                   <>
-                    <FreeWeeksLink>The first 4 weeks are free</FreeWeeksLink>
-                    . Pre-order the rest.
+                    <FreeWeeksLink>Weeks 1–4 are free</FreeWeeksLink>
+                    . Weeks 5–40 unlock when you join.
                   </>
                 )
               }
-              subtitle={
-                locale === "zh" ? (
-                  <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    。{pick(locale, PRICING.currencyNote)}。
-                  </>
-                ) : (
-                  <>
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. {pick(locale, PRICING.currencyNote)}.
-                  </>
-                )
-              }
+              subtitle={pick(locale, PRICING.currencyNote)}
               center
             />
           </div>
@@ -929,14 +857,14 @@ export default async function LandingPage() {
           </div>
 
           <FadeIn delay={350} className="text-center mt-10">
-            <p className="text-sm font-semibold" style={{ color: "var(--navy)" }}>
-              {pick(locale, PRICING.currencyNote)}
-            </p>
-            <p className="text-sm mt-1" style={{ color: "#5A6480" }}>
-              <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+            <p className="text-sm" style={{ color: "#5A6480" }}>
+              <NoteWithMembersLink text={pick(locale, PRICING.includesNote)} />
             </p>
             <p className="text-sm mt-3" style={{ color: "#5A6480" }}>
-              {pick(locale, PRICING.checkoutNote)}
+              <NoteWithMembersLink text={pick(locale, PRICING.checkoutNote)} />
+            </p>
+            <p className="text-sm mt-3" style={{ color: "#8A93B2" }}>
+              {pick(locale, PRICING.notMedicalAdvice)}
             </p>
             <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
               {t("想問別的，寫到", "For anything else, email")}
@@ -958,48 +886,19 @@ export default async function LandingPage() {
             <div>
               <SectionHeader
                 label={t("怎麼拿到", "How you get it")}
-                title={t("預購之後，每週放進旅程", "After you pre-order, each week goes into the journey")}
+                title={t("授權碼寄到信箱", "The license key comes by email")}
                 subtitle={
                   locale === "zh" ? (
                     <>
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                      到<MembersLink>會員頁</MembersLink>輸入。
                     </>
                   ) : (
                     <>
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                      Enter it on the <MembersLink>Members page</MembersLink>.
                     </>
                   )
                 }
               />
-              <FadeIn delay={200} className="mt-8">
-                <ul className="space-y-4">
-                  {[
-                    { icon: "💌", text: t("每週一頁情緒陪伴，跟著週數，放在旅程裡", "One page of company each week, for that week, in the journey") },
-                    {
-                      icon: "🌙",
-                      text: locale === "zh" ? (
-                        <>
-                          <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                          的那幾頁裡，有引導呼吸，和可以照著唸的冥想文字。
-                        </>
-                      ) : (
-                        <>
-                          <FreeWeeksLink>{freeWeeks}</FreeWeeksLink> and include guided breathing and read-aloud meditation text.
-                        </>
-                      ),
-                    },
-                    { icon: "🌸", text: t("三個孕期都在同一份預購裡", "Three trimesters in the same pre-order") },
-                    { icon: "✦", text: t("信用卡或 PayPal，在 Gumroad 付款", "Pay by card or PayPal on Gumroad") },
-                  ].map(({ icon, text }) => (
-                    <li key={icon} className="flex items-start gap-3">
-                      <span className="text-xl flex-shrink-0 mt-0.5">{icon}</span>
-                      <span className="text-sm leading-relaxed" style={{ color: "#5A6480" }}>
-                        {text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </FadeIn>
               <FadeIn delay={300} className="mt-8 flex flex-col sm:flex-row gap-4">
                 <a href="#pricing" className="btn-primary text-base">
                   {t("現在加入", "Join now")}
@@ -1035,10 +934,10 @@ export default async function LandingPage() {
                       className="font-bold text-base"
                       style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                     >
-                      {t("40 週完整方案", "The full 40-week plan")}
+                      {t("會員頁上的一週", "A week on the Members page")}
                     </p>
                     <p className="text-sm" style={{ color: "#8A93B2" }}>
-                      {t("每週情緒陪伴 · 引導呼吸與朗讀冥想 · 放在旅程裡", "Weekly company · guided breathing and read-aloud meditation · in the journey")}
+                      {t("先 30 秒，再看三段", "30 seconds, then three parts")}
                     </p>
                   </div>
                 </div>
@@ -1047,13 +946,13 @@ export default async function LandingPage() {
                   className="text-xs font-bold uppercase tracking-wider mb-3"
                   style={{ color: "var(--coral)" }}
                 >
-                  {t("旅程裡有什麼", "What's in it")}
+                  {t("接著看", "Then")}
                 </p>
                 <div className="space-y-2 mb-6">
                   {[
-                    { weeks: t("第 1–12 週", "Weeks 1–12"), theme: t("接納與安定", "Acceptance and steadiness") },
-                    { weeks: t("第 13–27 週", "Weeks 13–27"), theme: t("連結與探索", "Connection") },
-                    { weeks: t("第 28–40 週", "Weeks 28–40"), theme: t("準備與期待", "Getting ready") },
+                    { weeks: t("身", "Body"), theme: t("身體這一段", "The body part") },
+                    { weeks: t("心", "Mind"), theme: t("心情這一段", "The mind part") },
+                    { weeks: t("新生兒", "Newborn"), theme: t("準備寶寶這一段", "The newborn part") },
                   ].map(({ weeks, theme }) => (
                     <div
                       key={weeks}
@@ -1072,13 +971,6 @@ export default async function LandingPage() {
                     </div>
                   ))}
                 </div>
-
-                <p
-                  className="text-xs text-center mb-4"
-                  style={{ color: "#8A93B2" }}
-                >
-                  {pick(locale, PRICING.checkoutNote)}
-                </p>
 
                 <a
                   href={planPurchaseHref(PRICING.plans.find((plan) => plan.id === "full-pass")!)}
@@ -1116,16 +1008,11 @@ export default async function LandingPage() {
               {t("開始妳的旅程", "Start here")}
             </p>
             <h2
-              className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-8 leading-tight"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              {t("想走這四十週，", "If you want these forty weeks,")}
-              <br />
-              {t("現在可以預購", "you can pre-order")}
+              {t("第 5–40 週，加入後開通", "Weeks 5–40 unlock when you join")}
             </h2>
-            <p className="text-white/80 text-base mb-8 leading-relaxed">
-              {pick(locale, PRICING.checkoutNote)}
-            </p>
             <a
               href="#pricing"
               className="inline-flex items-center gap-2 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
@@ -1159,7 +1046,7 @@ export default async function LandingPage() {
                 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                {t("40 週孕期心靈旅程", "A 40-week pregnancy journey")}
+                {t("第 5–40 週在會員頁", "Weeks 5–40 are on the Members page")}
               </p>
             </div>
 
@@ -1174,6 +1061,7 @@ export default async function LandingPage() {
                   { label: t("40 週旅程", "40-week journey"), href: "#journey" },
                   { label: t("完整方案", "Plans"), href: "#pricing" },
                   { label: t("怎麼拿到", "How you get it"), href: "#early-access" },
+                  { label: t("會員頁", "Members"), href: PRICING.membersUrl },
                 ].map(({ label, href }) => (
                   <li key={href}>
                     <a

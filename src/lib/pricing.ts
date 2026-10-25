@@ -44,31 +44,34 @@ export const PRICING = {
   freeWeeksNote: { zh: "第 1–4 週免費", en: "Weeks 1–4 are free" } satisfies Bilingual,
   /** Live free weeks on the static site. Same-tab link from every free-weeks mention. */
   freeWeeksUrl: "https://www.maybeshedliketotalk.org/free",
+  /** Members area on the static site. License keys are entered there. */
+  membersUrl: "https://www.maybeshedliketotalk.org/members",
+  membersLinkLabel: { zh: "會員頁", en: "Members page" } satisfies Bilingual,
+  includesNote: {
+    zh: "都有會員頁、每週心情紀錄、三次一對一 Google Meet，另附可列印 PDF。",
+    en: "Every plan includes the Members page, a weekly mood log, 3 one-on-one Google Meet chats, and a bonus printable PDF.",
+  } satisfies Bilingual,
   checkoutNote: {
-    zh: "用信用卡或 PayPal，在 Gumroad 付款。每週的內容放在旅程裡。",
-    en: "Pay by card or PayPal on Gumroad. Each week's content is in the journey.",
+    zh: "Gumroad 付完，授權碼寄到信箱。到會員頁輸入。",
+    en: "Pay on Gumroad. The license key comes by email. Enter it on the Members page.",
+  } satisfies Bilingual,
+  notMedicalAdvice: {
+    zh: "這不是醫療建議，也不能取代產檢。身體的事問醫師或助產師。",
+    en: "Not medical advice, and not a substitute for prenatal care. For your body, ask a doctor or midwife.",
   } satisfies Bilingual,
   plans: [
     {
       id: "single-trimester",
       title: { zh: "單一孕期", en: "Single Trimester" },
       subtitle: {
-        zh: "適合孕期中途才加入。選一段週數，跟著那一段走。",
-        en: "For joining mid-pregnancy. Pick one set of weeks and follow that stretch.",
+        zh: "三個孕期選一個。",
+        en: "Pick one trimester.",
       },
       priceUsd: 15,
       features: [
         {
-          zh: "自選第 1–12、13–27 或 28–40 週",
-          en: "Choose weeks 1–12, 13–27, or 28–40",
-        },
-        {
-          zh: "該段的每週情緒陪伴",
-          en: "Weekly emotional guide for those weeks",
-        },
-        {
-          zh: "該段的引導呼吸，和可以照著唸的冥想文字",
-          en: "Guided breathing and read-aloud meditation text for those weeks",
+          zh: "第 1–12、13–27 或 28–40 週",
+          en: "Weeks 1–12, 13–27, or 28–40",
         },
       ],
       cta: { zh: "現在加入", en: "Join now" },
@@ -79,8 +82,8 @@ export const PRICING = {
       id: "full-pass",
       title: { zh: "全孕期通行證", en: "Full Pregnancy Pass" },
       subtitle: {
-        zh: "全部 40 週的情緒陪伴，加上引導呼吸，和可以照著唸的冥想文字。",
-        en: "All 40 weeks of emotional guidance, plus guided breathing and read-aloud meditation text.",
+        zh: "40 週都開通。",
+        en: "All 40 weeks.",
       },
       priceUsd: 29,
       compareAtUsd: 39,
@@ -89,20 +92,8 @@ export const PRICING = {
       badge: { zh: "最受歡迎", en: "Most popular" },
       features: [
         {
-          zh: "全部 40 週的情緒陪伴",
-          en: "All 40 weeks of emotional guidance",
-        },
-        {
-          zh: "引導呼吸，和可以照著唸的冥想文字",
-          en: "Guided breathing and read-aloud meditation text",
-        },
-        {
-          zh: "每週釋出",
-          en: "Released weekly",
-        },
-        {
-          zh: "一次買斷，永久使用",
-          en: "One-time purchase, lifetime access",
+          zh: "第 1–40 週",
+          en: "Weeks 1–40",
         },
       ],
       cta: { zh: "現在加入", en: "Join now" },
@@ -113,22 +104,18 @@ export const PRICING = {
       id: "gift-edition",
       title: { zh: "送禮版", en: "Gift Edition" },
       subtitle: {
-        zh: "全孕期通行證，再加一份數位禮卡。送給伴侶、家人或朋友。",
-        en: "The Full Pregnancy Pass, plus a digital gift card. For a partner, family, or friend.",
+        zh: "全孕期通行證，當禮物送。",
+        en: "The Full Pass, as a gift.",
       },
       priceUsd: 45,
       features: [
         {
-          zh: "含完整的全孕期通行證",
-          en: "Includes the Full Pregnancy Pass",
+          zh: "把授權碼轉給她",
+          en: "Forward the license key",
         },
         {
-          zh: "加一份數位禮卡，可以轉贈",
-          en: "Plus a digital gift card to pass on",
-        },
-        {
-          zh: "送給伴侶、家人或朋友",
-          en: "For a partner, family, or friend",
+          zh: "附可列印心意卡",
+          en: "A printable gift card",
         },
       ],
       cta: { zh: "送給她", en: "Send as a gift" },
@@ -142,7 +129,7 @@ export function formatUsd(amount: number) {
   return `US$${amount}`
 }
 
-/** Mailto pre-order, unless the plan already has a checkout URL. */
+/** Mailto fallback, unless the plan already has a checkout URL. */
 export function planPurchaseHref(plan: PricingPlan): string {
   if (plan.checkoutUrl) return plan.checkoutUrl
   return `mailto:${PRICING.email}?subject=${encodeURIComponent(plan.subject)}`

@@ -14,36 +14,24 @@ interface Profile {
   created_at: string
 }
 
-const TRIMESTERS = [
+const PARTS = [
   {
-    period: { zh: '第一孕期', en: 'First trimester' },
-    weeks: { zh: '1–12 週', en: 'Weeks 1–12' },
-    theme: { zh: '接納與安定', en: 'Acceptance and steadiness' },
-    items: [
-      { zh: '認識身體的變化', en: 'How your body is changing' },
-      { zh: '焦慮時的情緒引導', en: 'A guide for when you feel anxious' },
-      { zh: '與寶寶的第一次連結冥想', en: 'A first meditation with the baby' },
-    ],
+    period: { zh: '身', en: 'Body' },
+    weeks: { zh: '接著', en: 'Then' },
+    theme: { zh: '身體這一段', en: 'The body part' },
+    items: [] as { zh: string; en: string }[],
   },
   {
-    period: { zh: '第二孕期', en: 'Second trimester' },
-    weeks: { zh: '13–27 週', en: 'Weeks 13–27' },
-    theme: { zh: '連結與探索', en: 'Connection' },
-    items: [
-      { zh: '感受胎動的儀式', en: 'A ritual for feeling kicks' },
-      { zh: '身體形象與自我接納', en: 'Body image, and being okay with it' },
-      { zh: '深化與寶寶的情感連結', en: 'Feeling closer to the baby' },
-    ],
+    period: { zh: '心', en: 'Mind' },
+    weeks: { zh: '接著', en: 'Then' },
+    theme: { zh: '心情這一段', en: 'The mind part' },
+    items: [] as { zh: string; en: string }[],
   },
   {
-    period: { zh: '第三孕期', en: 'Third trimester' },
-    weeks: { zh: '28–40 週', en: 'Weeks 28–40' },
-    theme: { zh: '準備與期待', en: 'Getting ready' },
-    items: [
-      { zh: '生產恐懼的溫柔鬆綁', en: "When you're scared of giving birth" },
-      { zh: '孕期好眠呼吸練習', en: 'Breathing practice for sleep' },
-      { zh: '迎接分娩的正念陪伴', en: 'Company as labor gets closer' },
-    ],
+    period: { zh: '新生兒', en: 'Newborn prep' },
+    weeks: { zh: '接著', en: 'Then' },
+    theme: { zh: '準備寶寶這一段', en: 'The newborn part' },
+    items: [] as { zh: string; en: string }[],
   },
 ]
 
@@ -124,9 +112,22 @@ export default function DashboardPage() {
           {t('嗨，', 'Hi,')} {firstName} 👋
         </h2>
         <p className="text-[#1E2A5E]/50 text-sm mt-1">
-          {t(
-            '這四十週，我們一週一週陪著妳。',
-            'These forty weeks, we stay with you one week at a time.',
+          {locale === 'zh' ? (
+            <>
+              授權碼寄到信箱。到
+              <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
+                會員頁
+              </a>
+              輸入。
+            </>
+          ) : (
+            <>
+              The license key comes by email. Enter it on the{' '}
+              <a href={PRICING.membersUrl} className="underline underline-offset-2 text-[#F28B6E]">
+                Members page
+              </a>
+              .
+            </>
           )}
         </p>
       </div>
@@ -134,39 +135,45 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('完整旅程', 'Full journey')}
+            {t('整個孕期', 'Whole pregnancy')}
           </p>
           <p className="text-5xl font-extrabold leading-none text-[#F28B6E]">
             40
             <span className="text-lg ml-1">{t('週', 'wks')}</span>
           </p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('從第 1 週到寶寶出生', 'From week 1 until the baby arrives')}</p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('在會員頁', 'On the Members page')}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('情緒引導', 'Weekly guide')}
+            {t('每週開頭', 'Opens each week')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">{t('每週', 'Weekly')}</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('一週一頁，放進這個旅程', 'One page a week, added to this journey')}</p>
+          <p className="text-5xl font-extrabold leading-none text-[#5BBFB5]">
+            30
+            <span className="text-lg ml-1">{t('秒', 'sec')}</span>
+          </p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('再看身、心、新生兒', 'Then body, mind, newborn prep')}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-xs font-medium text-[#1E2A5E]/50 uppercase tracking-widest mb-2">
-            {t('冥想練習', 'Meditation')}
+            {t('一對一', 'One-on-one')}
           </p>
-          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">{t('文字', 'Text')}</p>
-          <p className="text-xs text-[#1E2A5E]/40 mt-2">{t('引導呼吸，和可以照著唸的冥想文字', 'Guided breathing and read-aloud meditation text')}</p>
+          <p className="text-5xl font-extrabold leading-none text-[#FFB627]">
+            3
+            <span className="text-lg ml-1">{t('次', '')}</span>
+          </p>
+          <p className="text-xs text-[#1E2A5E]/40 mt-2">Google Meet</p>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#F28BAE]/30 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
           <span className="inline-block px-3 py-1 rounded-full bg-[#F28BAE]/15 text-[#F28BAE] text-xs font-semibold mb-3">
-            {t('現在預購', 'Pre-order')}
+            {t('會員頁', 'Members')}
           </span>
           <h3 className="text-lg font-bold text-[#1E2A5E]">
-            {t('40 週旅程，三種方案', '40-week journey, three plans')}
+            {t('三種方案', 'Three plans')}
           </h3>
           <p className="text-sm text-[#1E2A5E]/60 mt-1 leading-relaxed">
             {locale === 'zh' ? (
@@ -175,7 +182,8 @@ export default function DashboardPage() {
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.zh}
                 </a>
-                ，{PRICING.currencyNote.zh}。{PRICING.checkoutNote.zh}
+                。{PRICING.includesNote.zh}
+                {PRICING.notMedicalAdvice.zh}
               </>
             ) : (
               <>
@@ -183,7 +191,7 @@ export default function DashboardPage() {
                 <a href={PRICING.freeWeeksUrl} className="underline underline-offset-2 text-[#F28B6E]">
                   {PRICING.freeWeeksNote.en}
                 </a>
-                . {PRICING.currencyNote.en}. {PRICING.checkoutNote.en}
+                . {PRICING.includesNote.en} {PRICING.notMedicalAdvice.en}
               </>
             )}
           </p>
@@ -198,10 +206,10 @@ export default function DashboardPage() {
 
       <div>
         <h3 className="text-base font-bold text-[#1E2A5E] mb-4">
-          {t('旅程預覽', 'Journey preview')}
+          {t('先 30 秒，再看這三段', '30 seconds, then these three parts')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {TRIMESTERS.map((trimester) => (
+          {PARTS.map((trimester) => (
             <div
               key={trimester.period.en}
               className="bg-white rounded-2xl border border-[#F28BAE]/15 shadow-sm p-5"
