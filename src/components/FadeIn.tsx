@@ -31,29 +31,33 @@ export default function FadeIn<T extends ElementType = "div">({
     const el = ref.current;
     if (!el) return;
 
-    // If the element is already partially in view on mount (e.g. hero), show it immediately
-    const rect = el.getBoundingClientRect();
-    const alreadyVisible = rect.top < window.innerHeight && rect.bottom > 0;
-    if (alreadyVisible) {
-      el.classList.add("visible");
+    // Never gate readability on the observer. Show immediately, including when
+    // IntersectionObserver is missing (older iOS) or the user prefers less motion.
+    const show = () => el.classList.add("visible");
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    if (reduceMotion || typeof IntersectionObserver === "undefined") {
+      show();
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold, rootMargin }
-    );
+    show();
 
-    observer.observe(el);
+    let observer: IntersectionObserver | null = null;
+    try {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) show();
+          });
+        },
+        { threshold: 0, rootMargin: "0px" }
+      );
+      observer.observe(el);
+    } catch {
+      show();
+    }
 
-    return () => observer.disconnect();
+    return () => observer?.disconnect();
   }, [threshold, rootMargin]);
 
   const delayAttr = delay !== undefined ? { "data-delay": String(delay) } : {};

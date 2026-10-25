@@ -1,14 +1,21 @@
+import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import FadeIn from "@/components/FadeIn";
-import { formatUsd, planPurchaseHref, PRICING } from "@/lib/pricing";
+import { FAQ, formatUsd, FREE_TRIAL_CTA, planPurchaseHref, PRICING } from "@/lib/pricing";
 import { pick, type Locale } from "@/lib/locale";
 import { getLocale } from "@/lib/locale-server";
+import { MAIN_SITE_URL, pageMetadata } from "@/lib/seo";
 
 /* ─────────────────────────────────────────
    Inline SVG: Geometric Blob Pregnant Woman
    (Headspace / Buck design style)
    ───────────────────────────────────────── */
 function HeroIllustration({ locale }: { locale: Locale }) {
+  const label =
+    locale === "zh"
+      ? "一位懷孕的人安靜地坐著，旁邊寫著 40 週"
+      : "A pregnant person sitting quietly, with a note that says 40 weeks";
   return (
     <div className="relative flex items-center justify-center w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto select-none">
       {/* Background decorative blobs */}
@@ -17,8 +24,10 @@ function HeroIllustration({ locale }: { locale: Locale }) {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-auto"
-        aria-hidden="true"
+        role="img"
+        aria-label={label}
       >
+        <title>{label}</title>
         {/* Outermost soft blob background */}
         <ellipse cx="240" cy="255" rx="210" ry="200" fill="#FFE8DF" opacity="0.6" />
 
@@ -263,7 +272,7 @@ function TrimesterCard({
           )}
           <span
             className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: textColor ?? "rgba(30,42,94,0.6)", fontFamily: "var(--font-quicksand), sans-serif" }}
+            style={{ color: textColor ?? "rgba(30,42,94,0.75)", fontFamily: "var(--font-quicksand), sans-serif" }}
           >
             {weeks}
           </span>
@@ -274,8 +283,8 @@ function TrimesterCard({
             {period}
           </h3>
           <p
-            className="text-lg font-bold"
-            style={{ color: textColor ?? "var(--navy)", opacity: 0.85, fontFamily: "var(--font-quicksand), sans-serif" }}
+            className="text-base leading-relaxed mt-3"
+            style={{ color: textColor ?? "var(--navy)", fontFamily: "var(--font-noto), sans-serif", fontWeight: 400 }}
           >
             {theme}
           </p>
@@ -426,14 +435,16 @@ function PricingCard({
           {...(ctaHref.startsWith("http")
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
-          className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
+          className="inline-flex items-center self-start min-h-11 text-sm font-semibold underline underline-offset-4"
+          style={{ color: "var(--coral)" }}
         >
           {ctaLabel}
         </a>
       ) : (
         <Link
           href={ctaHref}
-          className={highlighted ? "btn-primary text-center text-base" : "btn-secondary text-center text-base"}
+          className="inline-flex items-center self-start min-h-11 text-sm font-semibold underline underline-offset-4"
+          style={{ color: "var(--coral)" }}
         >
           {ctaLabel}
         </Link>
@@ -450,15 +461,18 @@ function SectionHeader({
   title,
   subtitle,
   center,
+  labelColor,
 }: {
   label: string;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   center?: boolean;
+  /** Override the coral kicker when it would fail contrast on a light field. */
+  labelColor?: string;
 }) {
   return (
     <FadeIn className={center ? "text-center" : ""}>
-      <p className="section-label mb-3">{label}</p>
+      <p className="section-label mb-3" style={labelColor ? { color: labelColor } : undefined}>{label}</p>
       <h2
         className="display-heading text-3xl md:text-4xl lg:text-5xl mb-4"
       >
@@ -479,12 +493,12 @@ function SectionHeader({
 /* ─────────────────────────────────────────
    Page
    ───────────────────────────────────────── */
-function FreeWeeksLink({ children }: { children: React.ReactNode }) {
+function FreeWeeksLink({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <a
       href={PRICING.freeWeeksUrl}
       className="underline underline-offset-2"
-      style={{ color: "var(--coral)" }}
+      style={{ color: color ?? "var(--coral)" }}
     >
       {children}
     </a>
@@ -503,28 +517,110 @@ function MembersLink({ children }: { children: React.ReactNode }) {
   );
 }
 
-function NoteWithMembersLink({ text }: { text: string }) {
-  const label = text.includes(PRICING.membersLinkLabel.zh)
-    ? PRICING.membersLinkLabel.zh
-    : PRICING.membersLinkLabel.en;
-  const at = text.indexOf(label);
+function TextWithEmail({ text }: { text: string }) {
+  const email = PRICING.email;
+  const at = text.indexOf(email);
   if (at < 0) return <>{text}</>;
   return (
     <>
       {text.slice(0, at)}
-      <MembersLink>{label}</MembersLink>
-      {text.slice(at + label.length)}
+      <a
+        href={`mailto:${email}`}
+        className="underline underline-offset-2 break-all"
+        style={{ color: "var(--coral)" }}
+      >
+        {email}
+      </a>
+      {text.slice(at + email.length)}
     </>
   );
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const zh = locale === "zh";
+  return pageMetadata({
+    locale,
+    title: zh
+      ? "孕期 40 週陪伴｜也許妳想找人聊一聊"
+      : "40 weeks of pregnancy support | Maybe She'd Like to Talk",
+    description: zh
+      ? "懷孕的時候，是不是也想有人陪著妳？我們按週數陪妳走完這 40 週，三個階段都會照顧到妳的身體和心情。前 4 週可以先免費看。"
+      : "When you're pregnant, you may want someone beside you. We stay with you through these 40 weeks, and all three stages look after your body and how you feel. The first 4 weeks are free to read.",
+    canonical: MAIN_SITE_URL,
+    languages: {
+      "zh-Hant": MAIN_SITE_URL,
+      en: MAIN_SITE_URL,
+      "x-default": MAIN_SITE_URL,
+    },
+  });
+}
+
+function jsonLd(locale: Locale) {
+  const zh = locale === "zh";
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        name: "也許妳想找人聊一聊",
+        alternateName: "Maybe She'd Like to Talk",
+        url: MAIN_SITE_URL,
+        description: zh
+          ? "一週一週陪妳走完這 40 週。"
+          : "Someone with you, week by week, through 40 weeks of pregnancy.",
+        inLanguage: ["zh-Hant", "en"],
+      },
+      {
+        "@type": "Organization",
+        name: "也許妳想找人聊一聊",
+        url: MAIN_SITE_URL,
+        email: PRICING.email,
+      },
+      {
+        "@type": "OfferCatalog",
+        name: zh ? "孕期方案" : "Pregnancy plans",
+        url: MAIN_SITE_URL,
+        itemListElement: PRICING.plans.map((plan) => ({
+          "@type": "Offer",
+          name: pick(locale, plan.title),
+          description: pick(locale, plan.subtitle),
+          price: plan.priceUsd,
+          priceCurrency: "USD",
+          url: MAIN_SITE_URL,
+          availability: "https://schema.org/InStock",
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        url: MAIN_SITE_URL,
+        mainEntity: FAQ.map((item) => ({
+          "@type": "Question",
+          name: pick(locale, item.q),
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: pick(locale, item.a),
+          },
+        })),
+      },
+    ],
+  };
 }
 
 export default async function LandingPage() {
   const locale = await getLocale();
   const t = (zh: string, en: string) => pick(locale, zh, en);
   const freeWeeks = pick(locale, PRICING.freeWeeksNote);
+  const freeTrial = pick(locale, FREE_TRIAL_CTA);
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-clip">
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(locale)) }}
+      />
 
       {/* ════════════════════════════════════════
           HERO SECTION
@@ -551,7 +647,7 @@ export default async function LandingPage() {
             {/* Text column */}
             <div className="order-2 lg:order-1">
               <FadeIn>
-                <p className="section-label mb-4">{t("40 週旅程", "40-week journey")}</p>
+                <p className="section-label mb-4">{t("懷孕週數", "Pregnancy week by week")}</p>
               </FadeIn>
 
               <FadeIn delay={100}>
@@ -559,9 +655,9 @@ export default async function LandingPage() {
                   className="display-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-4"
                   style={{ fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  {t("陪妳走完", "We'll walk with you")}
+                  {t("孕期 40 週，", "40 weeks of pregnancy,")}
                   <br />
-                  <span style={{ color: "var(--coral)" }}>{t("這四十週", "these forty weeks")}</span>
+                  <span style={{ color: "var(--coral)" }}>{t("有人陪著妳", "with someone beside you")}</span>
                 </h1>
               </FadeIn>
 
@@ -588,14 +684,17 @@ export default async function LandingPage() {
                 >
                   {locale === "zh" ? (
                     <>
-                      加入後，到<MembersLink>會員頁</MembersLink>看妳買的週。
+                      懷孕時，是不是也想有人系統性地陪著妳、照顧妳？這 40 週，我們從身體、心靈到新生兒照顧，一週一週陪妳。妳並不孤單。
                       <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                      。
+                      ，可以先慢慢看。第 5 週起如果想繼續，加入之後就能在
+                      <MembersLink>會員頁</MembersLink>
+                      打開。
                     </>
                   ) : (
                     <>
-                      After you join, the <MembersLink>Members page</MembersLink> shows the weeks you bought.{" "}
-                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
+                      When you&apos;re pregnant, you may want someone to stay with you and look after you. Over these 40 weeks we look after your body, your feelings, and getting ready for the baby, one week at a time. You&apos;re not alone.{" "}
+                      <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>, so you can start gently. From week 5, once you join, the{" "}
+                      <MembersLink>Members page</MembersLink> opens.
                     </>
                   )}
                 </p>
@@ -603,14 +702,11 @@ export default async function LandingPage() {
 
               <FadeIn delay={350}>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="#pricing" className="btn-primary text-base">
-                    {t("現在加入", "Join now")}
-                    <svg className="ml-2" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <a href={PRICING.freeWeeksUrl} className="btn-primary text-base min-h-11">
+                    {freeTrial}
+                    <svg className="ml-2" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                       <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </a>
-                  <a href="#journey" className="btn-secondary text-base">
-                    {t("了解這四十週", "See the forty weeks")}
                   </a>
                 </div>
               </FadeIn>
@@ -639,10 +735,10 @@ export default async function LandingPage() {
           <div className="text-center mb-14">
             <SectionHeader
               label={t("關於我們", "About")}
-              title={t("妳不需要一個人走", "You don't have to do this alone")}
+              title={t("孕期陪伴", "Pregnancy support")}
               subtitle={t(
-                "孕期是一段美麗卻複雜的旅程。我們相信每位媽咪都值得被溫柔地陪伴，在每一個當下感受到支持與理解。",
-                "Pregnancy is beautiful, and it's a lot. Every mother deserves someone gentle beside her.",
+                "懷孕這段路很長。我們按週數陪著妳，一週一頁。",
+                "Pregnancy is a long road. We stay with you, one week and one page at a time.",
               )}
               center
             />
@@ -651,58 +747,40 @@ export default async function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FeatureCard
               icon="💌"
-              title={t("30 秒", "30 seconds")}
-              description={t(
-                "每週開頭先看這個。",
-                "Each week opens with this.",
-              )}
+              title={t("每週一頁", "One page a week")}
+              description={
+                locale === "zh" ? (
+                  <>
+                    妳買了哪幾週，<MembersLink>會員頁</MembersLink>就開哪幾週，一週一頁。那一頁裡有身體、心情，也有準備寶寶的事。
+                  </>
+                ) : (
+                  <>
+                    The <MembersLink>Members page</MembersLink> opens the weeks you bought, one page a week. That page is about your body, your mood, and getting ready for the baby.
+                  </>
+                )
+              }
               delay={100}
             />
             <FeatureCard
               icon="🧘"
-              title={t("身、心、新生兒", "Body, mind, newborn")}
+              title={t("孕期心情", "A note for your mood")}
               description={t(
-                "接著看這三段。寫得很短。",
-                "Then those three parts. They're short.",
+                "每一週可以記一則心情，寫給自己就好。",
+                "Each week you can write one note, just for yourself.",
               )}
               delay={200}
             />
             <FeatureCard
               icon="🌙"
-              title={t("心情紀錄", "Mood log")}
+              title={t("3 次陪妳聊聊", "Three chats with us")}
               description={t(
-                "每週記一則。",
-                "One entry each week.",
+                "整個孕期有 3 次陪妳聊聊，另外還附一份可以列印的 PDF。",
+                "Through the pregnancy there are three chats with us, and a PDF you can print.",
               )}
               delay={300}
             />
           </div>
 
-          {/* Stats bar */}
-          <FadeIn delay={400} className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { num: "40", unit: t("週", "wks"), label: t("整個孕期", "The whole pregnancy") },
-              { num: "30", unit: t("秒", "sec"), label: t("每週開頭", "Opens each week") },
-              { num: "3", unit: "", label: t("身、心、新生兒", "Body, mind, newborn") },
-              { num: "3", unit: t("次", ""), label: t("一對一 Google Meet", "One-on-one Google Meet") },
-            ].map(({ num, unit, label }) => (
-              <div
-                key={label}
-                className="bg-white rounded-2xl p-6 text-center shadow-sm"
-              >
-                <p
-                  className="text-3xl font-black leading-none"
-                  style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
-                >
-                  {num}
-                  <span className="text-lg ml-0.5">{unit}</span>
-                </p>
-                <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
-                  {label}
-                </p>
-              </div>
-            ))}
-          </FadeIn>
         </div>
       </section>
 
@@ -713,65 +791,84 @@ export default async function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
             <SectionHeader
-              label={t("40 週旅程", "40-week journey")}
-              title={t("先看 30 秒", "Start with 30 seconds")}
-              subtitle={t("再看身、心、新生兒。", "Then body, mind, and newborn prep.")}
+              label={t("懷孕週數", "Pregnancy week by week")}
+              title={t("孕期三階段", "Three trimesters")}
+              subtitle={t(
+                "三個階段是第 1 到 12 週、第 13 到 27 週，還有第 28 到 40 週。每一段都可以單獨買。",
+                "The three stages are weeks 1–12, 13–27, and 28–40. You can buy any one of them on its own.",
+              )}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <TrimesterCard
-              period={t("身", "Body")}
-              weeks={t("接著", "Then")}
-              theme={t("身體這一段", "The body part")}
+              period={t("第一階段", "First trimester")}
+              weeks={t("第 1–12 週", "Weeks 1–12")}
+              theme={t(
+                "第一次產檢之前，心裡常常忐忑不安。別擔心，我們陪著妳，讓妳慢慢安心。",
+                "Before the first prenatal visit, it's natural to feel uneasy. Don't worry. We're with you, so you can settle in.",
+              )}
               color="#FFF0F3"
               delay={100}
-              items={[]}
+              items={[
+                t("前 4 週可以先免費看。", "The first 4 weeks are free to read."),
+                t("若只想走第 1 到 12 週，這一段也可以單獨買。", "If you only want weeks 1–12, you can buy just this part."),
+              ]}
             />
             <TrimesterCard
-              period={t("心", "Mind")}
-              weeks={t("接著", "Then")}
-              theme={t("心情這一段", "The mind part")}
+              period={t("第二階段", "Second trimester")}
+              weeks={t("第 13–27 週", "Weeks 13–27")}
+              theme={t(
+                "這段時間身體比較有感覺，日子也比較辛苦。放鬆心情，我們還是陪著妳。",
+                "Your body starts to feel the pregnancy, and the days take more out of you. Ease your mind. We're still with you.",
+              )}
               color="#E8F8F7"
               delay={200}
-              items={[]}
+              items={[
+                t("第 13 到 27 週可以單獨買，不一定要一次走完全程。", "You can buy weeks 13–27 on their own. You don't have to take the whole pregnancy at once."),
+              ]}
             />
             <TrimesterCard
-              period={t("新生兒", "Newborn prep")}
-              weeks={t("接著", "Then")}
-              theme={t("準備寶寶這一段", "The newborn part")}
+              period={t("第三階段", "Third trimester")}
+              weeks={t("第 28–40 週", "Weeks 28–40")}
+              theme={t(
+                "快要見到寶寶了，心裡是期待，也請記得休息。辛苦了。",
+                "You're close to meeting the baby. There's hope in that, so please rest. You've worked hard.",
+              )}
               color="#FFF5DC"
               delay={300}
-              items={[]}
+              items={[
+                t("這一段會陪妳走到第 40 週。", "This part stays with you through week 40."),
+                t("如果只要最後這段，也可以單獨買。", "If you only want this last stretch, you can buy it on its own."),
+              ]}
             />
           </div>
 
-          {/* Timeline visual */}
           <FadeIn delay={400}>
             <div
+              id="timeline"
               className="rounded-3xl p-8 md:p-10 relative overflow-hidden"
-              style={{ background: "var(--navy)" }}
+              style={{ background: "#FFD6E0" }}
             >
               <div
-                className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10 -translate-y-1/3 translate-x-1/4"
-                style={{ background: "var(--coral)" }}
+                className="absolute top-0 right-0 w-64 h-64 rounded-full -translate-y-1/3 translate-x-1/4"
+                style={{ background: "#fff", opacity: 0.35 }}
                 aria-hidden="true"
               />
               <p
-                className="text-xs font-bold uppercase tracking-widest mb-3"
-                style={{ color: "var(--coral)" }}
+                className="relative text-xs font-bold uppercase tracking-widest mb-3"
+                style={{ color: "var(--navy)" }}
               >
                 {t("時間軸", "Timeline")}
               </p>
               <h3
-                className="text-2xl md:text-3xl font-bold text-white mb-6"
-                style={{ fontFamily: "var(--font-noto), sans-serif" }}
+                className="relative text-2xl md:text-3xl font-bold mb-6"
+                style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
               >
-                {t("從懷孕第一天，到寶寶出生的那一刻", "From the first day of pregnancy to the moment the baby arrives")}
+                {t("從懷孕的第一天，一直陪到寶寶出生", "From the first day of pregnancy until the baby is born")}
               </h3>
-              {/* Progress bar */}
               <div className="relative">
-                <div className="h-3 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-3 rounded-full overflow-hidden" style={{ background: "rgba(30,42,94,0.08)" }}>
                   <div
                     className="h-full rounded-full"
                     style={{
@@ -780,24 +877,25 @@ export default async function LandingPage() {
                     }}
                   />
                 </div>
-                <div className="flex justify-between mt-3 text-xs text-white/60 font-semibold">
+                <div
+                  className="flex justify-between mt-3 text-xs font-semibold"
+                  style={{ color: "var(--navy)" }}
+                >
                   <span>{t("第 1 週", "Week 1")}</span>
                   <span>{t("第 13 週", "Week 13")}</span>
                   <span>{t("第 27 週", "Week 27")}</span>
                   <span>{t("第 40 週", "Week 40")}</span>
                 </div>
               </div>
-              <p className="text-white/60 text-sm mt-6">
+              <p className="relative text-sm mt-6 leading-relaxed" style={{ color: "var(--navy)" }}>
                 {locale === "zh" ? (
                   <>
-                    第 5–40 週在<MembersLink>會員頁</MembersLink>，加入後開通。
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
-                    。
+                    <FreeWeeksLink color="var(--navy)">{freeWeeks}</FreeWeeksLink>
+                    。從第 5 週到第 40 週，就是需要付費的部分。
                   </>
                 ) : (
                   <>
-                    Weeks 5–40 are on the <MembersLink>Members page</MembersLink> and unlock when you join.{" "}
-                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>.
+                    <FreeWeeksLink color="var(--navy)">{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, those weeks are paid.
                   </>
                 )}
               </p>
@@ -818,19 +916,7 @@ export default async function LandingPage() {
           <div className="text-center mb-14">
             <SectionHeader
               label={t("方案", "Pricing")}
-              title={
-                locale === "zh" ? (
-                  <>
-                    <FreeWeeksLink>前 4 週免費</FreeWeeksLink>
-                    。第 5–40 週加入後開通。
-                  </>
-                ) : (
-                  <>
-                    <FreeWeeksLink>Weeks 1–4 are free</FreeWeeksLink>
-                    . Weeks 5–40 unlock when you join.
-                  </>
-                )
-              }
+              title={t("三種方式，選一種就好", "Three ways to join. Pick the one that fits.")}
               subtitle={pick(locale, PRICING.currencyNote)}
               center
             />
@@ -856,133 +942,35 @@ export default async function LandingPage() {
             ))}
           </div>
 
-          <FadeIn delay={350} className="text-center mt-10">
-            <p className="text-sm" style={{ color: "#5A6480" }}>
-              <NoteWithMembersLink text={pick(locale, PRICING.includesNote)} />
-            </p>
-            <p className="text-sm mt-3" style={{ color: "#5A6480" }}>
-              <NoteWithMembersLink text={pick(locale, PRICING.checkoutNote)} />
-            </p>
-            <p className="text-sm mt-3" style={{ color: "#8A93B2" }}>
-              {pick(locale, PRICING.notMedicalAdvice)}
-            </p>
-            <p className="text-sm mt-2" style={{ color: "#8A93B2" }}>
-              {t("想問別的，寫到", "For anything else, email")}
-              <a href={`mailto:${PRICING.email}`} className="font-semibold ml-1" style={{ color: "var(--coral)" }}>
-                {PRICING.email}
-              </a>
-            </p>
-          </FadeIn>
         </div>
       </section>
 
       {/* ════════════════════════════════════════
-          EARLY ACCESS SECTION
+          FAQ
           ════════════════════════════════════════ */}
-      <section id="early-access" className="section-padding" style={{ backgroundColor: "var(--cream)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            <div>
-              <SectionHeader
-                label={t("怎麼拿到", "How you get it")}
-                title={t("授權碼寄到信箱", "The license key comes by email")}
-                subtitle={
-                  locale === "zh" ? (
-                    <>
-                      到<MembersLink>會員頁</MembersLink>輸入。
-                    </>
-                  ) : (
-                    <>
-                      Enter it on the <MembersLink>Members page</MembersLink>.
-                    </>
-                  )
-                }
-              />
-              <FadeIn delay={300} className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#pricing" className="btn-primary text-base">
-                  {t("現在加入", "Join now")}
-                </a>
-                <Link href="/auth/login" className="btn-secondary text-base">
-                  {t("已有帳號？登入", "Already have an account? Log in")}
-                </Link>
-              </FadeIn>
-            </div>
-
-            <FadeIn delay={200}>
-              <div
-                className="rounded-3xl p-8 relative overflow-hidden"
-                style={{ background: "white", boxShadow: "var(--shadow-card)" }}
-              >
-                <div
-                  className="h-2 rounded-full mb-8 -mx-8 -mt-8 px-8"
-                  style={{
-                    background: "linear-gradient(90deg, var(--coral), var(--pink), var(--teal))",
-                    width: "calc(100% + 4rem)",
-                  }}
-                />
-
-                <div className="flex items-center gap-4 mb-6">
-                  <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
-                    style={{ background: "var(--cream)" }}
-                  >
-                    🌙
-                  </div>
-                  <div>
-                    <p
-                      className="font-bold text-base"
-                      style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
-                    >
-                      {t("會員頁上的一週", "A week on the Members page")}
-                    </p>
-                    <p className="text-sm" style={{ color: "#8A93B2" }}>
-                      {t("先 30 秒，再看三段", "30 seconds, then three parts")}
-                    </p>
-                  </div>
-                </div>
-
-                <p
-                  className="text-xs font-bold uppercase tracking-wider mb-3"
-                  style={{ color: "var(--coral)" }}
+      <section id="faq" className="section-padding scroll-mt-24" style={{ backgroundColor: "var(--cream)" }}>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <SectionHeader
+              label={t("常見問題", "Questions")}
+              title={t("大家常常先問這兩件事", "Two things people often ask first")}
+              center
+            />
+          </div>
+          <div className="space-y-4">
+            {FAQ.map((item) => (
+              <article key={item.q.en} className="bg-white rounded-3xl p-6 sm:p-8 text-left">
+                <h3
+                  className="text-lg font-bold mb-2"
+                  style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
                 >
-                  {t("接著看", "Then")}
+                  {pick(locale, item.q)}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#5A6480" }}>
+                  <TextWithEmail text={pick(locale, item.a)} />
                 </p>
-                <div className="space-y-2 mb-6">
-                  {[
-                    { weeks: t("身", "Body"), theme: t("身體這一段", "The body part") },
-                    { weeks: t("心", "Mind"), theme: t("心情這一段", "The mind part") },
-                    { weeks: t("新生兒", "Newborn"), theme: t("準備寶寶這一段", "The newborn part") },
-                  ].map(({ weeks, theme }) => (
-                    <div
-                      key={weeks}
-                      className="rounded-xl py-3 px-4 flex items-center justify-between border-2"
-                      style={{
-                        borderColor: "var(--coral)",
-                        color: "var(--navy)",
-                      }}
-                    >
-                      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-noto), sans-serif" }}>
-                        {weeks}
-                      </span>
-                      <span className="text-xs font-semibold" style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}>
-                        {theme}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <a
-                  href={planPurchaseHref(PRICING.plans.find((plan) => plan.id === "full-pass")!)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary w-full text-center block text-sm"
-                >
-                  {pick(locale, PRICING.plans.find((plan) => plan.id === "full-pass")!.cta)}
-                </a>
-              </div>
-            </FadeIn>
-
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -1005,21 +993,21 @@ export default async function LandingPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <FadeIn>
             <p className="text-white/80 text-sm font-bold uppercase tracking-widest mb-4">
-              {t("開始妳的旅程", "Start here")}
+              {t("如果妳也想有人陪著", "If you want someone with you")}
             </p>
             <h2
               className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-8 leading-tight"
               style={{ fontFamily: "var(--font-noto), sans-serif" }}
             >
-              {t("第 5–40 週，加入後開通", "Weeks 5–40 unlock when you join")}
+              {t("第 5 週之後，我們還是陪著妳。", "After week 5, we're still with you.")}
             </h2>
             <a
-              href="#pricing"
-              className="inline-flex items-center gap-2 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
+              href={PRICING.freeWeeksUrl}
+              className="inline-flex items-center justify-center gap-2 min-h-11 bg-white font-bold py-4 px-8 rounded-full text-base transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
               style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
             >
-              {t("現在加入", "Join now")}
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              {freeTrial}
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </a>
@@ -1030,98 +1018,73 @@ export default async function LandingPage() {
       {/* ════════════════════════════════════════
           FOOTER
           ════════════════════════════════════════ */}
-      <footer
-        className="py-12"
-        style={{ backgroundColor: "var(--navy)" }}
-      >
+      <footer className="py-8 md:py-12" style={{ backgroundColor: "var(--navy)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-
-            {/* Brand */}
-            <div>
+          <div className="flex flex-col gap-8 md:grid md:grid-cols-3 md:gap-10 text-left">
+            <div className="min-w-0">
               <p
                 className="text-lg font-bold mb-2"
                 style={{ color: "var(--coral)", fontFamily: "var(--font-noto), sans-serif" }}
               >
                 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
               </p>
-              <p className="text-sm text-white/50 leading-relaxed">
-                {t("第 5–40 週在會員頁", "Weeks 5–40 are on the Members page")}
+              <p className="text-sm text-white/70 leading-relaxed">
+                {t("一週一週陪著妳，走到第 40 週。", "Week by week, with you, through week 40.")}
               </p>
             </div>
 
-            {/* Links */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">
+            <nav aria-label={t("頁尾導覽", "Footer")}>
+              <p className="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">
                 {t("導覽", "Explore")}
               </p>
-              <ul className="space-y-2">
+              <ul className="flex flex-col">
                 {[
-                  { label: t("關於我們", "About"), href: "#about" },
-                  { label: t("40 週旅程", "40-week journey"), href: "#journey" },
-                  { label: t("完整方案", "Plans"), href: "#pricing" },
-                  { label: t("怎麼拿到", "How you get it"), href: "#early-access" },
-                  { label: t("會員頁", "Members"), href: PRICING.membersUrl },
+                  { label: t("關於孕期陪伴", "About this pregnancy support"), href: "#about" },
+                  { label: t("孕期三階段", "Three trimesters"), href: "#journey" },
+                  { label: t("方案與價格", "Plans and prices"), href: "#pricing" },
+                  { label: t("常見問題", "Common questions"), href: "#faq" },
+                  { label: t("到會員頁看每一週", "Read each week on the Members page"), href: PRICING.membersUrl },
                 ].map(({ label, href }) => (
                   <li key={href}>
                     <a
                       href={href}
-                      className="text-sm text-white/60 hover:text-white transition-colors"
+                      className="flex items-center min-h-11 text-sm text-white/80 hover:text-white transition-colors"
                     >
                       {label}
                     </a>
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
 
-            {/* Contact */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">
+            <div className="min-w-0">
+              <p className="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">
                 {t("聯絡", "Contact")}
               </p>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="mailto:hello@maybeshedliketotalk.org"
-                    className="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2"
-                  >
-                    <span>✉</span>
-                    hello@maybeshedliketotalk.org
-                  </a>
-                </li>
-                <li className="pt-4">
-                  <a
-                    href="#pricing"
-                    className="text-sm font-bold text-white py-2.5 px-5 rounded-full border-2 border-white/30 hover:border-white transition-colors"
-                  >
-                    {t("現在加入 →", "Join now →")}
-                  </a>
-                </li>
-              </ul>
+              <a
+                href={`mailto:${PRICING.email}`}
+                className="flex items-center min-h-11 max-w-full break-all text-sm text-white/80 hover:text-white transition-colors"
+              >
+                {PRICING.email}
+              </a>
+              <a
+                href={PRICING.freeWeeksUrl}
+                className="inline-flex items-center justify-center min-h-11 mt-2 px-5 rounded-full border-2 border-white/40 text-sm font-bold text-white hover:border-white transition-colors"
+              >
+                {freeTrial}
+              </a>
             </div>
           </div>
 
-          <div
-            className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
-          >
-            <p className="text-xs text-white/60">
-              {t("聯絡我們", "Contact")}:{" "}
-              <a
-                href="mailto:hello@maybeshedliketotalk.org"
-                className="font-semibold text-white/80 hover:text-white transition-colors"
-              >
-                hello@maybeshedliketotalk.org
-              </a>
-            </p>
-            <p className="text-xs text-white/30">
+          <div className="border-t border-white/10 mt-8 pt-4 flex flex-col items-start gap-1 md:flex-row md:items-center md:justify-between">
+            <p className="text-xs text-white/50 min-h-11 flex items-center">
               © 2026 {t("也許妳想找人聊一聊", "Maybe She'd Like to Talk")}
             </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-xs text-white/30 hover:text-white/60 transition-colors">
+            <div className="flex flex-col items-stretch sm:flex-row sm:items-center">
+              <a href="#" className="flex items-center min-h-11 pr-4 text-xs text-white/60 hover:text-white transition-colors">
                 {t("隱私政策", "Privacy")}
               </a>
-              <a href="#" className="text-xs text-white/30 hover:text-white/60 transition-colors">
+              <a href="#" className="flex items-center min-h-11 text-xs text-white/60 hover:text-white transition-colors">
                 {t("服務條款", "Terms")}
               </a>
             </div>

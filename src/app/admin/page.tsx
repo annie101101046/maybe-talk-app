@@ -92,7 +92,7 @@ export default async function AdminPage({
           管理總覽{' '}
           <span className="text-[#1E2A5E]/30 font-normal text-xl">Admin Overview</span>
         </h2>
-        <p className="text-sm text-[#1E2A5E]/40 mt-1">所有數據均為即時從資料庫讀取。</p>
+        <p className="text-sm text-[#1E2A5E]/40 mt-1">這裡的數字，都是剛剛從資料庫讀出來的。</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

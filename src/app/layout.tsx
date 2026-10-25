@@ -6,6 +6,7 @@ import LocaleProvider from "@/components/LocaleProvider";
 import SiteFooter from "@/components/SiteFooter";
 import { htmlLang } from "@/lib/locale";
 import { getLocale } from "@/lib/locale-server";
+import { APP_ORIGIN } from "@/lib/seo";
 
 /* ─────────────────────────────────────────
    Font Loading
@@ -33,39 +34,24 @@ export async function generateMetadata(): Promise<Metadata> {
   const zh = locale === "zh";
   const title = zh ? "也許妳想找人聊一聊" : "Maybe She'd Like to Talk";
   const description = zh
-    ? "第 1–4 週免費。加入後，會員頁看得到妳買的週。"
-    : "Weeks 1–4 are free. After you join, the Members page shows the weeks you bought.";
+    ? "懷孕的時候，想有人一週一週陪著妳、照顧妳嗎？前 4 週可以先免費看。"
+    : "When you're pregnant, you may want someone with you, one week at a time. The first 4 weeks are free to read.";
 
   return {
+    metadataBase: new URL(APP_ORIGIN),
     title: {
       default: title,
-      template: `%s | ${title}`,
+      template: `%s｜${title}`,
     },
     description,
-    keywords: [
-      "孕期",
-      "孕婦",
-      "心靈陪伴",
-      "冥想",
-      "呼吸練習",
-      "pregnancy wellness",
-      "prenatal",
-      "mindfulness",
-      "也許妳想找人聊一聊",
-      "Maybe She'd Like to Talk",
-    ],
     openGraph: {
       type: "website",
       locale: zh ? "zh_TW" : "en_US",
-      alternateLocale: zh ? "en_US" : "zh_TW",
-      title,
-      description,
+      alternateLocale: zh ? ["en_US"] : ["zh_TW"],
       siteName: title,
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
     },
     robots: {
       index: true,

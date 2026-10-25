@@ -70,9 +70,9 @@ export default function LoginPage() {
             登入 <span className="text-[#1E2A5E]/40 font-normal text-base">| Sign In</span>
           </h2>
           <p className="text-sm text-[#1E2A5E]/50 mb-7">
-            歡迎回來，我們很高興見到妳。
+            登入之後，就能回到妳的頁面。
             <br />
-            <span className="text-xs">Welcome back, we&apos;re glad you&apos;re here.</span>
+            <span className="text-xs">Log in, and you can get back to your page.</span>
           </p>
 
           {/* Error Message */}
@@ -183,9 +183,9 @@ export default function LoginPage() {
 
         {/* Footer note */}
         <p className="mt-6 text-center text-xs text-[#1E2A5E]/30 leading-relaxed">
-          妳的隱私受到保護。我們不會分享妳的資料。
+          妳的資料我們會好好保護，不會拿去跟別人分享。
           <br />
-          Your privacy is protected. We never share your data.
+          We look after your information, and we don&apos;t share it.
         </p>
       </div>
     </main>
