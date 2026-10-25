@@ -240,40 +240,51 @@ function TrimesterCard({
   period,
   weeks,
   theme,
-  pill,
+  color,
+  textColor,
   delay,
   items,
+  preview,
 }: {
   period: string;
   weeks: string;
   theme: string;
-  /** Pastel pill behind the week range. Navy text on these passes WCAG AA. */
-  pill: string;
+  color: string;
+  textColor?: string;
   delay?: number;
   items: string[];
+  preview?: string;
 }) {
   return (
-    <FadeIn delay={delay} className="rounded-3xl overflow-hidden card-hover h-full">
+    <FadeIn delay={delay} className="rounded-3xl overflow-hidden card-hover">
       <div
-        className="p-8 h-full bg-white"
-        style={{ boxShadow: "0 8px 28px rgba(30, 42, 94, 0.06)" }}
+        className="p-8 h-full"
+        style={{ backgroundColor: color }}
       >
-        <div className="mb-4">
+        <div className="mb-6">
+          {preview && (
+            <p
+              className="text-xs font-bold uppercase tracking-widest mb-2"
+              style={{ color: "var(--coral)", fontFamily: "var(--font-quicksand), sans-serif" }}
+            >
+              {preview}
+            </p>
+          )}
           <span
-            className="inline-flex items-center rounded-full px-3 py-1 text-sm font-bold"
-            style={{ background: pill, color: "var(--navy)", fontFamily: "var(--font-quicksand), sans-serif" }}
+            className="text-xs font-bold uppercase tracking-widest"
+            style={{ color: textColor ?? "rgba(30,42,94,0.75)", fontFamily: "var(--font-quicksand), sans-serif" }}
           >
             {weeks}
           </span>
           <h3
-            className="text-2xl font-bold mt-4 mb-1"
-            style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
+            className="text-2xl font-bold mt-1 mb-1"
+            style={{ color: textColor ?? "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
           >
             {period}
           </h3>
           <p
             className="text-base leading-relaxed mt-3"
-            style={{ color: "var(--navy-light)", fontFamily: "var(--font-noto), sans-serif", fontWeight: 400 }}
+            style={{ color: textColor ?? "var(--navy)", fontFamily: "var(--font-noto), sans-serif", fontWeight: 400 }}
           >
             {theme}
           </p>
@@ -282,10 +293,10 @@ function TrimesterCard({
           {items.map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-2 text-sm leading-relaxed"
-              style={{ color: "var(--navy)" }}
+              className="flex items-start gap-2 text-sm"
+              style={{ color: textColor ?? "var(--navy)", opacity: 0.8 }}
             >
-              <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: pill }} />
+              <span className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-current" />
               {item}
             </li>
           ))}
@@ -482,12 +493,12 @@ function SectionHeader({
 /* ─────────────────────────────────────────
    Page
    ───────────────────────────────────────── */
-function FreeWeeksLink({ children, color }: { children: React.ReactNode; color?: string }) {
+function FreeWeeksLink({ children }: { children: React.ReactNode }) {
   return (
     <a
       href={PRICING.freeWeeksUrl}
       className="underline underline-offset-2"
-      style={{ color: color ?? "var(--coral)" }}
+      style={{ color: "var(--coral)" }}
     >
       {children}
     </a>
@@ -776,31 +787,12 @@ export default async function LandingPage() {
       {/* ════════════════════════════════════════
           JOURNEY SECTION
           ════════════════════════════════════════ */}
-      <section
-        id="journey"
-        className="section-padding relative overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #FFFFFF 0%, #FFF5F0 46%, #FFFFFF 100%)" }}
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute rounded-full"
-          style={{ width: 280, height: 280, right: -100, top: -70, background: "var(--coral-light)", opacity: 0.35 }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute rounded-full"
-          style={{ width: 220, height: 220, left: -90, top: "36%", background: "var(--teal-light)", opacity: 0.4 }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute rounded-full"
-          style={{ width: 140, height: 140, right: "18%", bottom: 36, background: "var(--yellow-light)", opacity: 0.4 }}
-        />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="journey" className="section-padding" style={{ backgroundColor: "#FFE9EE" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
             <SectionHeader
               label={t("懷孕週數", "Pregnancy week by week")}
-              labelColor="var(--teal-ink)"
+              labelColor="var(--navy)"
               title={t("孕期三階段", "Three trimesters")}
               subtitle={t(
                 "三個階段是第 1 到 12 週、第 13 到 27 週，還有第 28 到 40 週。每一段都可以單獨買。",
@@ -817,7 +809,7 @@ export default async function LandingPage() {
                 "第一次產檢之前，心裡常常忐忑不安。別擔心，我們陪著妳，讓妳慢慢安心。",
                 "Before the first prenatal visit, it's natural to feel uneasy. Don't worry. We're with you, so you can settle in.",
               )}
-              pill="var(--coral)"
+              color="#FFF0F3"
               delay={100}
               items={[
                 t("前 4 週可以先免費看。", "The first 4 weeks are free to read."),
@@ -831,7 +823,7 @@ export default async function LandingPage() {
                 "這段時間身體比較有感覺，日子也比較辛苦。放鬆心情，我們還是陪著妳。",
                 "Your body starts to feel the pregnancy, and the days take more out of you. Ease your mind. We're still with you.",
               )}
-              pill="var(--teal)"
+              color="#E8F8F7"
               delay={200}
               items={[
                 t("第 13 到 27 週可以單獨買，不一定要一次走完全程。", "You can buy weeks 13–27 on their own. You don't have to take the whole pregnancy at once."),
@@ -844,7 +836,7 @@ export default async function LandingPage() {
                 "快要見到寶寶了，心裡是期待，也請記得休息。辛苦了。",
                 "You're close to meeting the baby. There's hope in that, so please rest. You've worked hard.",
               )}
-              pill="var(--yellow)"
+              color="#FFF5DC"
               delay={300}
               items={[
                 t("這一段會陪妳走到第 40 週。", "This part stays with you through week 40."),
@@ -853,89 +845,57 @@ export default async function LandingPage() {
             />
           </div>
 
-          {/* Timeline — soft peach header, light circles, pastel week pills */}
           <FadeIn delay={400}>
             <div
-              className="relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-10"
-              style={{
-                background: "linear-gradient(135deg, #FFFFFF 0%, #FFF5F0 58%, #FFE5DB 100%)",
-                boxShadow: "0 8px 28px rgba(30, 42, 94, 0.06)",
-              }}
+              className="rounded-3xl p-8 md:p-10 relative overflow-hidden"
+              style={{ background: "var(--navy)" }}
             >
               <div
+                className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10 -translate-y-1/3 translate-x-1/4"
+                style={{ background: "var(--coral)" }}
                 aria-hidden="true"
-                className="pointer-events-none absolute rounded-full"
-                style={{ width: 168, height: 168, right: -56, top: -64, background: "var(--coral-light)", opacity: 0.45 }}
               />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute rounded-full"
-                style={{ width: 120, height: 120, left: -44, bottom: -48, background: "var(--teal-light)", opacity: 0.5 }}
-              />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute rounded-full"
-                style={{ width: 52, height: 52, right: 72, top: -14, background: "var(--yellow-light)", opacity: 0.55 }}
-              />
+              <p
+                className="text-xs font-bold uppercase tracking-widest mb-3"
+                style={{ color: "var(--coral)" }}
+              >
+                {t("時間軸", "Timeline")}
+              </p>
+              <h3
+                className="text-2xl md:text-3xl font-bold text-white mb-6"
+                style={{ fontFamily: "var(--font-noto), sans-serif" }}
+              >
+                {t("從懷孕的第一天，一直陪到寶寶出生", "From the first day of pregnancy until the baby is born")}
+              </h3>
               <div className="relative">
-                <p
-                  className="text-xs font-bold uppercase tracking-widest mb-3"
-                  style={{ color: "var(--teal-ink)" }}
-                >
-                  {t("時間軸", "Timeline")}
-                </p>
-                <h3
-                  className="text-2xl md:text-3xl font-bold mb-6"
-                  style={{ color: "var(--navy)", fontFamily: "var(--font-noto), sans-serif" }}
-                >
-                  {t("從懷孕的第一天，一直陪到寶寶出生", "From the first day of pregnancy until the baby is born")}
-                </h3>
-                <div className="relative">
-                  <div className="h-2.5 rounded-full overflow-hidden" style={{ background: "var(--coral-soft)" }}>
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: "100%",
-                        background: "linear-gradient(90deg, var(--coral-light) 0%, var(--yellow-light) 50%, var(--teal-light) 100%)",
-                      }}
-                    />
-                  </div>
-                  <div className="mt-4 flex flex-wrap justify-between gap-2">
-                    {(
-                      [
-                        [t("第 1 週", "Week 1"), "var(--coral)"],
-                        [t("第 13 週", "Week 13"), "var(--teal)"],
-                        [t("第 27 週", "Week 27"), "var(--yellow)"],
-                        [t("第 40 週", "Week 40"), "var(--navy)"],
-                      ] as const
-                    ).map(([label, pill]) => (
-                      <span
-                        key={label}
-                        className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold"
-                        style={{
-                          background: pill,
-                          color: pill === "var(--navy)" ? "#fff" : "var(--navy)",
-                          fontFamily: "var(--font-quicksand), sans-serif",
-                        }}
-                      >
-                        {label}
-                      </span>
-                    ))}
-                  </div>
+                <div className="h-3 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: "100%",
+                      background: "linear-gradient(90deg, var(--coral) 0%, var(--yellow) 50%, var(--teal) 100%)",
+                    }}
+                  />
                 </div>
-                <p className="text-sm mt-6 leading-relaxed" style={{ color: "var(--navy)" }}>
-                  {locale === "zh" ? (
-                    <>
-                      <FreeWeeksLink color="var(--teal-ink)">{freeWeeks}</FreeWeeksLink>
-                      。從第 5 週到第 40 週，就是需要付費的部分。
-                    </>
-                  ) : (
-                    <>
-                      <FreeWeeksLink color="var(--teal-ink)">{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, those weeks are paid.
-                    </>
-                  )}
-                </p>
+                <div className="flex justify-between mt-3 text-xs text-white/60 font-semibold">
+                  <span>{t("第 1 週", "Week 1")}</span>
+                  <span>{t("第 13 週", "Week 13")}</span>
+                  <span>{t("第 27 週", "Week 27")}</span>
+                  <span>{t("第 40 週", "Week 40")}</span>
+                </div>
               </div>
+              <p className="text-white/70 text-sm mt-6 leading-relaxed">
+                {locale === "zh" ? (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>
+                    。從第 5 週到第 40 週，就是需要付費的部分。
+                  </>
+                ) : (
+                  <>
+                    <FreeWeeksLink>{freeWeeks}</FreeWeeksLink>. From week 5 through week 40, those weeks are paid.
+                  </>
+                )}
+              </p>
             </div>
           </FadeIn>
         </div>
