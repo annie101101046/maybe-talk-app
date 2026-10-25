@@ -8,9 +8,9 @@
 
 /** The only checkout URLs in the app. Change these three together. */
 export const GUMROAD_CHECKOUT_URLS = {
-  singleTrimester: "https://kincode.gumroad.com/l/single-trimester",
-  fullPregnancyPass: "https://kincode.gumroad.com/l/full-pregnancy-pass",
-  giftEdition: "https://kincode.gumroad.com/l/gift-edition",
+  singleTrimester: "https://chitchat61.gumroad.com/l/single-trimester",
+  fullPregnancyPass: "https://chitchat61.gumroad.com/l/full-pregnancy-pass",
+  giftEdition: "https://chitchat61.gumroad.com/l/gift-edition",
 } as const
 
 export type Bilingual = {
