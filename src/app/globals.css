@@ -8,10 +8,18 @@
   /* Brand Palette */
   --coral:      #F28B6E;
   --coral-dark: #E07050;
+  --coral-light:#FFB59A;
+  --coral-soft: #FFF0EB;
   --navy:       #1E2A5E;
+  --navy-light: #2B4570;
   --teal:       #5BBFB5;
   --teal-dark:  #3FA89D;
+  --teal-light: #B8E8E0;
+  --teal-soft:  #E8F8F5;
+  --teal-ink:   #247A71;
   --yellow:     #FFB627;
+  --yellow-light:#FFD470;
+  --yellow-soft:#FFF7E0;
   --pink:       #F28BAE;
   --pink-soft:  #FFF0F3;
   --cream:      #FFF5F0;
