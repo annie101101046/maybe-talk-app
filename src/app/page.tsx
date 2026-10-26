@@ -772,10 +772,10 @@ export default async function LandingPage() {
             />
             <FeatureCard
               icon="🌙"
-              title={t("3 次陪妳聊聊", "Three chats with us")}
+              title={t("陪妳聊聊", "Chats with us")}
               description={t(
-                "整個孕期有 3 次陪妳聊聊，另外還附一份可以列印的 PDF。",
-                "Through the pregnancy there are three chats with us, and a PDF you can print.",
+                "單一孕期是 1 次陪妳聊聊。全孕期通行證和送禮版是 3 次陪妳聊聊，另外還附一份可以列印的 PDF。",
+                "A single trimester includes one chat with us. The Full Pass and the Gift Edition include three chats with us, and a PDF you can print.",
               )}
               delay={300}
             />
