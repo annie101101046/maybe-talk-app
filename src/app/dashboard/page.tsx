@@ -119,7 +119,10 @@ export default function DashboardPage() {
         </div>
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-sm text-[#1E2A5E] leading-relaxed">
-            {t('整個孕期有 3 次陪妳聊聊。', 'Through the pregnancy there are three chats with us.')}
+            {t(
+              '單一孕期是 1 次陪妳聊聊。全孕期通行證和送禮版是 3 次陪妳聊聊。',
+              'A single trimester includes one chat with us. The Full Pass and the Gift Edition include three chats with us.',
+            )}
           </p>
         </div>
       </div>
