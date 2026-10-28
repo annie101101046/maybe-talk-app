@@ -180,14 +180,6 @@ function HeroIllustration({ locale }: { locale: Locale }) {
           </text>
         </g>
 
-        {/* ── Floating chat bubble ── */}
-        <g transform="translate(68, 200)">
-          <rect width="72" height="34" rx="17" fill="#5BBFB5" />
-          <path d="M20 34 L28 44 L36 34" fill="#5BBFB5" />
-          <text x="36" y="21" textAnchor="middle" fill="white" fontSize="9" fontWeight="700" fontFamily="sans-serif">
-            {locale === "zh" ? "妳還好嗎" : "You okay?"}
-          </text>
-        </g>
       </svg>
     </div>
   );
@@ -744,18 +736,18 @@ export default async function LandingPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <FeatureCard
               icon="💌"
               title={t("每週一頁", "One page a week")}
               description={
                 locale === "zh" ? (
                   <>
-                    妳買了哪幾週，<MembersLink>會員頁</MembersLink>就開哪幾週，一週一頁。那一頁裡有身體、心情，也有準備寶寶的事。
+                    妳買了哪幾週，<MembersLink>會員頁</MembersLink>就開哪幾週，一週一頁。那一頁裡有身體、心情，也有準備寶寶的事。另外還附一份可以列印的 PDF。
                   </>
                 ) : (
                   <>
-                    The <MembersLink>Members page</MembersLink> opens the weeks you bought, one page a week. That page is about your body, your mood, and getting ready for the baby.
+                    The <MembersLink>Members page</MembersLink> opens the weeks you bought, one page a week. That page is about your body, your mood, and getting ready for the baby. A PDF you can print comes with it.
                   </>
                 )
               }
@@ -769,15 +761,6 @@ export default async function LandingPage() {
                 "Each week you can write one note, just for yourself.",
               )}
               delay={200}
-            />
-            <FeatureCard
-              icon="🌙"
-              title={t("陪妳聊聊", "Chats with us")}
-              description={t(
-                "單一孕期是 1 次陪妳聊聊。全孕期通行證和送禮版是 3 次陪妳聊聊，另外還附一份可以列印的 PDF。",
-                "A single trimester includes one chat with us. The Full Pass and the Gift Edition include three chats with us, and a PDF you can print.",
-              )}
-              delay={300}
             />
           </div>
 
