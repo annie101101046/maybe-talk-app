@@ -743,11 +743,11 @@ export default async function LandingPage() {
               description={
                 locale === "zh" ? (
                   <>
-                    妳買了哪幾週，<MembersLink>會員頁</MembersLink>就開哪幾週，一週一頁。那一頁裡有身體、心情，也有準備寶寶的事。另外還附一份可以列印的 PDF。
+                    妳買了哪幾週，<MembersLink>會員頁</MembersLink>就開哪幾週，一週一頁。那一頁裡有身體、心情，也有準備寶寶的事。
                   </>
                 ) : (
                   <>
-                    The <MembersLink>Members page</MembersLink> opens the weeks you bought, one page a week. That page is about your body, your mood, and getting ready for the baby. A PDF you can print comes with it.
+                    The <MembersLink>Members page</MembersLink> opens the weeks you bought, one page a week. That page is about your body, your mood, and getting ready for the baby.
                   </>
                 )
               }

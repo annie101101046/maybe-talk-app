@@ -152,8 +152,8 @@ export default function DashboardPage() {
 
       <p className="text-sm text-[#1E2A5E]/70 leading-relaxed">
         {t(
-          '每一週會先寫身體，再寫心情，最後是怎麼準備寶寶。另外還有一份可以列印的 PDF。',
-          'Each week starts with your body, then your mood, then getting ready for the baby. There is also a PDF you can print.',
+          '每一週會先寫身體，再寫心情，最後是怎麼準備寶寶。',
+          'Each week starts with your body, then your mood, then getting ready for the baby.',
         )}
       </p>
     </div>
