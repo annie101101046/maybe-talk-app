@@ -83,7 +83,12 @@ export const PRICING = {
         en: "Choose one part: weeks 1–12, weeks 13–27, or weeks 28–40.",
       },
       priceUsd: 25,
-      features: [{ zh: "1 次陪妳聊聊", en: "One chat with us" }],
+      features: [
+        {
+          zh: "這一階段的週頁，一週一頁。",
+          en: "The weekly pages for this stage, one page a week.",
+        },
+      ],
       cta: PAY_ON_GUMROAD,
       subject: "Single Trimester US$25 / 單一孕期 US$25",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.singleTrimester,
@@ -99,7 +104,12 @@ export const PRICING = {
       compareAtUsd: 69,
       priceNote: { zh: "早鳥價", en: "Early bird" },
       highlighted: true,
-      features: [{ zh: "3 次陪妳聊聊", en: "Three chats with us" }],
+      features: [
+        {
+          zh: "第 1 週到第 40 週的週頁，一週一頁。",
+          en: "Weekly pages from week 1 through week 40, one page a week.",
+        },
+      ],
       cta: PAY_ON_GUMROAD,
       subject: "Full Pregnancy Pass US$49 / 全孕期通行證 US$49",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.fullPregnancyPass,
@@ -113,7 +123,12 @@ export const PRICING = {
       },
       priceUsd: 49,
       compareAtUsd: 69,
-      features: [{ zh: "3 次陪妳聊聊", en: "Three chats with us" }],
+      features: [
+        {
+          zh: "週頁和全孕期通行證一樣，再附一張可以列印的心意卡。",
+          en: "The same weekly pages as the Full Pass, plus a card she can print.",
+        },
+      ],
       cta: PAY_ON_GUMROAD,
       subject: "Gift Edition US$49 / 送禮版 US$49",
       checkoutUrl: GUMROAD_CHECKOUT_URLS.giftEdition,

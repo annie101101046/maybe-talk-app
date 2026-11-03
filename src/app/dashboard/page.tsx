@@ -106,7 +106,7 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-sm text-[#1E2A5E] leading-relaxed">
             {t('妳買的那些週，都在會員頁，一週一頁。', 'The weeks you bought are on the Members page, one page each week.')}
@@ -115,14 +115,6 @@ export default function DashboardPage() {
         <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
           <p className="text-sm text-[#1E2A5E] leading-relaxed">
             {t('每一週可以記一則心情，寫給自己就好。', 'Each week you can write one note, just for yourself.')}
-          </p>
-        </div>
-        <div className="bg-white rounded-2xl border border-[#F28BAE]/20 shadow-sm shadow-[#F28BAE]/5 p-5">
-          <p className="text-sm text-[#1E2A5E] leading-relaxed">
-            {t(
-              '單一孕期是 1 次陪妳聊聊。全孕期通行證和送禮版是 3 次陪妳聊聊。',
-              'A single trimester includes one chat with us. The Full Pass and the Gift Edition include three chats with us.',
-            )}
           </p>
         </div>
       </div>
